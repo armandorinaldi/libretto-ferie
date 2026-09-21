@@ -23,8 +23,6 @@
     --line:#D8D2C2;
     --danger:#A63D40;
     color-scheme:light;
-    /* grana dell'inchiostro: piccoli vuoti che rompono la campitura piena */
-    --ink-grain:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='72' height='72'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='0.45' numOctaves='3' seed='4'/><feColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1.25 0 0 0 -0.10'/></filter><rect width='72' height='72' filter='url(%23g)'/></svg>");
   }
   *{box-sizing:border-box;}
   body{
@@ -129,60 +127,39 @@
     position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
     pointer-events:none;
   }
-  /* Inchiostro su carta: il telaio del timbro (::before e ::after) prende bordi
-     sbavati e coperture irregolari; il testo resta leggibile, solo sbavato. */
-  .stamp > div{
-    position:relative;
-    display:flex;align-items:center;justify-content:center;
-    mix-blend-mode:multiply;
-    color:var(--tinta);
-  }
-  .stamp > div::before,
-  .stamp > div::after{
-    content:'';position:absolute;
-    filter:url(#inkRough);
-    -webkit-mask-image:var(--ink-grain);mask-image:var(--ink-grain);
-    -webkit-mask-size:72px 72px;mask-size:72px 72px;
-    -webkit-mask-position:var(--mp,0 0);mask-position:var(--mp,0 0);
-  }
-  .stamp > div::before{
-    inset:0;border:2.5px solid var(--tinta);
-    border-radius:var(--r,3px);background:var(--fill,transparent);
-  }
-  .stamp > div::after{
-    inset:var(--i2,2px);border:1px solid var(--tinta);
-    border-radius:var(--r2,1px);opacity:.75;
-  }
-  .stamp > div > span{
-    position:relative;z-index:1;
-    filter:url(#inkRough);
-    opacity:.95;
-  }
-
   .stamp-circle{
-    --tinta:var(--ferie);--fill:var(--ferie-soft);--r:50%;--r2:50%;--i2:3px;
-    width:74%;height:74%;
-    font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:.95rem;
+    width:70%;height:70%;border-radius:50%;
+    border:2px solid var(--ferie);color:var(--ferie);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:.9rem;
     transform:rotate(var(--rot,-6deg));
+    background:var(--ferie-soft);
+    box-shadow:0 0 0 1px var(--ferie) inset;
   }
   .stamp-half{
-    --tinta:var(--permesso);--r:50%;--r2:50%;--i2:3px;
-    --fill:linear-gradient(90deg,var(--permesso-soft) 50%, transparent 50%);
-    width:74%;height:74%;
-    font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:.8rem;
+    width:70%;height:70%;border-radius:50%;
+    border:2px solid var(--permesso);color:var(--permesso);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Fraunces',Georgia,serif;font-weight:700;font-size:.72rem;
     transform:rotate(var(--rot,4deg));
+    background:linear-gradient(90deg,var(--permesso-soft) 50%, transparent 50%);
+    box-shadow:0 0 0 1px var(--permesso) inset;
   }
   .stamp-permesso{
-    --tinta:var(--permesso);--fill:var(--permesso-soft);
-    width:80%;height:62%;line-height:1;letter-spacing:.04em;
-    font-family:'IBM Plex Mono',ui-monospace,monospace;font-weight:600;font-size:.64rem;
+    width:74%;height:60%;border-radius:5px;
+    border:2px solid var(--permesso);color:var(--permesso);
+    display:flex;align-items:center;justify-content:center;flex-direction:column;line-height:1;
+    font-family:'IBM Plex Mono',ui-monospace,monospace;font-weight:600;font-size:.62rem;
     transform:rotate(var(--rot,-4deg));
+    background:var(--permesso-soft);
   }
   .stamp-chiusura{
-    --tinta:var(--chiusura);--fill:var(--chiusura-soft);
-    width:82%;height:62%;line-height:1;letter-spacing:.06em;
-    font-family:'IBM Plex Mono',ui-monospace,monospace;font-weight:600;font-size:.6rem;
+    width:76%;height:60%;border-radius:5px;
+    border:2px solid var(--chiusura);color:var(--chiusura);
+    display:flex;align-items:center;justify-content:center;flex-direction:column;line-height:1;
+    font-family:'IBM Plex Mono',ui-monospace,monospace;font-weight:600;font-size:.56rem;
     transform:rotate(var(--rot,3deg));
+    background:var(--chiusura-soft);
   }
   .daynum{position:relative;z-index:1;}
 
@@ -285,13 +262,6 @@
 </style>
 </head>
 <body>
-<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute">
-  <filter id="inkRough" x="-25%" y="-25%" width="150%" height="150%">
-    <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" seed="9" result="n"/>
-    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.1" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</svg>
-
 <div class="wrap">
 
   <div class="masthead">
@@ -622,16 +592,14 @@
         const stamp = document.createElement('div');
         stamp.className = 'stamp';
         const rot = ((d*37)%13)-6;
-        // ogni timbro pesca un pezzo diverso della grana, così nessuno è identico a un altro
-        const st = `--rot:${rot}deg;--mp:${(d*17)%72}px ${(d*31)%72}px`;
         if(entry.tipo === 'ferie'){
-          stamp.innerHTML = `<div class="stamp-circle" style="${st}"><span>F</span></div>`;
+          stamp.innerHTML = `<div class="stamp-circle" style="--rot:${rot}deg">F</div>`;
         } else if(entry.tipo === 'mezza'){
-          stamp.innerHTML = `<div class="stamp-half" style="${st}"><span>½</span></div>`;
+          stamp.innerHTML = `<div class="stamp-half" style="--rot:${rot}deg">½</div>`;
         } else if(entry.tipo === 'permesso'){
-          stamp.innerHTML = `<div class="stamp-permesso" style="${st}"><span>${entry.ore}h</span></div>`;
+          stamp.innerHTML = `<div class="stamp-permesso" style="--rot:${rot}deg">${entry.ore}h</div>`;
         } else if(entry.tipo === 'chiusura'){
-          stamp.innerHTML = `<div class="stamp-chiusura" style="${st}"><span>CA</span></div>`;
+          stamp.innerHTML = `<div class="stamp-chiusura" style="--rot:${rot}deg">CA</div>`;
         }
         cell.appendChild(stamp);
       }
