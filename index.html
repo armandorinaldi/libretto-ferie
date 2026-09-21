@@ -160,8 +160,20 @@
   .ledger h2{
     font-family:'Fraunces',Georgia,serif;font-size:1.05rem;margin:0 0 14px;font-weight:600;
   }
+  .ledger-total{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:14px;
+    margin-bottom:4px;
+  }
+  .ledger-total .ledger-label{margin-bottom:8px;}
+  .ledger-total .ledger-main{margin-bottom:0;}
+  .ledger-total .ledger-num{font-size:2.6rem;}
+  .ledger-num.total-c{color:var(--ink);}
   .ledger-block{border-top:1px solid var(--line);padding:14px 0;}
-  .ledger-block:first-of-type{border-top:none;padding-top:0;}
+  .ledger-block:first-of-type,
+  .ledger-total + .ledger-block{border-top:none;}
   .ledger-label{
     font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-soft);
     display:flex;justify-content:space-between;margin-bottom:6px;
@@ -282,6 +294,10 @@
         <label for="inpOreMezza">Ore di una mezza giornata (ROL)</label>
         <input type="number" id="inpOreMezza" min="0.5" step="0.5">
       </div>
+      <div class="field">
+        <label for="inpOreGiornata">Ore di una giornata lavorativa</label>
+        <input type="number" id="inpOreGiornata" min="1" step="0.5">
+      </div>
     </div>
     <button class="settings-save" id="saveSettings">Salva impostazioni</button>
   </div>
@@ -318,6 +334,14 @@
 
     <div class="card ledger">
       <h2>Riepilogo</h2>
+
+      <div class="ledger-total">
+        <div class="ledger-label"><span>Totale disponibile</span><span id="totaleLabel">a fine mese</span></div>
+        <div class="ledger-main">
+          <span class="ledger-num total-c" id="totaleNum">0</span>
+          <span class="ledger-unit">giorni</span>
+        </div>
+      </div>
 
       <div class="ledger-block">
         <div class="ledger-label"><span>Ferie residue</span><span id="ferieAnnoLabel">a fine mese</span></div>
@@ -420,7 +444,8 @@
     meseRif: `${todayForDefault.getFullYear()}-${pad(todayForDefault.getMonth()+1)}`,
     maturazioneFerie: 1.67,
     maturazioneRol: 8.66,
-    oreMezzaGiornata: 4
+    oreMezzaGiornata: 4,
+    oreGiornata: 8
   };
 
   let settings = {...DEFAULT_SETTINGS};
@@ -504,6 +529,7 @@
     $('inpMaturazioneFerie').value = settings.maturazioneFerie;
     $('inpMaturazioneRol').value = settings.maturazioneRol;
     $('inpOreMezza').value = settings.oreMezzaGiornata;
+    $('inpOreGiornata').value = settings.oreGiornata;
   }
 
   function renderCalendar(){
@@ -731,6 +757,16 @@
     const ferieResidue = ferieTotale - ferieUsateDaRif;
     const permessoResiduo = rolTotale - permessoUsateDaRif;
 
+    const oreGiornata = Number(settings.oreGiornata) > 0
+      ? Number(settings.oreGiornata)
+      : DEFAULT_SETTINGS.oreGiornata;
+    const totaleGiorni = ferieResidue + permessoResiduo / oreGiornata;
+    const nf = (n) => round2(n).toLocaleString('it-IT');
+
+    $('totaleLabel').textContent = `al ${pad(m+1)}/${y}`;
+    $('totaleNum').textContent = nf(totaleGiorni);
+    $('totaleNum').style.color = totaleGiorni < 0 ? 'var(--danger)' : '';
+
     $('ferieAnnoLabel').textContent = `al ${pad(m+1)}/${y}`;
     $('permessoAnnoLabel').textContent = `al ${pad(m+1)}/${y}`;
     $('ferieResidueNum').textContent = round2(ferieResidue).toLocaleString('it-IT');
@@ -804,6 +840,7 @@
       settings.maturazioneFerie = parseFloat($('inpMaturazioneFerie').value) || 0;
       settings.maturazioneRol = parseFloat($('inpMaturazioneRol').value) || 0;
       settings.oreMezzaGiornata = parseFloat($('inpOreMezza').value) || DEFAULT_SETTINGS.oreMezzaGiornata;
+      settings.oreGiornata = parseFloat($('inpOreGiornata').value) || DEFAULT_SETTINGS.oreGiornata;
       saveSettings();
       renderLedger();
       $('settingsPanel').classList.remove('open');
