@@ -259,6 +259,23 @@
   }
   .settings-save:hover{opacity:.88;}
 
+  .backup{border-top:1px solid var(--line);margin-top:18px;padding-top:14px;}
+  .backup h3{
+    font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;
+    color:var(--ink-soft);margin:0 0 6px;font-weight:600;
+  }
+  .backup p{margin:0 0 10px;font-size:.74rem;color:var(--ink-soft);max-width:60ch;line-height:1.5;}
+  .backup-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .backup-btn{
+    border:1px solid var(--line);background:var(--paper);color:var(--ink);
+    border-radius:6px;padding:7px 12px;font-family:'Inter',system-ui,sans-serif;
+    font-size:.76rem;font-weight:600;cursor:pointer;transition:.15s;
+  }
+  .backup-btn:hover{border-color:var(--ink);}
+  .backup-msg{font-size:.74rem;color:var(--ink-soft);margin-top:9px;min-height:1.1em;}
+  .backup-msg.ok{color:var(--ferie);}
+  .backup-msg.ko{color:var(--danger);}
+
   :where(button,input):focus-visible{outline:2px solid var(--ink);outline-offset:2px;}
 
   /* modal for permesso hours */
@@ -342,6 +359,17 @@
       </div>
     </div>
     <button class="settings-save" id="saveSettings">Salva impostazioni</button>
+
+    <div class="backup">
+      <h3>Copia di sicurezza</h3>
+      <p>I dati vivono in questo browser. Esportali in un file ogni tanto: se svuoti la cache o cambi computer, li rimetti con un clic.</p>
+      <div class="backup-row">
+        <button class="backup-btn" id="exportData">Esporta dati</button>
+        <button class="backup-btn" id="importTrigger">Importa da file</button>
+        <input type="file" id="importFile" accept="application/json,.json" hidden>
+      </div>
+      <div class="backup-msg" id="backupMsg" role="status"></div>
+    </div>
   </div>
 
   <div id="app" class="layout" style="display:none;">
@@ -899,6 +927,65 @@
 
   function round2(n){ return Math.round(n*100)/100; }
 
+  // ---- Copia di sicurezza ----
+  function backupMsg(testo, esito){
+    const el = $('backupMsg');
+    el.textContent = testo;
+    el.className = 'backup-msg' + (esito ? ' ' + esito : '');
+  }
+
+  async function esportaDati(){
+    const testo = JSON.stringify({
+      app: 'libretto-ferie',
+      versione: 1,
+      esportatoIl: new Date().toISOString(),
+      settings, entries
+    }, null, 2);
+    const nome = `libretto-ferie-${new Date().toISOString().slice(0,10)}.json`;
+    const giorni = Object.keys(entries).length;
+
+    // dentro Claude i download passano dalla capability; altrove basta un link
+    try{
+      if(window.claude && typeof window.claude.use === 'function'){
+        const dl = await window.claude.use('downloads');
+        if(dl){
+          await dl.save({ filename: nome, data: testo });
+          backupMsg(`Esportati ${giorni} giorni in ${nome}.`, 'ok');
+          return;
+        }
+      }
+    }catch(e){ /* si prosegue con il link */ }
+
+    try{
+      const url = URL.createObjectURL(new Blob([testo], {type:'application/json'}));
+      const a = document.createElement('a');
+      a.href = url; a.download = nome;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      backupMsg(`Esportati ${giorni} giorni in ${nome}.`, 'ok');
+    }catch(e){
+      backupMsg('Non sono riuscito a preparare il file da scaricare.', 'ko');
+    }
+  }
+
+  async function importaDati(file){
+    try{
+      const dati = JSON.parse(await file.text());
+      if(!dati || typeof dati !== 'object' || !dati.entries || typeof dati.entries !== 'object'){
+        throw new Error('formato');
+      }
+      const prima = Object.keys(entries).length;
+      entries = {...entries, ...dati.entries};
+      if(dati.settings) settings = {...DEFAULT_SETTINGS, ...dati.settings};
+      saveEntries(); saveSettings();
+      fillSettingsForm(); renderCalendar(); renderLedger();
+      const aggiunti = Object.keys(entries).length - prima;
+      backupMsg(`Importati ${Object.keys(dati.entries).length} giorni (${aggiunti} nuovi). Nulla è stato cancellato.`, 'ok');
+    }catch(e){
+      backupMsg('File non valido: serve un backup esportato da qui.', 'ko');
+    }
+  }
+
   function meseAbbr(m){
     const s = MESI[m].slice(0,3);
     return s.charAt(0).toUpperCase() + s.slice(1);
@@ -946,6 +1033,14 @@
       saveSettings();
       renderLedger();
       $('settingsPanel').classList.remove('open');
+    });
+
+    $('exportData').addEventListener('click', esportaDati);
+    $('importTrigger').addEventListener('click', () => $('importFile').click());
+    $('importFile').addEventListener('change', (e) => {
+      const file = e.target.files && e.target.files[0];
+      if(file) importaDati(file);
+      e.target.value = '';
     });
 
     $('modalConfirm').addEventListener('click', confirmModal);
