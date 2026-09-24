@@ -1,0 +1,2407 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Libretto Ferie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     LIBRETTO FERIE — Design System
+     Stile: Flat Design · Tipografia: Plus Jakarta Sans
+     Palette: Banking / Traditional Finance (navy + near-white)
+     Niente ombre né gradienti: colore, tipografia e spazio.
+     ============================================================ */
+
+  /* ---------- TOKEN — TEMA CHIARO ---------- */
+  :root{
+    --color-background:#F8FAFC;
+    --color-card:#FFFFFF;
+    --color-muted:#E8ECF1;
+    --color-foreground:#020617;
+    --color-muted-foreground:#475569;
+    --color-faint:#64748B;
+
+    --color-primary:#0F172A;
+    --color-on-primary:#FFFFFF;
+    --color-secondary:#1E3A8A;
+    --color-border:#E2E8F0;
+    --color-border-strong:#CBD5E1;
+    --color-ring:#1E3A8A;
+
+    --color-destructive:#DC2626;
+    --color-destructive-soft:#FBE4E7;
+    --color-warning:#9A5B16;
+    --color-warning-soft:#FAEBD9;
+
+    /* categorie del libretto */
+    --ferie:#0F766E;
+    --ferie-soft:#D9F0EC;
+    --permesso:#9A5B16;
+    --permesso-soft:#FAEBD9;
+    --chiusura:#1E3A8A;
+    --chiusura-soft:#E2E8FC;
+    --festivo:#BE2A3E;
+    --festivo-soft:#FBE4E7;
+    --retribuito:#6D28D9;
+    --retribuito-soft:#EDE6FB;
+    --torta:#C2410C;
+    --torta-soft:#FCE7D8;
+
+    /* scala di spazio — densità standard */
+    --space-1:4px; --space-2:8px; --space-3:12px;
+    --space-4:16px; --space-6:24px; --space-8:32px; --space-10:40px;
+
+    --radius-sm:6px; --radius-md:10px; --radius-lg:14px;
+    --dur:180ms;
+  }
+
+  /* ---------- TOKEN — TEMA SCURO ---------- */
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --color-background:#0B1220;
+    --color-card:#141D2E;
+    --color-muted:#1E293B;
+    --color-foreground:#F1F5F9;
+    --color-muted-foreground:#A3B2C7;
+    --color-faint:#7C8DA6;
+
+    --color-primary:#DBE6F5;
+    --color-on-primary:#0B1220;
+    --color-secondary:#7EA2F0;
+    --color-border:#27334A;
+    --color-border-strong:#3C4B67;
+    --color-ring:#7EA2F0;
+
+    --color-destructive:#F87171;
+    --color-destructive-soft:#3B1F26;
+    --color-warning:#E0A26A;
+    --color-warning-soft:#38281A;
+
+    --ferie:#5EC9BC;
+    --ferie-soft:#123833;
+    --permesso:#E0A26A;
+    --permesso-soft:#38281A;
+    --chiusura:#93AEF5;
+    --chiusura-soft:#1C2745;
+    --festivo:#F08A9A;
+    --festivo-soft:#3B1F26;
+    --retribuito:#B49BF5;
+    --retribuito-soft:#271F42;
+    --torta:#F0A97C;
+    --torta-soft:#3A2618;
+  }
+
+  html{color-scheme:light;scroll-padding-top:env(safe-area-inset-top,0px);}
+
+  *{box-sizing:border-box;}
+  [hidden]{display:none !important;}
+  html,body{margin:0;padding:0;}
+
+  body{
+    background:var(--color-background);
+    color:var(--color-foreground);
+    font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
+    font-size:16px;
+    line-height:1.5;
+    padding-block:var(--space-6) var(--space-10);
+    padding-left:var(--space-4);
+    padding-right:var(--space-4);
+    min-height:100vh;
+    transition:background-color var(--dur) ease, color var(--dur) ease;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (min-width:768px){
+    body{padding-block:var(--space-8) var(--space-10);padding-left:var(--space-6);padding-right:var(--space-6);}
+  }
+
+  .wrap{max-width:1060px;margin:0 auto;}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important;}
+  }
+
+  button{font-family:inherit;cursor:pointer;}
+  :focus-visible{outline:2px solid var(--color-ring);outline-offset:2px;}
+
+  .icon{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.9;
+        stroke-linecap:round;stroke-linejoin:round;flex:none;display:block;}
+  .icon-sm{width:15px;height:15px;}
+
+  /* ---------- TESTATA ---------- */
+  .masthead{
+    display:flex;justify-content:space-between;align-items:center;
+    gap:var(--space-4);flex-wrap:wrap;
+    padding-bottom:var(--space-4);margin-bottom:var(--space-6);
+    border-bottom:1px solid var(--color-border);
+  }
+  .masthead h1{
+    font-size:1.75rem;font-weight:700;margin:0;letter-spacing:-.02em;line-height:1.2;
+  }
+  @media (min-width:768px){ .masthead h1{font-size:2rem;} }
+  .masthead .sub{
+    font-size:.8125rem;color:var(--color-muted-foreground);margin-top:2px;font-weight:500;
+  }
+  .masthead-actions{display:flex;gap:var(--space-2);align-items:center;}
+
+  /* pulsanti testata: target 44px */
+  .gear-btn,.theme-btn{
+    display:inline-flex;align-items:center;gap:var(--space-2);
+    min-height:44px;padding:0 var(--space-4);
+    background:var(--color-card);border:1px solid var(--color-border);
+    border-radius:var(--radius-md);
+    font-size:.875rem;font-weight:600;color:var(--color-muted-foreground);
+    transition:background-color var(--dur) ease, color var(--dur) ease, border-color var(--dur) ease;
+  }
+  .gear-btn:hover,.theme-btn:hover{
+    background:var(--color-muted);color:var(--color-foreground);border-color:var(--color-border-strong);
+  }
+
+  /* ---------- LAYOUT ---------- */
+  .layout{display:grid;grid-template-columns:1fr;gap:var(--space-4);align-items:start;}
+  @media (min-width:1024px){ .layout{grid-template-columns:1.6fr 1fr;gap:var(--space-6);} }
+
+  .card{
+    background:var(--color-card);
+    border:1px solid var(--color-border);
+    border-radius:var(--radius-lg);
+    padding:var(--space-4);
+  }
+  @media (min-width:768px){ .card{padding:var(--space-6);} }
+
+  /* ---------- NAVIGAZIONE MESE ---------- */
+  .month-nav{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:var(--space-2);margin-bottom:var(--space-4);
+  }
+  .month-nav > button{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:44px;height:44px;flex:none;
+    background:var(--color-card);border:1px solid var(--color-border);
+    border-radius:var(--radius-md);color:var(--color-foreground);
+    transition:background-color var(--dur) ease, border-color var(--dur) ease;
+  }
+  .month-nav > button:hover{background:var(--color-muted);border-color:var(--color-border-strong);}
+  .month-title{
+    font-size:1.25rem;font-weight:700;text-align:center;
+    text-transform:capitalize;letter-spacing:-.01em;line-height:1.3;
+  }
+  @media (min-width:768px){ .month-title{font-size:1.4rem;} }
+
+  .month-nav .today-btn{
+    display:inline-flex;align-items:center;gap:6px;
+    min-height:32px;padding:0 var(--space-3);
+    background:transparent;border:1px solid var(--color-border);
+    border-radius:999px;color:var(--color-secondary);
+    font-size:.75rem;font-weight:600;
+    opacity:0;pointer-events:none;
+    transition:opacity var(--dur) ease, background-color var(--dur) ease, border-color var(--dur) ease;
+  }
+  .month-nav .today-btn.show{opacity:1;pointer-events:auto;}
+  .month-nav .today-btn:hover{background:var(--color-muted);border-color:var(--color-border-strong);}
+
+  /* ---------- SUGGERIMENTO D'USO ---------- */
+  .cal-hint{
+    display:flex;align-items:center;gap:var(--space-2);
+    margin-bottom:var(--space-4);
+    font-size:.75rem;line-height:1.45;color:var(--color-faint);
+  }
+  .cal-hint .icon{color:var(--color-secondary);}
+
+  /* ---------- CALENDARIO ---------- */
+  .weekdays{display:grid;grid-template-columns:repeat(7,1fr);gap:var(--space-1);margin-bottom:var(--space-2);}
+  .weekdays span{
+    font-size:.75rem;font-weight:600;text-align:center;
+    color:var(--color-faint);letter-spacing:.02em;
+  }
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:var(--space-1);}
+  @media (min-width:640px){ .grid,.weekdays{gap:var(--space-2);} }
+
+  .day{
+    aspect-ratio:1/1;min-height:44px;
+    border:1px solid var(--color-border);border-radius:var(--radius-md);
+    background:var(--color-card);
+    position:relative;display:flex;align-items:flex-start;justify-content:flex-start;
+    padding:5px 6px;
+    font-size:.8125rem;font-weight:600;
+    font-variant-numeric:tabular-nums;
+    color:var(--color-muted-foreground);
+    cursor:pointer;
+    transition:background-color var(--dur) ease, border-color var(--dur) ease;
+    -webkit-user-select:none;user-select:none;-webkit-touch-callout:none;
+  }
+  .day:hover{background:var(--color-muted);border-color:var(--color-border-strong);}
+  .day.empty{visibility:hidden;cursor:default;}
+  .day.weekend{
+    background:var(--color-muted);border-color:transparent;
+    color:var(--color-faint);cursor:default;
+  }
+  .day.weekend:hover{border-color:transparent;}
+  .day.holiday{
+    background:var(--festivo-soft);border-color:var(--festivo-soft);
+    color:var(--festivo);cursor:default;
+  }
+  .day.holiday:hover{background:var(--festivo-soft);border-color:var(--festivo-soft);}
+  .day.today{border-color:var(--color-secondary);box-shadow:inset 0 0 0 1px var(--color-secondary);}
+  .day.selecting{
+    background:var(--color-muted);
+    border-color:var(--color-ring);box-shadow:inset 0 0 0 1px var(--color-ring);
+  }
+  .grid.dragging{cursor:grabbing;}
+
+  .daynum{position:relative;z-index:1;}
+
+  /* ---------- COMPLEANNI ---------- */
+  .cake{
+    position:absolute;top:2px;right:2px;z-index:2;
+    display:flex;align-items:center;justify-content:center;
+    width:20px;height:20px;padding:0;
+    background:none;border:none;border-radius:var(--radius-sm);
+    color:var(--torta);
+    transition:transform var(--dur) ease, background-color var(--dur) ease;
+  }
+  .cake svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:1.8;
+            stroke-linecap:round;stroke-linejoin:round;display:block;}
+  .cake:hover,.cake:focus-visible{transform:scale(1.15);background:var(--torta-soft);}
+  .bday-tip{
+    position:fixed;z-index:70;
+    max-width:200px;padding:var(--space-2) var(--space-3);
+    background:var(--color-primary);color:var(--color-on-primary);
+    border-radius:var(--radius-md);
+    font-size:.75rem;font-weight:700;line-height:1.3;text-align:center;
+    pointer-events:none;
+    animation:tipIn 140ms ease-out;
+  }
+  @keyframes tipIn{ from{opacity:0;transform:translateY(3px);} to{opacity:1;transform:translateY(0);} }
+  .bday-tip .tip-icon{
+    display:block;margin:0 auto 3px;width:16px;height:16px;
+    stroke:currentColor;fill:none;stroke-width:1.8;
+    stroke-linecap:round;stroke-linejoin:round;
+  }
+  .holiday-label{
+    position:absolute;bottom:3px;left:4px;right:4px;
+    font-size:.5625rem;line-height:1.1;font-weight:600;color:var(--festivo);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+
+  /* ---------- TIMBRI (piatti, con lettera identificativa) ---------- */
+  .stamp{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;
+    animation:stampIn 160ms ease-out;
+  }
+  @keyframes stampIn{ from{opacity:0;} to{opacity:1;} }
+
+  .stamp-circle,.stamp-half,.stamp-permesso,.stamp-chiusura,.stamp-retribuito{
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;line-height:1;
+  }
+  .stamp-circle{
+    width:64%;height:64%;border-radius:50%;
+    background:var(--ferie);color:var(--color-card);
+    font-size:.875rem;
+  }
+  :root[data-theme="dark"] .stamp-circle{color:#0B1220;}
+  .stamp-half{
+    width:64%;height:64%;border-radius:50%;
+    background:var(--permesso-soft);color:var(--permesso);
+    border:1.5px solid var(--permesso);
+    font-size:.8125rem;
+  }
+  .stamp-permesso{
+    min-width:66%;height:52%;border-radius:var(--radius-sm);
+    background:var(--permesso);color:var(--color-card);
+    font-size:.6875rem;font-variant-numeric:tabular-nums;padding:0 3px;
+  }
+  :root[data-theme="dark"] .stamp-permesso{color:#0B1220;}
+  .stamp-chiusura{
+    min-width:66%;height:52%;border-radius:var(--radius-sm);
+    background:var(--chiusura);color:#FFFFFF;
+    font-size:.6875rem;letter-spacing:.03em;padding:0 3px;
+  }
+  :root[data-theme="dark"] .stamp-chiusura{color:#0B1220;}
+  .stamp-retribuito{
+    width:64%;height:64%;border-radius:50%;
+    background:var(--retribuito-soft);color:var(--retribuito);
+    border:1.5px solid var(--retribuito);
+    font-size:.75rem;
+  }
+  .stamp-retribuito .icon{width:13px;height:13px;stroke-width:2;}
+  .stamp-retribuito .ore{font-size:.5625rem;margin-left:1px;}
+
+  /* ---------- LEGENDA ---------- */
+  .stamp-legend{
+    display:flex;flex-wrap:wrap;gap:var(--space-3) var(--space-4);
+    margin-top:var(--space-4);padding-top:var(--space-4);
+    border-top:1px solid var(--color-border);
+    font-size:.75rem;font-weight:500;color:var(--color-muted-foreground);
+  }
+  .stamp-legend span{display:flex;align-items:center;gap:6px;}
+  .legend-swatch{width:12px;height:12px;border-radius:4px;display:inline-block;flex:none;}
+
+  /* ---------- RIEPILOGO ---------- */
+  .ledger h2{font-size:1.125rem;font-weight:700;margin:0 0 var(--space-4);letter-spacing:-.01em;}
+  .ledger-block{border-top:1px solid var(--color-border);padding:var(--space-4) 0;}
+  .ledger-block:first-of-type{border-top:none;padding-top:0;}
+  .ledger-label{
+    display:flex;justify-content:space-between;gap:var(--space-2);
+    font-size:.75rem;font-weight:600;color:var(--color-muted-foreground);
+    margin-bottom:var(--space-2);
+  }
+  .ledger-main{display:flex;align-items:baseline;gap:var(--space-2);flex-wrap:wrap;margin-bottom:var(--space-3);}
+  .ledger-num{
+    font-size:2.25rem;font-weight:800;line-height:1;letter-spacing:-.03em;
+    font-variant-numeric:tabular-nums;
+    transition:color var(--dur) ease;
+  }
+  .ledger-num.ferie-c{color:var(--ferie);}
+  .ledger-num.permesso-c{color:var(--permesso);}
+  .ledger-num.over{color:var(--color-destructive);}
+  .ledger-unit{font-size:.8125rem;color:var(--color-muted-foreground);font-weight:500;}
+  .ledger-bar{
+    height:8px;border-radius:999px;background:var(--color-muted);
+    overflow:hidden;margin-bottom:var(--space-2);
+  }
+  .ledger-bar-fill{height:100%;border-radius:999px;transition:width 300ms ease;}
+  .ledger-bar-fill.over{background:var(--color-destructive) !important;}
+  .ledger-detail{
+    display:flex;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap;
+    font-size:.75rem;color:var(--color-muted-foreground);
+  }
+  .ledger-detail b{color:var(--color-foreground);font-weight:700;font-variant-numeric:tabular-nums;}
+  .ledger-num.retribuito-c{color:var(--retribuito);}
+  .motivi-list{
+    display:flex;gap:var(--space-2);flex-wrap:wrap;margin-bottom:var(--space-2);
+  }
+  .motivi-list span{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:3px var(--space-2);border-radius:999px;
+    background:var(--retribuito-soft);color:var(--retribuito);
+    font-size:.6875rem;font-weight:700;
+  }
+  .motivi-list b{font-variant-numeric:tabular-nums;}
+  .ledger-note{
+    margin-top:var(--space-2);
+    font-size:.6875rem;line-height:1.45;color:var(--color-faint);
+  }
+
+  /* ---------- AVVISO SFORAMENTO ---------- */
+  .alert{
+    display:flex;gap:var(--space-2);align-items:flex-start;
+    margin-top:var(--space-3);padding:var(--space-3);
+    border-radius:var(--radius-md);
+    font-size:.75rem;line-height:1.45;font-weight:500;
+  }
+  .alert .icon{width:16px;height:16px;margin-top:1px;}
+  .alert b{font-weight:700;font-variant-numeric:tabular-nums;}
+  .alert.warn{background:var(--color-warning-soft);color:var(--color-warning);}
+  .alert.danger{background:var(--color-destructive-soft);color:var(--color-destructive);}
+
+  /* ---------- BLOCCO TOTALE ---------- */
+  .ledger-total{
+    margin-top:var(--space-4);padding:var(--space-4);
+    background:var(--color-muted);border-radius:var(--radius-md);
+  }
+  .ledger-total .ledger-label{color:var(--color-muted-foreground);}
+  .ledger-total .ledger-main{margin-bottom:var(--space-2);}
+  .ledger-total .ledger-num{font-size:2.5rem;color:var(--color-foreground);}
+  .total-split{
+    display:flex;gap:var(--space-2);flex-wrap:wrap;
+    font-size:.75rem;color:var(--color-muted-foreground);
+  }
+  .total-split span{
+    display:inline-flex;align-items:center;gap:5px;
+    background:var(--color-card);border-radius:999px;
+    padding:3px var(--space-2);font-weight:600;
+  }
+  .total-split .swatch{width:8px;height:8px;border-radius:50%;flex:none;}
+  .total-split b{font-variant-numeric:tabular-nums;color:var(--color-foreground);}
+
+  /* ---------- PROIEZIONE A FINE ANNO ---------- */
+  .projection{
+    margin-top:var(--space-4);padding:var(--space-4);
+    border:1px dashed var(--color-border-strong);border-radius:var(--radius-md);
+  }
+  .proj-head{
+    display:flex;align-items:center;gap:6px;
+    font-size:.6875rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--color-faint);margin-bottom:var(--space-3);
+  }
+  .proj-grid{display:flex;gap:var(--space-4);flex-wrap:wrap;margin-bottom:var(--space-3);}
+  .proj-item{flex:1 1 110px;}
+  .proj-num{
+    font-size:1.625rem;font-weight:800;line-height:1;letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;display:block;
+  }
+  .proj-num.ferie-c{color:var(--ferie);}
+  .proj-num.permesso-c{color:var(--permesso);}
+  .proj-num.over{color:var(--color-destructive);}
+  .proj-item small{
+    display:block;margin-top:5px;
+    font-size:.6875rem;font-weight:600;color:var(--color-muted-foreground);
+  }
+  .proj-sent{
+    margin:0;font-size:.75rem;line-height:1.5;color:var(--color-muted-foreground);
+  }
+  .proj-sent b{color:var(--color-foreground);font-weight:700;font-variant-numeric:tabular-nums;}
+
+  /* ---------- SELETTORE VISTA ---------- */
+  .view-toggle{
+    display:inline-flex;gap:var(--space-1);padding:3px;
+    background:var(--color-muted);border-radius:999px;margin-bottom:var(--space-4);
+  }
+  .view-toggle button{
+    min-height:34px;padding:0 var(--space-4);
+    background:transparent;border:none;border-radius:999px;
+    font-size:.8125rem;font-weight:700;color:var(--color-muted-foreground);
+    transition:background-color var(--dur) ease, color var(--dur) ease;
+  }
+  .view-toggle button.active{background:var(--color-card);color:var(--color-foreground);}
+
+  /* ---------- VISTA ANNUALE ---------- */
+  .year-nav{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:var(--space-2);margin-bottom:var(--space-4);
+  }
+  .year-nav button{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:44px;height:44px;flex:none;
+    background:var(--color-card);border:1px solid var(--color-border);
+    border-radius:var(--radius-md);color:var(--color-foreground);
+    transition:background-color var(--dur) ease, border-color var(--dur) ease;
+  }
+  .year-nav button:hover{background:var(--color-muted);border-color:var(--color-border-strong);}
+  .year-title{font-size:1.25rem;font-weight:700;letter-spacing:-.01em;font-variant-numeric:tabular-nums;}
+
+  .year-grid{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-3);
+  }
+  @media (min-width:560px){ .year-grid{grid-template-columns:repeat(3,1fr);} }
+  @media (min-width:1024px){ .year-grid{grid-template-columns:repeat(4,1fr);} }
+
+  .mini-month{
+    padding:var(--space-2);border:1px solid var(--color-border);
+    border-radius:var(--radius-md);background:var(--color-card);
+    cursor:pointer;text-align:left;width:100%;
+    transition:border-color var(--dur) ease, background-color var(--dur) ease;
+  }
+  .mini-month:hover{background:var(--color-muted);border-color:var(--color-border-strong);}
+  .mini-month.current{border-color:var(--color-secondary);box-shadow:inset 0 0 0 1px var(--color-secondary);}
+  .mini-head{
+    display:flex;align-items:baseline;justify-content:space-between;gap:var(--space-2);
+    margin-bottom:6px;
+  }
+  .mini-name{
+    font-size:.75rem;font-weight:700;text-transform:capitalize;
+    color:var(--color-foreground);letter-spacing:-.01em;
+  }
+  .mini-count{
+    font-size:.625rem;font-weight:700;font-variant-numeric:tabular-nums;
+    color:var(--color-faint);
+  }
+  .mini-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+  .mini-day{
+    aspect-ratio:1/1;border-radius:2px;background:var(--color-background);
+  }
+  .mini-day.empty{background:transparent;}
+  .mini-day.weekend{background:var(--color-muted);}
+  .mini-day.holiday{background:var(--festivo-soft);}
+  .mini-day.ferie{background:var(--ferie);}
+  .mini-day.mezza,.mini-day.permesso{background:var(--permesso);}
+  .mini-day.chiusura{background:var(--chiusura);}
+  .mini-day.retribuito{background:var(--retribuito);}
+
+  /* ---------- MOVIMENTI ---------- */
+  .movements{margin-top:var(--space-4);border-top:1px solid var(--color-border);padding-top:var(--space-4);}
+  .movements h3{
+    font-size:.75rem;font-weight:700;color:var(--color-muted-foreground);
+    margin:0 0 var(--space-2);letter-spacing:.02em;
+  }
+  .move-row{
+    display:flex;justify-content:space-between;align-items:center;gap:var(--space-2);
+    font-size:.875rem;padding:var(--space-2) 0;
+    border-bottom:1px solid var(--color-border);
+  }
+  .move-row:last-child{border-bottom:none;}
+  .move-date{
+    color:var(--color-faint);font-weight:700;font-variant-numeric:tabular-nums;margin-right:6px;
+  }
+  .no-move{font-size:.875rem;color:var(--color-faint);}
+  .move-del{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:32px;height:32px;flex:none;
+    background:none;border:none;border-radius:var(--radius-sm);
+    color:var(--color-faint);
+    transition:background-color var(--dur) ease, color var(--dur) ease;
+  }
+  .move-del:hover{background:var(--color-destructive-soft);color:var(--color-destructive);}
+
+  /* ---------- IMPOSTAZIONI ---------- */
+  .settings-panel{display:none;margin-bottom:var(--space-4);}
+  .settings-panel.open{display:block;}
+  .settings-hint{margin:0 0 var(--space-4);font-size:.875rem;color:var(--color-muted-foreground);max-width:64ch;}
+  .settings-grid{display:grid;grid-template-columns:1fr;gap:var(--space-4);}
+  @media (min-width:640px){ .settings-grid{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));} }
+  .field label{
+    display:block;font-size:.8125rem;font-weight:600;
+    color:var(--color-foreground);margin-bottom:6px;
+  }
+  .field input{
+    width:100%;min-height:44px;padding:0 var(--space-3);
+    border:1px solid var(--color-border);border-radius:var(--radius-md);
+    font-family:inherit;font-size:1rem;font-weight:600;
+    font-variant-numeric:tabular-nums;
+    background:var(--color-card);color:var(--color-foreground);
+    transition:border-color var(--dur) ease;
+  }
+  .field input:focus{outline:none;border-color:var(--color-ring);box-shadow:inset 0 0 0 1px var(--color-ring);}
+  .settings-save{
+    display:inline-flex;align-items:center;gap:var(--space-2);
+    min-height:44px;margin-top:var(--space-4);padding:0 var(--space-6);
+    background:var(--color-primary);color:var(--color-on-primary);
+    border:1px solid var(--color-primary);border-radius:var(--radius-md);
+    font-size:.9375rem;font-weight:700;
+    transition:opacity var(--dur) ease;
+  }
+  .settings-save:hover{opacity:.88;}
+
+  /* ---------- COPIA DI SICUREZZA ---------- */
+  .backup{
+    margin-top:var(--space-6);padding-top:var(--space-6);
+    border-top:1px solid var(--color-border);
+  }
+  .backup-head{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:var(--space-3);flex-wrap:wrap;margin-bottom:var(--space-1);
+  }
+  .backup h3{
+    font-size:.9375rem;font-weight:700;margin:0;letter-spacing:-.01em;
+  }
+  .backup-badge{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:5px var(--space-3);border-radius:999px;
+    font-size:.75rem;font-weight:600;
+    background:var(--color-muted);color:var(--color-muted-foreground);
+  }
+  .backup-badge .dot{width:7px;height:7px;border-radius:50%;flex:none;background:currentColor;}
+  .backup-badge.fresh{background:var(--ferie-soft);color:var(--ferie);}
+  .backup-badge.stale{background:var(--color-warning-soft);color:var(--color-warning);}
+  .backup-badge.none{background:var(--color-destructive-soft);color:var(--color-destructive);}
+
+  .gear-btn{position:relative;}
+  .gear-btn .nudge{
+    position:absolute;top:8px;right:8px;
+    width:8px;height:8px;border-radius:50%;
+    background:var(--color-warning);
+    border:2px solid var(--color-card);
+  }
+  .gear-btn .nudge.none{background:var(--color-destructive);}
+  .backup > p{
+    margin:0 0 var(--space-4);font-size:.8125rem;
+    color:var(--color-muted-foreground);max-width:64ch;
+  }
+  .backup-grid{display:grid;grid-template-columns:1fr;gap:var(--space-6);}
+  @media (min-width:768px){ .backup-grid{grid-template-columns:1fr 1fr;gap:var(--space-8);} }
+  .backup-col h4{
+    display:flex;align-items:center;gap:6px;
+    font-size:.75rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
+    color:var(--color-muted-foreground);margin:0 0 var(--space-2);
+  }
+  .backup-col > p{
+    margin:0 0 var(--space-3);font-size:.75rem;line-height:1.5;color:var(--color-faint);
+  }
+  .backup-area{
+    width:100%;min-height:104px;resize:vertical;
+    padding:var(--space-3);
+    border:1px solid var(--color-border);border-radius:var(--radius-md);
+    background:var(--color-background);color:var(--color-muted-foreground);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:.6875rem;line-height:1.5;
+    margin-bottom:var(--space-3);
+  }
+  .backup-area:focus{outline:none;border-color:var(--color-ring);box-shadow:inset 0 0 0 1px var(--color-ring);}
+  .backup-actions{display:flex;gap:var(--space-2);flex-wrap:wrap;}
+  .btn-ghost{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    min-height:40px;padding:0 var(--space-4);
+    background:var(--color-card);border:1px solid var(--color-border-strong);
+    border-radius:var(--radius-md);
+    font-size:.8125rem;font-weight:700;color:var(--color-foreground);
+    transition:background-color var(--dur) ease, border-color var(--dur) ease, opacity var(--dur) ease;
+  }
+  .btn-ghost:hover{background:var(--color-muted);}
+  .btn-ghost.danger{border-color:var(--color-destructive);color:var(--color-destructive);}
+  .btn-ghost.danger:hover{background:var(--color-destructive-soft);}
+  .btn-ghost[disabled]{opacity:.45;pointer-events:none;}
+  .backup-file{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    min-height:40px;padding:0 var(--space-4);
+    background:var(--color-card);border:1px dashed var(--color-border-strong);
+    border-radius:var(--radius-md);
+    font-size:.8125rem;font-weight:700;color:var(--color-muted-foreground);
+    cursor:pointer;
+    transition:background-color var(--dur) ease, color var(--dur) ease;
+  }
+  .backup-file:hover{background:var(--color-muted);color:var(--color-foreground);}
+  .backup-file input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;}
+  .backup-status{
+    margin:var(--space-3) 0 0;font-size:.75rem;line-height:1.5;font-weight:600;
+    color:var(--color-muted-foreground);
+  }
+  .backup-status.ok{color:var(--ferie);}
+  .backup-status.err{color:var(--color-destructive);}
+  .backup-confirm{
+    margin-top:var(--space-3);padding:var(--space-3);
+    background:var(--color-warning-soft);color:var(--color-warning);
+    border-radius:var(--radius-md);font-size:.75rem;line-height:1.5;font-weight:500;
+  }
+  .backup-confirm p{margin:0 0 var(--space-3);}
+  .backup-confirm b{font-weight:700;font-variant-numeric:tabular-nums;}
+
+  /* ---------- MODALE ---------- */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(2,6,23,.55);
+    display:none;align-items:center;justify-content:center;
+    z-index:50;padding:var(--space-4);
+  }
+  .modal-overlay.open{display:flex;}
+  .modal-box{
+    background:var(--color-card);border:1px solid var(--color-border);
+    border-radius:var(--radius-lg);padding:var(--space-6);
+    width:100%;max-width:320px;
+  }
+  .modal-box h3{margin:0 0 var(--space-1);font-size:1.125rem;font-weight:700;}
+  .modal-box p{margin:0 0 var(--space-4);font-size:.875rem;color:var(--color-muted-foreground);}
+  .modal-box input{
+    width:100%;min-height:52px;padding:0 var(--space-3);
+    border:1px solid var(--color-border);border-radius:var(--radius-md);
+    font-family:inherit;font-size:1.375rem;font-weight:700;
+    font-variant-numeric:tabular-nums;text-align:center;
+    background:var(--color-card);color:var(--color-foreground);
+    margin-bottom:var(--space-4);
+  }
+  .modal-box input:focus{outline:none;border-color:var(--color-ring);box-shadow:inset 0 0 0 1px var(--color-ring);}
+  .modal-actions{display:flex;gap:var(--space-2);}
+  .modal-actions button{
+    flex:1;min-height:44px;border-radius:var(--radius-md);
+    font-size:.9375rem;font-weight:700;
+    border:1px solid var(--color-border);
+    transition:background-color var(--dur) ease, opacity var(--dur) ease;
+  }
+  .modal-confirm{background:var(--color-primary);color:var(--color-on-primary);border-color:var(--color-primary);}
+  .modal-confirm:hover{opacity:.88;}
+  .modal-confirm[disabled]{opacity:.4;pointer-events:none;}
+  .modal-cancel{background:var(--color-card);color:var(--color-muted-foreground);}
+  .modal-cancel:hover{background:var(--color-muted);color:var(--color-foreground);}
+
+  /* ---------- MODALE DEL GIORNO ---------- */
+  .modal-day{
+    max-width:360px;text-align:left;
+    max-height:calc(100vh - 2 * var(--space-4));overflow-y:auto;
+  }
+  .modal-day h3{margin-bottom:2px;}
+  .modal-day h3::first-letter{text-transform:uppercase;}
+  .type-list{display:grid;gap:var(--space-2);margin-bottom:var(--space-4);}
+  .type-opt{
+    display:flex;align-items:center;gap:var(--space-3);
+    width:100%;min-height:48px;padding:0 var(--space-3);
+    background:var(--color-card);border:1px solid var(--color-border);
+    border-radius:var(--radius-md);
+    font-size:.875rem;font-weight:700;color:var(--color-foreground);text-align:left;
+    transition:background-color var(--dur) ease, border-color var(--dur) ease;
+  }
+  .type-opt:hover{background:var(--color-muted);}
+  .type-opt .dot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--c);}
+  .type-opt .hint{
+    margin-left:auto;font-size:.6875rem;font-weight:600;
+    color:var(--color-faint);text-align:right;
+  }
+  .type-opt.active{
+    background:var(--cs);border-color:var(--c);box-shadow:inset 0 0 0 1px var(--c);
+  }
+  .type-opt.active .hint{color:var(--c);}
+  .modal-minor{
+    display:block;width:100%;min-height:38px;margin-top:var(--space-1);
+    background:none;border:none;
+    font-size:.75rem;font-weight:600;color:var(--color-faint);
+    transition:color var(--dur) ease;
+  }
+  .modal-minor:hover{color:var(--color-foreground);}
+  .modal-delete{
+    display:flex;align-items:center;justify-content:center;gap:6px;
+    width:100%;min-height:44px;margin-top:var(--space-3);
+    padding-top:var(--space-3);
+    background:none;border:none;border-top:1px solid var(--color-border);
+    font-size:.8125rem;font-weight:700;color:var(--color-destructive);
+    transition:color var(--dur) ease;
+  }
+  .modal-delete:hover{color:var(--color-foreground);}
+
+  .modal-field{margin-bottom:var(--space-4);text-align:left;}
+  .modal-field > span{
+    display:block;font-size:.6875rem;font-weight:700;letter-spacing:.03em;
+    text-transform:uppercase;color:var(--color-faint);margin-bottom:6px;
+  }
+  .modal-box select{
+    width:100%;min-height:48px;padding:0 var(--space-3);
+    border:1px solid var(--color-border);border-radius:var(--radius-md);
+    font-family:inherit;font-size:.9375rem;font-weight:600;
+    background:var(--color-card);color:var(--color-foreground);
+  }
+  .modal-box select:focus{outline:none;border-color:var(--color-ring);box-shadow:inset 0 0 0 1px var(--color-ring);}
+  .segmented{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2);}
+  .segmented button{
+    min-height:44px;border-radius:var(--radius-md);
+    background:var(--color-card);border:1px solid var(--color-border);
+    font-size:.8125rem;font-weight:700;color:var(--color-muted-foreground);
+    transition:background-color var(--dur) ease, color var(--dur) ease, border-color var(--dur) ease;
+  }
+  .modal-box .modal-note{
+    margin:0 0 var(--space-4);padding:var(--space-2) var(--space-3);
+    background:var(--retribuito-soft);color:var(--retribuito);
+    border-radius:var(--radius-sm);font-size:.6875rem;line-height:1.45;font-weight:600;
+  }
+  .segmented button.active{
+    background:var(--color-primary);color:var(--color-on-primary);border-color:var(--color-primary);
+  }
+
+  /* ---------- PRESET ORE ---------- */
+  .ore-presets{display:flex;gap:var(--space-2);flex-wrap:wrap;margin-bottom:var(--space-2);}
+  .ore-presets button{
+    min-height:36px;padding:0 var(--space-3);
+    background:var(--color-card);border:1px solid var(--color-border);
+    border-radius:999px;
+    font-size:.75rem;font-weight:700;color:var(--color-muted-foreground);
+    transition:background-color var(--dur) ease, color var(--dur) ease, border-color var(--dur) ease;
+  }
+  .ore-presets button:hover{background:var(--color-muted);color:var(--color-foreground);}
+  .ore-presets button.active{
+    background:var(--permesso-soft);color:var(--permesso);border-color:var(--permesso);
+  }
+
+  /* ---------- ANNULLAMENTO ---------- */
+  .toast{
+    position:fixed;left:50%;transform:translateX(-50%);
+    bottom:calc(var(--space-4) + env(safe-area-inset-bottom,0px));
+    z-index:60;
+    display:flex;align-items:center;gap:var(--space-3);
+    max-width:calc(100vw - 2 * var(--space-4));
+    padding:var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+    background:var(--color-primary);color:var(--color-on-primary);
+    border-radius:999px;
+    font-size:.8125rem;font-weight:600;line-height:1.3;
+    animation:toastIn 200ms ease-out;
+  }
+  @keyframes toastIn{ from{opacity:0;transform:translate(-50%,8px);} to{opacity:1;transform:translate(-50%,0);} }
+  .toast button{
+    display:inline-flex;align-items:center;gap:5px;flex:none;
+    min-height:34px;padding:0 var(--space-3);
+    background:var(--color-on-primary);color:var(--color-primary);
+    border:none;border-radius:999px;
+    font-size:.75rem;font-weight:700;
+    transition:opacity var(--dur) ease;
+  }
+  .toast button:hover{opacity:.85;}
+
+  /* ---------- PRESSIONE PROLUNGATA ---------- */
+  .day.longpress .stamp{
+    opacity:.3;transform:scale(.82);
+    transition:opacity 500ms linear, transform 500ms ease-out;
+  }
+
+  /* ---------- VARIE ---------- */
+  .footnote{
+    text-align:center;font-size:.75rem;color:var(--color-faint);
+    margin-top:var(--space-8);
+  }
+  .loading-msg{
+    text-align:center;font-size:.875rem;color:var(--color-muted-foreground);
+    padding:var(--space-10) var(--space-4);
+  }
+</style>
+
+<div class="wrap">
+
+  <div class="masthead">
+    <div>
+      <h1>Libretto Ferie</h1>
+      <div class="sub">Ferie · ROL · Chiusure aziendali</div>
+    </div>
+    <div class="masthead-actions">
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="Cambia tema">
+        <span id="themeIcon" aria-hidden="true"></span><span id="themeLabel">Scuro</span>
+      </button>
+      <button class="gear-btn" id="toggleSettings" type="button" aria-expanded="false" aria-controls="settingsPanel">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span>Impostazioni</span>
+        <span class="nudge" id="settingsNudge" hidden aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="settings-panel card" id="settingsPanel">
+    <p class="settings-hint">
+      Inserisci il saldo dell'ultima busta paga e il mese a cui si riferisce: da lì in poi il libretto aggiunge da solo la maturazione mensile, mese dopo mese.
+    </p>
+    <div class="settings-grid">
+      <div class="field">
+        <label for="inpSaldoFerie">Saldo ferie da busta paga (gg)</label>
+        <input type="number" id="inpSaldoFerie" min="0" step="0.01">
+      </div>
+      <div class="field">
+        <label for="inpSaldoRol">Saldo ROL da busta paga (ore)</label>
+        <input type="number" id="inpSaldoRol" min="0" step="0.01">
+      </div>
+      <div class="field">
+        <label for="inpMeseRif">Mese di riferimento busta paga</label>
+        <input type="month" id="inpMeseRif">
+      </div>
+      <div class="field">
+        <label for="inpMaturazioneFerie">Maturazione mensile ferie (gg)</label>
+        <input type="number" id="inpMaturazioneFerie" min="0" step="0.01">
+      </div>
+      <div class="field">
+        <label for="inpMaturazioneRol">Maturazione mensile ROL (ore)</label>
+        <input type="number" id="inpMaturazioneRol" min="0" step="0.01">
+      </div>
+      <div class="field">
+        <label for="inpOreGiornata">Ore di una giornata lavorativa</label>
+        <input type="number" id="inpOreGiornata" min="1" step="0.5">
+      </div>
+    </div>
+    <button class="settings-save" type="button" id="saveSettings">Salva impostazioni</button>
+
+    <div class="backup">
+      <div class="backup-head">
+        <h3>Copia di sicurezza</h3>
+        <span class="backup-badge" id="backupBadge"><span class="dot"></span><span id="backupBadgeText">—</span></span>
+      </div>
+      <p>I dati vivono nel browser che stai usando. Salva una copia in un file JSON per ritrovarli su un altro dispositivo, o per recuperarli se svuoti la cache.</p>
+
+      <div class="backup-grid">
+        <div class="backup-col">
+          <h4>
+            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            Esporta
+          </h4>
+          <p>Copia il testo qui sotto e incollalo in un file di testo con estensione <b>.json</b>, conservato dove preferisci.</p>
+          <textarea class="backup-area" id="exportArea" readonly spellcheck="false" aria-label="Dati del libretto in formato JSON"></textarea>
+          <div class="backup-actions">
+            <button class="btn-ghost" type="button" id="copyExport">
+              <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copia negli appunti
+            </button>
+            <button class="btn-ghost" type="button" id="refreshExport">
+              <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+              Aggiorna
+            </button>
+          </div>
+          <p class="backup-status" id="exportStatus"></p>
+        </div>
+
+        <div class="backup-col">
+          <h4>
+            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            Importa
+          </h4>
+          <p>Scegli un file di backup, oppure incolla qui il contenuto di una copia salvata.</p>
+          <textarea class="backup-area" id="importArea" spellcheck="false" placeholder='{"versione":1,"impostazioni":{…},"movimenti":{…}}' aria-label="Incolla qui il backup da importare"></textarea>
+          <div class="backup-actions">
+            <label class="backup-file">
+              <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
+              Scegli file…
+              <input type="file" id="importFile" accept=".json,application/json,text/plain">
+            </label>
+            <button class="btn-ghost" type="button" id="checkImport">Controlla e importa</button>
+          </div>
+          <p class="backup-status" id="importStatus"></p>
+          <div class="backup-confirm" id="importConfirm" hidden>
+            <p id="importSummary"></p>
+            <div class="backup-actions">
+              <button class="btn-ghost" type="button" id="importMerge">Unisci ai dati attuali</button>
+              <button class="btn-ghost danger" type="button" id="importReplace">Sostituisci tutto</button>
+              <button class="btn-ghost" type="button" id="importCancel">Annulla</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="app" class="layout" style="display:none;">
+    <div class="card">
+      <div class="view-toggle" role="group" aria-label="Vista del calendario">
+        <button type="button" data-view="mese" class="active" aria-pressed="true">Mese</button>
+        <button type="button" data-view="anno" aria-pressed="false">Anno</button>
+      </div>
+
+      <div class="year-nav" id="yearNav" hidden>
+        <button id="prevYear" type="button" aria-label="Anno precedente">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="year-title" id="yearTitle">—</div>
+        <button id="nextYear" type="button" aria-label="Anno successivo">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+      <div class="year-grid" id="yearGrid" hidden></div>
+
+      <div class="month-nav" id="monthNav">
+        <button id="prevMonth" type="button" aria-label="Mese precedente">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <div class="month-title" id="monthTitle">—</div>
+          <button class="today-btn" id="todayBtn" type="button">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+            <span>Torna a oggi</span>
+          </button>
+        </div>
+        <button id="nextMonth" type="button" aria-label="Mese successivo">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+
+      <div class="cal-hint" id="modeRow">
+        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V6a2 2 0 0 1 4 0v5"/><path d="M13 11V7a2 2 0 0 1 4 0v4"/><path d="M17 11v-.5a2 2 0 0 1 4 0V15a6 6 0 0 1-6 6h-2a7 7 0 0 1-7-7v-3a2 2 0 0 1 4 0"/></svg>
+        <span>Tocca un giorno per segnarlo o modificarlo, trascina per più giorni. Tieni premuto su un giorno segnato per eliminarlo.</span>
+      </div>
+
+      <div class="weekdays" id="weekdays">
+        <span>Lun</span><span>Mar</span><span>Mer</span><span>Gio</span><span>Ven</span><span>Sab</span><span>Dom</span>
+      </div>
+      <div class="grid" id="calGrid"></div>
+
+      <div class="stamp-legend">
+        <span><span class="legend-swatch" style="background:var(--ferie)"></span>Ferie</span>
+        <span><span class="legend-swatch" style="background:var(--permesso)"></span>ROL (permessi a ore)</span>
+        <span><span class="legend-swatch" style="background:var(--chiusura)"></span>Chiusura aziendale (scala dalle ferie)</span>
+        <span><span class="legend-swatch" style="background:var(--retribuito)"></span>Permesso retribuito (non scala nulla)</span>
+        <span><span class="legend-swatch" style="background:var(--festivo)"></span>Festività</span>
+        <span><span class="legend-swatch" style="background:var(--color-muted)"></span>Weekend</span>
+      </div>
+    </div>
+
+    <div class="card ledger">
+      <h2>Riepilogo</h2>
+
+      <div class="ledger-block">
+        <div class="ledger-label"><span>Ferie residue</span><span id="ferieAnnoLabel">a fine mese</span></div>
+        <div class="ledger-main">
+          <span class="ledger-num ferie-c" id="ferieResidueNum">0</span>
+          <span class="ledger-unit">giorni su <span id="ferieTotaleLabel">0</span> maturati</span>
+        </div>
+        <div class="ledger-bar"><div class="ledger-bar-fill" id="ferieBar" style="background:var(--ferie);width:0%"></div></div>
+        <div class="ledger-detail"><span>Usate questo mese: <b id="ferieMese">0</b></span><span>Usate dalla busta paga: <b id="ferieAnno">0</b></span></div>
+        <p class="ledger-note" id="ferieNote">Le chiusure aziendali vengono scalate dai giorni di ferie.</p>
+        <div class="alert danger" id="ferieAlert" hidden>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          <span id="ferieAlertText"></span>
+        </div>
+      </div>
+
+      <div class="ledger-block">
+        <div class="ledger-label"><span>ROL residui</span><span id="permessoAnnoLabel">a fine mese</span></div>
+        <div class="ledger-main">
+          <span class="ledger-num permesso-c" id="permessoResiduoNum">0</span>
+          <span class="ledger-unit">ore su <span id="permessoTotaleLabel">0</span> maturate</span>
+        </div>
+        <div class="ledger-bar"><div class="ledger-bar-fill" id="permessoBar" style="background:var(--permesso);width:0%"></div></div>
+        <div class="ledger-detail"><span>Usate questo mese: <b id="permessoMese">0</b></span><span>Usate dalla busta paga: <b id="permessoAnno">0</b></span></div>
+        <div class="alert danger" id="permessoAlert" hidden>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          <span id="permessoAlertText"></span>
+        </div>
+      </div>
+
+      <div class="ledger-total">
+        <div class="ledger-label"><span>Totale a disposizione</span><span id="totaleLabel">a fine mese</span></div>
+        <div class="ledger-main">
+          <span class="ledger-num" id="totaleNum">0</span>
+          <span class="ledger-unit">giorni complessivi</span>
+        </div>
+        <div class="total-split">
+          <span><span class="swatch" style="background:var(--ferie)"></span>Ferie <b id="totaleFerie">0</b> gg</span>
+          <span><span class="swatch" style="background:var(--permesso)"></span>ROL <b id="totaleRolGg">0</b> gg</span>
+        </div>
+        <p class="ledger-note" id="totaleNote">I ROL sono convertiti in giorni a 8 ore.</p>
+      </div>
+
+      <div class="ledger-block" id="retribuitiBlock" hidden>
+        <div class="ledger-label"><span>Permessi retribuiti</span><span id="retribuitiAnno">—</span></div>
+        <div class="ledger-main">
+          <span class="ledger-num retribuito-c" id="retribuitiNum">0</span>
+          <span class="ledger-unit" id="retribuitiUnit">giorni</span>
+        </div>
+        <div class="motivi-list" id="motiviList"></div>
+        <p class="ledger-note">Assenze giustificate e pagate: non scalano né ferie né ROL.</p>
+      </div>
+
+      <div class="projection">
+        <div class="proj-head">
+          <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7"/><path d="M14 8h6v6"/></svg>
+          <span id="projTitle">Proiezione a fine anno</span>
+        </div>
+        <div class="proj-grid">
+          <div class="proj-item">
+            <span class="proj-num ferie-c" id="projFerie">0</span>
+            <small>giorni di ferie al 31/12</small>
+          </div>
+          <div class="proj-item">
+            <span class="proj-num permesso-c" id="projRol">0</span>
+            <small>ore di ROL al 31/12</small>
+          </div>
+        </div>
+        <p class="proj-sent" id="projSentence"></p>
+      </div>
+
+      <div class="movements">
+        <h3>Movimenti del mese</h3>
+        <div id="movementsList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading-msg" id="loadingMsg">Caricamento del libretto…</div>
+
+  <div class="footnote">I dati restano salvati solo per te, tra una visita e l'altra.</div>
+</div>
+
+<div class="bday-tip" id="bdayTip" role="status" hidden></div>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden>
+  <span id="toastText"></span>
+  <button type="button" id="toastUndo">
+    <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+    Annulla
+  </button>
+</div>
+
+<div class="modal-overlay" id="dayOverlay">
+  <div class="modal-box modal-day" role="dialog" aria-modal="true" aria-labelledby="dayTitle">
+    <h3 id="dayTitle">Giorno</h3>
+    <p id="daySubtitle">Cosa segni su questo giorno?</p>
+
+    <div class="type-list" id="typeList">
+      <button class="type-opt" type="button" data-tipo="ferie" style="--c:var(--ferie);--cs:var(--ferie-soft)" aria-pressed="false">
+        <span class="dot"></span>Ferie<span class="hint">giornata intera</span>
+      </button>
+      <button class="type-opt" type="button" data-tipo="permesso" style="--c:var(--permesso);--cs:var(--permesso-soft)" aria-pressed="false">
+        <span class="dot"></span>ROL<span class="hint">a ore</span>
+      </button>
+      <button class="type-opt" type="button" data-tipo="chiusura" style="--c:var(--chiusura);--cs:var(--chiusura-soft)" aria-pressed="false">
+        <span class="dot"></span>Chiusura aziendale<span class="hint">scala dalle ferie</span>
+      </button>
+      <button class="type-opt" type="button" data-tipo="retribuito" style="--c:var(--retribuito);--cs:var(--retribuito-soft)" aria-pressed="false">
+        <span class="dot"></span>Permesso retribuito<span class="hint">non scala nulla</span>
+      </button>
+    </div>
+
+    <div class="modal-field" id="motivoField" hidden>
+      <span>Motivo</span>
+      <select id="dayMotivo">
+        <option>Donazione sangue</option>
+        <option>Legge 104</option>
+        <option>Lutto</option>
+        <option>Congedo matrimoniale</option>
+        <option>Assemblea sindacale</option>
+        <option>Visita medica</option>
+        <option>Altro</option>
+      </select>
+    </div>
+
+    <div class="modal-field" id="durataField" hidden>
+      <span>Durata</span>
+      <div class="segmented" id="dayDurata">
+        <button type="button" data-durata="giorno" class="active">Giornata intera</button>
+        <button type="button" data-durata="ore">A ore</button>
+      </div>
+    </div>
+
+    <div class="modal-field" id="oreField" hidden>
+      <span id="oreLabel">Ore</span>
+      <div class="ore-presets" id="orePresets">
+        <button type="button" data-ore="4">4h</button>
+        <button type="button" data-ore="8">8h</button>
+      </div>
+      <input type="number" id="dayOre" min="0.5" step="0.5" value="4">
+    </div>
+
+    <p class="modal-note" id="dayNote" hidden>Non viene scalato né dalle ferie né dai ROL.</p>
+
+    <div class="modal-actions">
+      <button class="modal-confirm" type="button" id="dayConfirm">Salva</button>
+    </div>
+    <button class="modal-minor" type="button" id="dayCancel">Annulla</button>
+    <button class="modal-delete" type="button" id="dayDelete" hidden>
+      <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+      <span id="dayDeleteLabel">Elimina il movimento</span>
+    </button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
+
+  function pad(n){ return n < 10 ? '0'+n : ''+n; }
+
+  const todayForDefault = new Date();
+  const DEFAULT_SETTINGS = {
+    saldoFerie: 0,
+    saldoRol: 0,
+    meseRif: `${todayForDefault.getFullYear()}-${pad(todayForDefault.getMonth()+1)}`,
+    maturazioneFerie: 1.67,
+    maturazioneRol: 8.66,
+    oreGiornata: 8
+  };
+
+  let settings = {...DEFAULT_SETTINGS};
+  let entries = {}; // "YYYY-MM-DD" -> {tipo:'ferie'|'permesso'|'chiusura'|'retribuito', ore?:number, motivo?:string}
+  const ORE_MEZZA_GIORNATA = 4;
+  let theme = 'light';
+  let backupMeta = null; // { at: ISO, hash: string }
+  let view = 'mese';
+  let viewDate = new Date();
+  viewDate.setDate(1);
+
+  const $ = (id) => document.getElementById(id);
+
+  // Archivio: usa window.storage se presente, altrimenti lo storage del browser.
+  const store = {
+    async get(key){
+      if(window.storage && window.storage.get) return await window.storage.get(key);
+      try{ const v = localStorage.getItem(key); return v === null ? null : {value:v}; }
+      catch(e){ return null; }
+    },
+    async set(key, value){
+      if(window.storage && window.storage.set) return await window.storage.set(key, value);
+      try{ localStorage.setItem(key, value); }catch(e){ /* storage non disponibile */ }
+    }
+  };
+
+  function keyFor(y,m,d){ return `${y}-${pad(m+1)}-${pad(d)}`; }
+
+  // Le vecchie "mezze giornate" ora vivono dentro il ROL, come 4 ore.
+  function migraMezzeGiornate(){
+    let cambiato = false;
+    Object.keys(entries).forEach(k => {
+      if(entries[k] && entries[k].tipo === 'mezza'){
+        entries[k] = { tipo:'permesso', ore: ORE_MEZZA_GIORNATA };
+        cambiato = true;
+      }
+    });
+    return cambiato;
+  }
+
+  function refreshViews(){
+    if(view === 'anno') renderYear(); else renderCalendar();
+    renderLedger();
+  }
+
+  // ---- Annullamento dell'ultima azione ----
+  let undoSnapshot = null;
+  let undoTimer = null;
+
+  function snapshotKeys(keys){
+    const s = {};
+    keys.forEach(k => { s[k] = entries[k] ? {...entries[k]} : null; });
+    return s;
+  }
+
+  function showUndo(testo, snapshot){
+    undoSnapshot = snapshot;
+    $('toastText').textContent = testo;
+    $('toast').hidden = false;
+    clearTimeout(undoTimer);
+    undoTimer = setTimeout(hideToast, 7000);
+  }
+
+  function hideToast(){
+    $('toast').hidden = true;
+    undoSnapshot = null;
+    clearTimeout(undoTimer);
+  }
+
+  function undoLast(){
+    if(!undoSnapshot) return;
+    Object.keys(undoSnapshot).forEach(k => {
+      if(undoSnapshot[k]) entries[k] = undoSnapshot[k];
+      else delete entries[k];
+    });
+    saveEntries();
+    refreshViews();
+    hideToast();
+  }
+
+  function etichettaTipo(rec){
+    if(!rec) return '';
+    if(rec.tipo === 'ferie') return 'ferie';
+    if(rec.tipo === 'permesso') return `ROL di ${rec.ore} ${plur(rec.ore,'ora','ore')}`;
+    if(rec.tipo === 'chiusura') return 'chiusura aziendale';
+    if(rec.tipo === 'retribuito') return (rec.motivo || 'permesso retribuito').toLowerCase();
+    return 'movimento';
+  }
+
+  const FIXED_HOLIDAYS = [
+    [1,1,'Capodanno'],
+    [1,6,'Epifania'],
+    [4,25,'Liberazione'],
+    [5,1,'Festa dei Lavoratori'],
+    [6,2,'Festa della Repubblica'],
+    [8,15,'Ferragosto'],
+    [11,1,'Ognissanti'],
+    [12,8,'Immacolata'],
+    [12,25,'Natale'],
+    [12,26,'Santo Stefano']
+  ];
+  const holidayCache = {};
+
+  // Compleanni: ricorrono ogni anno, non sono movimenti e non finiscono nel backup.
+  const COMPLEANNI = {
+    '02-03': 'Antonio',
+    '04-07': 'Armando',
+    '05-02': 'Carla',
+    '07-07': 'Paolo',
+    '07-31': 'Vanessa',
+    '10-11': 'Gabriel',
+    '12-28': 'Lorenzo'
+  };
+  function getCompleanno(m0, d){ return COMPLEANNI[`${pad(m0+1)}-${pad(d)}`] || null; }
+
+  const ICON_TORTA = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c.6.9 1 1.5 1 2a1 1 0 0 1-2 0c0-.5.4-1.1 1-2z"/><path d="M12 6.5v2.6"/><path d="M4 21h16"/><path d="M5.5 21v-5.5a2.5 2.5 0 0 1 2.5-2.5h8a2.5 2.5 0 0 1 2.5 2.5V21"/><path d="M5.5 16.6c1.4 0 1.4-1.1 2.8-1.1s1.4 1.1 2.8 1.1 1.4-1.1 2.8-1.1 1.4 1.1 2.8 1.1"/></svg>';
+
+  function calcolaPasqua(year){
+    const a = year % 19;
+    const b = Math.floor(year / 100);
+    const c = year % 100;
+    const d = Math.floor(b / 4);
+    const e = b % 4;
+    const f = Math.floor((b + 8) / 25);
+    const g = Math.floor((b - f + 1) / 3);
+    const h = (19*a + b - d - g + 15) % 30;
+    const i = Math.floor(c / 4);
+    const k = c % 4;
+    const l = (32 + 2*e + 2*i - h - k) % 7;
+    const mm = Math.floor((a + 11*h + 22*l) / 451);
+    const month = Math.floor((h + l - 7*mm + 114) / 31);
+    const day = ((h + l - 7*mm + 114) % 31) + 1;
+    return { month, day }; // month is 1-based (3=marzo, 4=aprile)
+  }
+
+  function getHolidaysForYear(year){
+    if(holidayCache[year]) return holidayCache[year];
+    const map = {};
+    FIXED_HOLIDAYS.forEach(([m,d,name]) => { map[`${pad(m)}-${pad(d)}`] = name; });
+    if(year >= 2026) map['10-04'] = 'San Francesco'; // Legge 151/2025
+    const pasqua = calcolaPasqua(year);
+    const pasquaDate = new Date(year, pasqua.month - 1, pasqua.day);
+    const pasquettaDate = new Date(year, pasqua.month - 1, pasqua.day + 1);
+    map[`${pad(pasquaDate.getMonth()+1)}-${pad(pasquaDate.getDate())}`] = 'Pasqua';
+    map[`${pad(pasquettaDate.getMonth()+1)}-${pad(pasquettaDate.getDate())}`] = 'Pasquetta';
+    holidayCache[year] = map;
+    return map;
+  }
+
+  function getHoliday(y, m0, d){
+    const map = getHolidaysForYear(y);
+    return map[`${pad(m0+1)}-${pad(d)}`] || null;
+  }
+
+  async function loadData(){
+    try{
+      const s = await store.get('leave-settings');
+      if(s && s.value) settings = {...DEFAULT_SETTINGS, ...JSON.parse(s.value)};
+    }catch(e){ /* no settings yet */ }
+    try{
+      const e = await store.get('leave-entries');
+      if(e && e.value) entries = JSON.parse(e.value);
+    }catch(e){ /* no entries yet */ }
+    try{
+      const b = await store.get('leave-backup-meta');
+      if(b && b.value) backupMeta = JSON.parse(b.value);
+    }catch(e){ /* nessuna copia ancora */ }
+    try{
+      const t = await store.get('leave-theme');
+      if(t && t.value && (t.value === 'dark' || t.value === 'light')) theme = t.value;
+      else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) theme = 'dark';
+    }catch(e){
+      if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) theme = 'dark';
+    }
+  }
+
+  async function saveSettings(){
+    try{ await store.set('leave-settings', JSON.stringify(settings)); }
+    catch(e){ console.error('Errore salvataggio impostazioni', e); }
+  }
+  async function saveEntries(){
+    try{ await store.set('leave-entries', JSON.stringify(entries)); }
+    catch(e){ console.error('Errore salvataggio movimenti', e); }
+  }
+
+  const ICON_GOCCIA = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3s6 6.4 6 10a6 6 0 0 1-12 0c0-3.6 6-10 6-10z"/></svg>';
+  const ICON_MOON ='<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>';
+  const ICON_SUN = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+
+  function applyTheme(){
+    document.documentElement.setAttribute('data-theme', theme);
+    $('themeIcon').innerHTML = theme === 'dark' ? ICON_SUN : ICON_MOON;
+    $('themeLabel').textContent = theme === 'dark' ? 'Chiaro' : 'Scuro';
+  }
+
+  async function toggleTheme(){
+    theme = theme === 'dark' ? 'light' : 'dark';
+    applyTheme();
+    try{ await store.set('leave-theme', theme); }
+    catch(e){ console.error('Errore salvataggio tema', e); }
+  }
+
+  function fillSettingsForm(){
+    $('inpSaldoFerie').value = settings.saldoFerie;
+    $('inpSaldoRol').value = settings.saldoRol;
+    $('inpMeseRif').value = settings.meseRif;
+    $('inpMaturazioneFerie').value = settings.maturazioneFerie;
+    $('inpMaturazioneRol').value = settings.maturazioneRol;
+    $('inpOreGiornata').value = settings.oreGiornata;
+  }
+
+  function renderCalendar(){
+    const y = viewDate.getFullYear();
+    const m = viewDate.getMonth();
+    $('monthTitle').textContent = `${MESI[m]} ${y}`;
+    const now = new Date();
+    $('todayBtn').classList.toggle('show', !(now.getFullYear() === y && now.getMonth() === m));
+
+    const grid = $('calGrid');
+    grid.innerHTML = '';
+
+    const firstDow = (new Date(y,m,1).getDay() + 6) % 7; // Mon=0
+    const daysInMonth = new Date(y,m+1,0).getDate();
+    const today = new Date();
+    const todayKey = keyFor(today.getFullYear(), today.getMonth(), today.getDate());
+
+    for(let i=0;i<firstDow;i++){
+      const empty = document.createElement('div');
+      empty.className = 'day empty';
+      grid.appendChild(empty);
+    }
+
+    for(let d=1; d<=daysInMonth; d++){
+      const dow = (new Date(y,m,d).getDay());
+      const isWeekend = (dow===0 || dow===6);
+      const holidayName = getHoliday(y, m, d);
+      const cell = document.createElement('div');
+      cell.className = 'day' + (isWeekend ? ' weekend':'') + (holidayName ? ' holiday':'');
+      const k = keyFor(y,m,d);
+      if(k === todayKey) cell.classList.add('today');
+      if(holidayName) cell.title = holidayName;
+
+      const num = document.createElement('span');
+      num.className = 'daynum';
+      num.textContent = d;
+      cell.appendChild(num);
+
+      if(holidayName){
+        const label = document.createElement('span');
+        label.className = 'holiday-label';
+        label.textContent = holidayName;
+        cell.appendChild(label);
+      }
+
+      const entry = entries[k];
+      if(entry){
+        const stamp = document.createElement('div');
+        stamp.className = 'stamp';
+        if(entry.tipo === 'ferie'){
+          stamp.innerHTML = '<div class="stamp-circle">F</div>';
+        } else if(entry.tipo === 'permesso'){
+          stamp.innerHTML = `<div class="stamp-permesso">${entry.ore}h</div>`;
+        } else if(entry.tipo === 'chiusura'){
+          stamp.innerHTML = '<div class="stamp-chiusura">CA</div>';
+        } else if(entry.tipo === 'retribuito'){
+          const contenuto = entry.motivo === 'Donazione sangue' ? ICON_GOCCIA : 'R';
+          const coda = entry.ore ? `<span class="ore">${entry.ore}h</span>` : '';
+          stamp.innerHTML = `<div class="stamp-retribuito">${contenuto}${coda}</div>`;
+          cell.title = `${entry.motivo || 'Permesso retribuito'}${entry.ore ? ' · ' + entry.ore + ' ore' : ' · giornata intera'}`;
+        }
+        cell.appendChild(stamp);
+      }
+
+      const festeggiato = getCompleanno(m, d);
+      if(festeggiato){
+        const torta = document.createElement('button');
+        torta.type = 'button';
+        torta.className = 'cake';
+        torta.innerHTML = ICON_TORTA;
+        torta.setAttribute('aria-label', `Auguri ${festeggiato}`);
+        torta.dataset.nome = festeggiato;
+        cell.appendChild(torta);
+      }
+
+      if(!isWeekend && !holidayName){
+        cell.classList.add('selectable');
+        cell.dataset.key = k;
+        cell.dataset.day = d;
+      }
+      grid.appendChild(cell);
+    }
+  }
+
+  // ---- Vista annuale ----
+  const MESI_BREVI = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
+
+  function renderYear(){
+    const y = viewDate.getFullYear();
+    const mCorrente = viewDate.getMonth();
+    $('yearTitle').textContent = y;
+
+    const oggi = new Date();
+    const grid = $('yearGrid');
+    grid.innerHTML = '';
+
+    for(let m=0; m<12; m++){
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'mini-month' + (m === mCorrente ? ' current' : '');
+      btn.dataset.month = m;
+
+      const firstDow = (new Date(y,m,1).getDay() + 6) % 7;
+      const daysInMonth = new Date(y,m+1,0).getDate();
+
+      let usati = 0;
+      let celle = '';
+      for(let i=0;i<firstDow;i++) celle += '<span class="mini-day empty"></span>';
+      for(let d=1; d<=daysInMonth; d++){
+        const dow = new Date(y,m,d).getDay();
+        const isWeekend = (dow===0 || dow===6);
+        const holidayName = getHoliday(y, m, d);
+        const e = entries[keyFor(y,m,d)];
+        let cls = 'mini-day';
+        let titolo = `${pad(d)} ${MESI[m]}`;
+        if(e){
+          cls += ' ' + e.tipo;
+          usati++;
+          titolo += ' · ' + (e.tipo === 'permesso' ? `ROL ${e.ore}h`
+            : e.tipo === 'chiusura' ? 'chiusura aziendale'
+            : e.tipo === 'retribuito' ? (e.motivo || 'permesso retribuito') : 'ferie');
+        } else if(holidayName){
+          cls += ' holiday';
+          titolo += ' · ' + holidayName;
+        } else if(isWeekend){
+          cls += ' weekend';
+        }
+        celle += `<span class="${cls}" title="${titolo}"></span>`;
+      }
+
+      btn.innerHTML =
+        `<div class="mini-head">
+           <span class="mini-name">${MESI_BREVI[m]}${(oggi.getFullYear()===y && oggi.getMonth()===m) ? ' ·' : ''}</span>
+           <span class="mini-count">${usati || ''}</span>
+         </div>
+         <div class="mini-grid">${celle}</div>`;
+
+      btn.setAttribute('aria-label', `${MESI[m]} ${y}${usati ? `, ${usati} ${plur(usati,'giorno segnato','giorni segnati')}` : ''}`);
+      btn.addEventListener('click', () => {
+        viewDate = new Date(y, m, 1);
+        setView('mese');
+      });
+      grid.appendChild(btn);
+    }
+  }
+
+  function setView(v){
+    view = v;
+    const annuale = v === 'anno';
+    ['monthNav','modeRow','weekdays','calGrid'].forEach(id => { $(id).hidden = annuale; });
+    ['yearNav','yearGrid'].forEach(id => { $(id).hidden = !annuale; });
+    document.querySelectorAll('.view-toggle button').forEach(b => {
+      const on = b.dataset.view === v;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    if(annuale) renderYear(); else renderCalendar();
+    renderLedger();
+  }
+
+  // ---- Messaggio di auguri ----
+  let tipTimer = null;
+
+  function mostraAuguri(bottone){
+    const tip = $('bdayTip');
+    tip.innerHTML = `${ICON_TORTA.replace('<svg', '<svg class="tip-icon"')}Auguri ${bottone.dataset.nome}!`;
+    tip.hidden = false;
+
+    const r = bottone.getBoundingClientRect();
+    const t = tip.getBoundingClientRect();
+    let left = r.left + r.width/2 - t.width/2;
+    left = Math.max(8, Math.min(left, window.innerWidth - t.width - 8));
+    let top = r.top - t.height - 8;
+    if(top < 8) top = r.bottom + 8; // se non c'è posto sopra, va sotto
+    tip.style.left = left + 'px';
+    tip.style.top = top + 'px';
+
+    clearTimeout(tipTimer);
+    tipTimer = setTimeout(nascondiAuguri, 2600);
+  }
+
+  function nascondiAuguri(){
+    clearTimeout(tipTimer);
+    $('bdayTip').hidden = true;
+  }
+
+  function collegaAuguri(){
+    const grid = $('calGrid');
+    // il tocco sulla torta non deve avviare la selezione del giorno
+    grid.addEventListener('pointerdown', (e) => {
+      if(e.target.closest('.cake')) e.stopPropagation();
+    }, true);
+    grid.addEventListener('mousedown', (e) => {
+      if(e.target.closest('.cake')) e.stopPropagation();
+    }, true);
+    grid.addEventListener('touchstart', (e) => {
+      if(e.target.closest('.cake')) e.stopPropagation();
+    }, true);
+
+    grid.addEventListener('click', (e) => {
+      const torta = e.target.closest('.cake');
+      if(!torta) return;
+      e.stopPropagation();
+      mostraAuguri(torta);
+    });
+    grid.addEventListener('mouseover', (e) => {
+      const torta = e.target.closest('.cake');
+      if(torta) mostraAuguri(torta);
+    });
+    grid.addEventListener('mouseout', (e) => {
+      if(e.target.closest('.cake')) nascondiAuguri();
+    });
+    grid.addEventListener('focusin', (e) => {
+      const torta = e.target.closest('.cake');
+      if(torta) mostraAuguri(torta);
+    });
+    grid.addEventListener('focusout', (e) => {
+      if(e.target.closest('.cake')) nascondiAuguri();
+    });
+    window.addEventListener('scroll', nascondiAuguri, {passive:true});
+  }
+
+  // ---- Selezione con trascinamento ----
+  let isPointerDown = false;
+  let dragStartDay = null;
+  let didDrag = false;
+  let selectedKeys = [];
+  let pendingKeys = [];
+
+  function cellAtPoint(x, y){
+    const el = document.elementFromPoint(x, y);
+    if(!el) return null;
+    const cell = el.closest('.day.selectable');
+    return cell && $('calGrid').contains(cell) ? cell : null;
+  }
+
+  function computeRange(startDay, endDay){
+    const lo = Math.min(startDay, endDay);
+    const hi = Math.max(startDay, endDay);
+    const keys = [];
+    $('calGrid').querySelectorAll('.day.selectable').forEach(cell => {
+      const d = Number(cell.dataset.day);
+      if(d >= lo && d <= hi) keys.push(cell.dataset.key);
+    });
+    return keys;
+  }
+
+  function highlightSelection(){
+    $('calGrid').querySelectorAll('.day').forEach(cell => {
+      cell.classList.toggle('selecting', selectedKeys.includes(cell.dataset.key));
+    });
+  }
+
+  let longPressTimer = null;
+  let longPressFired = false;
+
+  function cancelLongPress(){
+    clearTimeout(longPressTimer);
+    longPressTimer = null;
+    $('calGrid').querySelectorAll('.longpress').forEach(c => c.classList.remove('longpress'));
+  }
+
+  function beginSelection(cell){
+    isPointerDown = true;
+    didDrag = false;
+    longPressFired = false;
+    dragStartDay = Number(cell.dataset.day);
+    selectedKeys = [cell.dataset.key];
+    $('calGrid').classList.add('dragging');
+    highlightSelection();
+
+    // pressione prolungata su un giorno già segnato = elimina al volo
+    cancelLongPress();
+    const k = cell.dataset.key;
+    if(entries[k]){
+      cell.classList.add('longpress');
+      longPressTimer = setTimeout(() => {
+        longPressFired = true;
+        isPointerDown = false;
+        selectedKeys = [];
+        $('calGrid').classList.remove('dragging');
+        $('calGrid').querySelectorAll('.selecting').forEach(c => c.classList.remove('selecting'));
+        cancelLongPress();
+        eliminaGiorno(k);
+      }, 550);
+    }
+  }
+
+  function extendSelection(cell){
+    const d = Number(cell.dataset.day);
+    if(d !== dragStartDay){ didDrag = true; cancelLongPress(); }
+    const range = computeRange(dragStartDay, d);
+    if(range.length !== selectedKeys.length || range[range.length-1] !== selectedKeys[selectedKeys.length-1]){
+      selectedKeys = range;
+      highlightSelection();
+    }
+  }
+
+  function endSelection(){
+    cancelLongPress();
+    if(longPressFired){ longPressFired = false; return; }
+    if(!isPointerDown) return;
+    isPointerDown = false;
+    $('calGrid').classList.remove('dragging');
+    const keys = selectedKeys.slice();
+    selectedKeys = [];
+    $('calGrid').querySelectorAll('.selecting').forEach(c => c.classList.remove('selecting'));
+    if(keys.length === 0) return;
+    commitSelection(keys, !didDrag && keys.length === 1);
+  }
+
+  // ---- Modale del giorno: crea, modifica, elimina ----
+  const GIORNI = ['domenica','lunedì','martedì','mercoledì','giovedì','venerdì','sabato'];
+  let dayTipo = null;
+  let dayDurata = 'giorno';
+
+  function descriviEntry(e){
+    if(!e) return null;
+    if(e.tipo === 'ferie') return 'Ferie, giornata intera';
+    if(e.tipo === 'permesso') return `ROL, ${e.ore} ${plur(e.ore,'ora','ore')}`;
+    if(e.tipo === 'chiusura') return 'Chiusura aziendale, scalata dalle ferie';
+    if(e.tipo === 'retribuito') return `${e.motivo || 'Permesso retribuito'}, ${e.ore ? e.ore + ' ' + plur(e.ore,'ora','ore') : 'giornata intera'}`;
+    return null;
+  }
+
+  // Cosa hai già segnato nel mese: serve a decidere senza chiudere il pannello.
+  function riepilogoMese(y, m0){
+    let ferie = 0, ore = 0, retribuiti = 0;
+    Object.keys(entries).forEach(k => {
+      const [ky, km] = k.split('-').map(Number);
+      if(ky !== y || km - 1 !== m0) return;
+      const e = entries[k];
+      if(e.tipo === 'ferie' || e.tipo === 'chiusura') ferie += 1;
+      else if(e.tipo === 'permesso') ore += e.ore;
+      else if(e.tipo === 'retribuito') retribuiti += 1;
+    });
+    const pezzi = [];
+    if(ferie > 0) pezzi.push(`${num(ferie)} ${plur(ferie,'giorno','giorni')} di ferie`);
+    if(ore > 0) pezzi.push(`${num(ore)} ${plur(ore,'ora','ore')} di ROL`);
+    if(retribuiti > 0) pezzi.push(`${retribuiti} ${plur(retribuiti,'permesso retribuito','permessi retribuiti')}`);
+    if(pezzi.length === 0) return `A ${MESI[m0]} non hai ancora segnato nulla.`;
+    const ultimo = pezzi.pop();
+    return `Finora a ${MESI[m0]}: ${pezzi.length ? pezzi.join(', ') + ' e ' : ''}${ultimo}.`;
+  }
+
+  function commitSelection(keys, isSingleTap){
+    pendingKeys = keys;
+    const esistenti = keys.filter(k => entries[k]);
+    const primo = isSingleTap ? entries[keys[0]] : null;
+
+    if(isSingleTap){
+      const [yy,mm,dd] = keys[0].split('-').map(Number);
+      const data = new Date(yy, mm-1, dd);
+      $('dayTitle').textContent = `${GIORNI[data.getDay()]} ${dd} ${MESI[mm-1]}`;
+      const festeggiato = getCompleanno(mm-1, dd);
+      const base = primo ? `Ora è segnato: ${descriviEntry(primo)}.` : riepilogoMese(yy, mm-1);
+      $('daySubtitle').textContent = festeggiato ? `Compleanno di ${festeggiato}. ${base}` : base;
+    } else {
+      const primi = keys[0].split('-').map(Number);
+      const ultimi = keys[keys.length-1].split('-').map(Number);
+      $('dayTitle').textContent = `${keys.length} giorni selezionati`;
+      $('daySubtitle').textContent =
+        `Dal ${primi[2]} al ${ultimi[2]} ${MESI[ultimi[1]-1]}, weekend e festivi esclusi` +
+        (esistenti.length ? ` · ${esistenti.length} ${plur(esistenti.length,'è già segnato e verrà sostituito','già segnati, verranno sostituiti')}.` : '.');
+    }
+
+    // stato iniziale: se c'è già un movimento parte da quello
+    if(primo){
+      selezionaTipo(primo.tipo, true);
+      if(primo.tipo === 'permesso') $('dayOre').value = primo.ore;
+      if(primo.tipo === 'retribuito'){
+        $('dayMotivo').value = primo.motivo || 'Altro';
+        setDurata(primo.ore ? 'ore' : 'giorno');
+        if(primo.ore) $('dayOre').value = primo.ore;
+      }
+    } else {
+      selezionaTipo(null, true);
+    }
+
+    $('dayDelete').hidden = esistenti.length === 0;
+    $('dayDeleteLabel').textContent = esistenti.length > 1
+      ? `Elimina i ${esistenti.length} movimenti`
+      : 'Elimina il movimento';
+
+    $('dayOverlay').classList.add('open');
+  }
+
+  function selezionaTipo(tipo, iniziale){
+    dayTipo = tipo;
+    document.querySelectorAll('.type-opt').forEach(b => {
+      const on = b.dataset.tipo === tipo;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    const isRetribuito = tipo === 'retribuito';
+    const isRol = tipo === 'permesso';
+    $('motivoField').hidden = !isRetribuito;
+    $('durataField').hidden = !isRetribuito;
+    $('dayNote').hidden = !isRetribuito;
+    $('oreField').hidden = !(isRol || (isRetribuito && dayDurata === 'ore'));
+    $('oreLabel').textContent = isRol ? 'Ore di ROL' : 'Ore';
+    if(!iniziale && isRetribuito) setDurata(dayDurata);
+    $('dayConfirm').disabled = !tipo;
+    syncPresets();
+  }
+
+  function syncPresets(){
+    const v = parseFloat($('dayOre').value);
+    document.querySelectorAll('#orePresets button').forEach(b => {
+      b.classList.toggle('active', parseFloat(b.dataset.ore) === v);
+    });
+  }
+
+  function setDurata(d){
+    dayDurata = d;
+    document.querySelectorAll('#dayDurata button').forEach(b => {
+      b.classList.toggle('active', b.dataset.durata === d);
+    });
+    $('oreField').hidden = !(dayTipo === 'permesso' || (dayTipo === 'retribuito' && d === 'ore'));
+  }
+
+  function confirmDay(){
+    if(!dayTipo || pendingKeys.length === 0) return;
+    const ore = parseFloat($('dayOre').value);
+
+    let record;
+    if(dayTipo === 'permesso'){
+      if(!(ore > 0)) return;
+      record = { tipo:'permesso', ore: ore };
+    } else if(dayTipo === 'retribuito'){
+      const motivo = $('dayMotivo').value;
+      if(dayDurata === 'ore'){
+        if(!(ore > 0)) return;
+        record = { tipo:'retribuito', motivo: motivo, ore: ore };
+      } else {
+        record = { tipo:'retribuito', motivo: motivo };
+      }
+    } else {
+      record = { tipo: dayTipo };
+    }
+
+    const snap = snapshotKeys(pendingKeys);
+    const n = pendingKeys.length;
+    pendingKeys.forEach(k => { entries[k] = {...record}; });
+    saveEntries();
+    refreshViews();
+    showUndo(`${n} ${plur(n,'giorno segnato','giorni segnati')} come ${etichettaTipo(record)}`, snap);
+    closeDay();
+  }
+
+  function deleteDay(){
+    const daEliminare = pendingKeys.filter(k => entries[k]);
+    const snap = snapshotKeys(daEliminare);
+    const n = daEliminare.length;
+    daEliminare.forEach(k => { delete entries[k]; });
+    saveEntries();
+    refreshViews();
+    showUndo(`${n} ${plur(n,'movimento eliminato','movimenti eliminati')}`, snap);
+    closeDay();
+  }
+
+  function eliminaGiorno(k){
+    const rec = entries[k];
+    if(!rec) return;
+    const snap = snapshotKeys([k]);
+    delete entries[k];
+    saveEntries();
+    refreshViews();
+    const giorno = Number(k.split('-')[2]);
+    showUndo(`${etichettaTipo(rec)} del ${giorno} eliminata`, snap);
+    if(navigator.vibrate) { try{ navigator.vibrate(12); }catch(e){} }
+  }
+
+  function closeDay(){
+    $('dayOverlay').classList.remove('open');
+    pendingKeys = [];
+    dayTipo = null;
+    dayDurata = 'giorno';
+  }
+
+  function ymIndex(y, m){ return y*12 + m; } // m is 0-based
+  function round2(n){ return Math.round(n*100)/100; }
+  function num(n){ return round2(n).toLocaleString('it-IT'); }
+  function plur(n, sing, plurale){ return round2(Math.abs(n)) === 1 ? sing : plurale; }
+
+  function renderLedger(){
+    const y = viewDate.getFullYear();
+    const m = viewDate.getMonth();
+    const viewedYM = ymIndex(y, m);
+
+    const [refY, refM] = settings.meseRif.split('-').map(Number); // refM is 1-based from <input type="month">
+    const refYM = ymIndex(refY, refM - 1);
+
+    const monthsElapsed = Math.max(0, viewedYM - refYM);
+    const ferieTotale = settings.saldoFerie + monthsElapsed * settings.maturazioneFerie;
+    const rolTotale = settings.saldoRol + monthsElapsed * settings.maturazioneRol;
+    const oreGiornata = settings.oreGiornata > 0 ? settings.oreGiornata : 8;
+
+    let ferieUsateDaRif = 0, ferieMese = 0, permessoUsateDaRif = 0, permessoMese = 0;
+    let chiusureDaRif = 0, chiusureMese = 0;
+    const monthMoves = [];
+
+    let retribuitiGiorni = 0, retribuitiOre = 0;
+    const motiviConteggio = {};
+
+    // proiezione: tutto ciò che pesa da qui al 31 dicembre dell'anno visualizzato
+    const dicYM = ymIndex(y, 11);
+    let ferieFinoADic = 0, rolFinoADic = 0, ferieFuture = 0, rolFuture = 0;
+
+    function contaProiezione(tipo, giorni, ore, entryYM){
+      if(entryYM <= refYM || entryYM > dicYM) return;
+      ferieFinoADic += giorni;
+      rolFinoADic += ore;
+      if(entryYM > viewedYM){ ferieFuture += giorni; rolFuture += ore; }
+    }
+
+    Object.keys(entries).forEach(k => {
+      const [ky, km, kd] = k.split('-').map(Number);
+      const entryYM = ymIndex(ky, km - 1);
+      const isThisMonth = entryYM === viewedYM;
+      const countsTowardBalance = entryYM > refYM && entryYM <= viewedYM;
+      const e = entries[k];
+
+      if(e.tipo === 'ferie'){
+        if(countsTowardBalance) ferieUsateDaRif += 1;
+        if(isThisMonth){ ferieMese += 1; monthMoves.push({k, kd, label:'Ferie · giornata intera'}); }
+        contaProiezione('ferie', 1, 0, entryYM);
+      } else if(e.tipo === 'chiusura'){
+        if(countsTowardBalance){ ferieUsateDaRif += 1; chiusureDaRif += 1; }
+        if(isThisMonth){ ferieMese += 1; chiusureMese += 1; monthMoves.push({k, kd, label:'Chiusura aziendale · 1 giorno di ferie'}); }
+        contaProiezione('chiusura', 1, 0, entryYM);
+      } else if(e.tipo === 'permesso'){
+        if(countsTowardBalance) permessoUsateDaRif += e.ore;
+        if(isThisMonth){ permessoMese += e.ore; monthMoves.push({k, kd, label:`ROL · ${e.ore} ore`}); }
+        contaProiezione('permesso', 0, e.ore, entryYM);
+      } else if(e.tipo === 'retribuito'){
+        // non scala nulla: lo contiamo solo per memoria, sull'anno solare visualizzato
+        const motivo = e.motivo || 'Altro';
+        if(ky === y){
+          if(e.ore){ retribuitiOre += e.ore; } else { retribuitiGiorni += 1; }
+          motiviConteggio[motivo] = (motiviConteggio[motivo] || 0) + 1;
+        }
+        if(isThisMonth){
+          monthMoves.push({k, kd, label:`${motivo} · ${e.ore ? e.ore + ' ore' : 'giornata intera'}, non scalato`});
+        }
+      }
+    });
+
+    const ferieResidue = ferieTotale - ferieUsateDaRif;
+    const permessoResiduo = rolTotale - permessoUsateDaRif;
+
+    $('ferieAnnoLabel').textContent = `al ${pad(m+1)}/${y}`;
+    $('permessoAnnoLabel').textContent = `al ${pad(m+1)}/${y}`;
+    $('totaleLabel').textContent = `al ${pad(m+1)}/${y}`;
+    $('ferieResidueNum').textContent = num(ferieResidue);
+    $('ferieTotaleLabel').textContent = num(ferieTotale);
+    $('permessoResiduoNum').textContent = num(permessoResiduo);
+    $('permessoTotaleLabel').textContent = num(rolTotale);
+    $('ferieMese').textContent = num(ferieMese);
+    $('ferieAnno').textContent = num(ferieUsateDaRif);
+    $('permessoMese').textContent = num(permessoMese);
+    $('permessoAnno').textContent = num(permessoUsateDaRif);
+
+    // --- nota chiusure aziendali ---
+    if(chiusureDaRif > 0){
+      const dettaglioMese = chiusureMese > 0
+        ? ` Questo mese: ${num(chiusureMese)} ${plur(chiusureMese,'giorno','giorni')}.`
+        : '';
+      $('ferieNote').textContent =
+        `Le chiusure aziendali sono scalate dalle ferie: ${num(chiusureDaRif)} ${plur(chiusureDaRif,'giorno incluso','giorni inclusi')} nel conteggio.${dettaglioMese}`;
+    } else {
+      $('ferieNote').textContent = 'Le chiusure aziendali vengono scalate dai giorni di ferie.';
+    }
+
+    // --- barre ---
+    const ferieBarPct = ferieTotale > 0 ? Math.max(0, Math.min(100, (ferieUsateDaRif/ferieTotale)*100)) : (ferieUsateDaRif > 0 ? 100 : 0);
+    const permessoBarPct = rolTotale > 0 ? Math.max(0, Math.min(100, (permessoUsateDaRif/rolTotale)*100)) : (permessoUsateDaRif > 0 ? 100 : 0);
+    $('ferieBar').style.width = ferieBarPct + '%';
+    $('permessoBar').style.width = permessoBarPct + '%';
+
+    const ferieOver = ferieResidue < 0;
+    const rolOver = permessoResiduo < 0;
+    $('ferieResidueNum').classList.toggle('over', ferieOver);
+    $('permessoResiduoNum').classList.toggle('over', rolOver);
+    $('ferieBar').classList.toggle('over', ferieOver);
+    $('permessoBar').classList.toggle('over', rolOver);
+
+    // --- avvisi di sforamento ---
+    const sforoFerie = round2(-ferieResidue);
+    const sforoRol = round2(-permessoResiduo);
+
+    $('ferieAlert').hidden = !ferieOver;
+    if(ferieOver){
+      $('ferieAlertText').innerHTML =
+        `Hai pianificato <b>${num(sforoFerie)}</b> ${plur(sforoFerie,'giorno','giorni')} di ferie oltre il maturato al ${pad(m+1)}/${y}. Sposta qualche giorno più avanti o verifica il saldo in busta paga.`;
+    }
+
+    $('permessoAlert').hidden = !rolOver;
+    if(rolOver){
+      $('permessoAlertText').innerHTML =
+        `Hai pianificato <b>${num(sforoRol)}</b> ${plur(sforoRol,'ora','ore')} di ROL oltre il maturato al ${pad(m+1)}/${y}. Sposta qualche permesso più avanti o verifica il saldo in busta paga.`;
+    }
+
+    // --- totale a disposizione, in giorni ---
+    const rolInGiorni = permessoResiduo / oreGiornata;
+    const totaleGiorni = ferieResidue + rolInGiorni;
+    $('totaleNum').textContent = num(totaleGiorni);
+    $('totaleNum').classList.toggle('over', totaleGiorni < 0);
+    $('totaleFerie').textContent = num(ferieResidue);
+    $('totaleRolGg').textContent = num(rolInGiorni);
+    $('totaleNote').textContent =
+      `${num(permessoResiduo)} ore di ROL convertite in giorni a ${num(oreGiornata)} ore.`;
+
+    // --- permessi retribuiti (non scalano nulla) ---
+    const motiviChiavi = Object.keys(motiviConteggio);
+    $('retribuitiBlock').hidden = motiviChiavi.length === 0;
+    if(motiviChiavi.length > 0){
+      $('retribuitiAnno').textContent = `nel ${y}`;
+      if(retribuitiGiorni > 0 && retribuitiOre > 0){
+        $('retribuitiNum').textContent = num(retribuitiGiorni);
+        $('retribuitiUnit').textContent = `${plur(retribuitiGiorni,'giornata intera','giornate intere')} più ${num(retribuitiOre)} ${plur(retribuitiOre,'ora','ore')}`;
+      } else if(retribuitiOre > 0){
+        $('retribuitiNum').textContent = num(retribuitiOre);
+        $('retribuitiUnit').textContent = plur(retribuitiOre,'ora','ore');
+      } else {
+        $('retribuitiNum').textContent = num(retribuitiGiorni);
+        $('retribuitiUnit').textContent = plur(retribuitiGiorni,'giornata','giornate');
+      }
+      motiviChiavi.sort((a,b) => motiviConteggio[b] - motiviConteggio[a]);
+      $('motiviList').innerHTML = motiviChiavi.map(mo =>
+        `<span>${mo} <b>${motiviConteggio[mo]}</b></span>`).join('');
+    }
+
+    // --- proiezione al 31 dicembre ---
+    const mesiADic = Math.max(0, dicYM - refYM);
+    const projFerie = settings.saldoFerie + mesiADic * settings.maturazioneFerie - ferieFinoADic;
+    const projRol = settings.saldoRol + mesiADic * settings.maturazioneRol - rolFinoADic;
+
+    $('projTitle').textContent = `Proiezione al 31 dicembre ${y}`;
+    $('projFerie').textContent = num(projFerie);
+    $('projRol').textContent = num(projRol);
+    $('projFerie').classList.toggle('over', projFerie < 0);
+    $('projRol').classList.toggle('over', projRol < 0);
+
+    const meseCorrente = MESI[m];
+    let frase;
+    if(ferieFuture > 0 || rolFuture > 0){
+      const pezzi = [];
+      if(ferieFuture > 0) pezzi.push(`<b>${num(ferieFuture)}</b> ${plur(ferieFuture,'giorno','giorni')} di ferie`);
+      if(rolFuture > 0) pezzi.push(`<b>${num(rolFuture)}</b> ${plur(rolFuture,'ora','ore')} di ROL`);
+      frase = `Tiene già conto di ${pezzi.join(' e ')} a calendario dopo ${meseCorrente}.`;
+    } else {
+      frase = `Dopo ${meseCorrente} non hai ancora pianificato nulla: questo è tutto quello che avrai da giocarti.`;
+    }
+    if(projFerie < 0 || projRol < 0){
+      frase += ' Con quanto hai pianificato sforerai il maturato di fine anno.';
+    } else if(projFerie >= 1){
+      frase += ` Ti restano <b>${num(projFerie)}</b> ${plur(projFerie,'giorno','giorni')} di ferie da mettere a calendario entro dicembre.`;
+    }
+    $('projSentence').innerHTML = frase;
+
+    // --- movimenti ---
+    monthMoves.sort((a,b) => a.kd - b.kd);
+    const list = $('movementsList');
+    if(monthMoves.length === 0){
+      list.innerHTML = '<div class="no-move">Nessun movimento registrato questo mese.</div>';
+    } else {
+      list.innerHTML = monthMoves.map(mv => `
+        <div class="move-row">
+          <span><span class="move-date">${pad(mv.kd)}</span>${mv.label}</span>
+          <button class="move-del" type="button" data-key="${mv.k}" aria-label="Elimina movimento del ${pad(mv.kd)}">
+            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
+          </button>
+        </div>`).join('');
+      list.querySelectorAll('.move-del').forEach(btn => {
+        btn.addEventListener('click', () => { eliminaGiorno(btn.dataset.key); });
+      });
+    }
+
+    renderBackupStatus();
+  }
+
+  // ---- Copia di sicurezza ----
+  const TIPI_VALIDI = ['ferie','mezza','permesso','chiusura','retribuito']; // 'mezza' accettato dai vecchi backup
+  let importPayload = null;
+
+  function buildBackup(){
+    return {
+      app: 'libretto-ferie',
+      versione: 1,
+      esportatoIl: new Date().toISOString(),
+      impostazioni: settings,
+      movimenti: entries
+    };
+  }
+
+  function refreshExport(){
+    $('exportArea').value = JSON.stringify(buildBackup(), null, 2);
+    const n = Object.keys(entries).length;
+    setStatus('exportStatus', `${n} ${plur(n,'movimento','movimenti')} nella copia, aggiornata adesso.`, '');
+    renderBackupStatus();
+  }
+
+  // Impronta dei dati: serve a capire se il libretto è cambiato dall'ultima copia.
+  function dataHash(){
+    const src = JSON.stringify({s:settings, e:entries});
+    let h = 5381;
+    for(let i=0;i<src.length;i++){ h = ((h*33) ^ src.charCodeAt(i)) >>> 0; }
+    return h.toString(36) + '.' + src.length;
+  }
+
+  async function markBackupDone(){
+    backupMeta = { at: new Date().toISOString(), hash: dataHash() };
+    try{ await store.set('leave-backup-meta', JSON.stringify(backupMeta)); }
+    catch(e){ console.error('Errore salvataggio promemoria copia', e); }
+    renderBackupStatus();
+  }
+
+  function tempoFa(iso){
+    const then = new Date(iso);
+    if(isNaN(then)) return 'in una data imprecisata';
+    const giorni = Math.floor((Date.now() - then.getTime()) / 86400000);
+    if(giorni <= 0) return 'oggi';
+    if(giorni === 1) return 'ieri';
+    if(giorni < 30) return `${giorni} giorni fa`;
+    const mesi = Math.floor(giorni / 30);
+    if(mesi === 1) return 'un mese fa';
+    if(mesi < 12) return `${mesi} mesi fa`;
+    const anni = Math.floor(mesi / 12);
+    return anni === 1 ? 'un anno fa' : `${anni} anni fa`;
+  }
+
+  function renderBackupStatus(){
+    const badge = $('backupBadge');
+    const nudge = $('settingsNudge');
+    const haDati = Object.keys(entries).length > 0;
+
+    let stato, testo;
+    if(!backupMeta || !backupMeta.at){
+      stato = haDati ? 'none' : '';
+      testo = haDati ? 'Nessuna copia di sicurezza' : 'Nessuna copia — il libretto è vuoto';
+    } else if(backupMeta.hash === dataHash()){
+      stato = 'fresh';
+      testo = `Copia aggiornata · ${tempoFa(backupMeta.at)}`;
+    } else {
+      stato = 'stale';
+      testo = `Modifiche non ancora salvate · ultima copia ${tempoFa(backupMeta.at)}`;
+    }
+
+    badge.className = 'backup-badge' + (stato ? ' ' + stato : '');
+    $('backupBadgeText').textContent = testo;
+
+    const avvisa = haDati && stato !== 'fresh';
+    nudge.hidden = !avvisa;
+    nudge.className = 'nudge' + (stato === 'none' ? ' none' : '');
+    $('toggleSettings').setAttribute('title', avvisa ? testo : 'Impostazioni');
+  }
+
+  function setStatus(id, text, kind){
+    const el = $(id);
+    el.textContent = text;
+    el.className = 'backup-status' + (kind ? ' ' + kind : '');
+  }
+
+  async function copyExport(){
+    const area = $('exportArea');
+    try{
+      await navigator.clipboard.writeText(area.value);
+      setStatus('exportStatus', 'Copiato negli appunti. Incollalo in un file .json e conservalo.', 'ok');
+      markBackupDone();
+    }catch(e){
+      area.focus();
+      area.select();
+      setStatus('exportStatus', 'Il testo è selezionato: copialo con Cmd+C (o Ctrl+C).', '');
+    }
+  }
+
+  function isValidKey(k){ return /^\d{4}-\d{2}-\d{2}$/.test(k); }
+
+  function parseBackup(raw){
+    let data;
+    try{ data = JSON.parse(raw); }
+    catch(e){ return { errore: 'Il testo non è un backup valido: controlla di averlo copiato per intero.' }; }
+    if(!data || typeof data !== 'object') return { errore: 'Il file non contiene dati del libretto.' };
+
+    const movimenti = data.movimenti || data.entries;
+    const impostazioni = data.impostazioni || data.settings;
+    if(!movimenti || typeof movimenti !== 'object') return { errore: 'Nel file non ci sono movimenti da importare.' };
+
+    const puliti = {};
+    let scartati = 0;
+    Object.keys(movimenti).forEach(k => {
+      const e = movimenti[k];
+      if(!isValidKey(k) || !e || TIPI_VALIDI.indexOf(e.tipo) === -1){ scartati++; return; }
+      if(e.tipo === 'mezza'){
+        puliti[k] = { tipo:'permesso', ore: ORE_MEZZA_GIORNATA }; // vecchi backup
+      } else if(e.tipo === 'permesso'){
+        const ore = parseFloat(e.ore);
+        if(!(ore > 0)){ scartati++; return; }
+        puliti[k] = { tipo:'permesso', ore: ore };
+      } else if(e.tipo === 'retribuito'){
+        const rec = { tipo:'retribuito', motivo: typeof e.motivo === 'string' ? e.motivo : 'Altro' };
+        const oreR = parseFloat(e.ore);
+        if(oreR > 0) rec.ore = oreR;
+        puliti[k] = rec;
+      } else {
+        puliti[k] = { tipo: e.tipo };
+      }
+    });
+
+    let setPuliti = null;
+    if(impostazioni && typeof impostazioni === 'object'){
+      setPuliti = {
+        saldoFerie: parseFloat(impostazioni.saldoFerie) || 0,
+        saldoRol: parseFloat(impostazioni.saldoRol) || 0,
+        meseRif: /^\d{4}-\d{2}$/.test(impostazioni.meseRif) ? impostazioni.meseRif : settings.meseRif,
+        maturazioneFerie: parseFloat(impostazioni.maturazioneFerie) || 0,
+        maturazioneRol: parseFloat(impostazioni.maturazioneRol) || 0,
+        oreGiornata: parseFloat(impostazioni.oreGiornata) || 8
+      };
+    }
+
+    return { movimenti: puliti, impostazioni: setPuliti, scartati: scartati };
+  }
+
+  function prepareImport(){
+    const raw = $('importArea').value.trim();
+    if(!raw){
+      setStatus('importStatus', 'Incolla un backup o scegli un file prima di importare.', 'err');
+      return;
+    }
+    const res = parseBackup(raw);
+    if(res.errore){
+      $('importConfirm').hidden = true;
+      importPayload = null;
+      setStatus('importStatus', res.errore, 'err');
+      return;
+    }
+
+    const chiavi = Object.keys(res.movimenti);
+    if(chiavi.length === 0){
+      $('importConfirm').hidden = true;
+      importPayload = null;
+      setStatus('importStatus', 'Il backup non contiene movimenti leggibili.', 'err');
+      return;
+    }
+
+    chiavi.sort();
+    const conflitti = chiavi.filter(k => entries[k]).length;
+    const periodo = chiavi.length > 1
+      ? `da ${itDate(chiavi[0])} a ${itDate(chiavi[chiavi.length-1])}`
+      : `del ${itDate(chiavi[0])}`;
+
+    importPayload = res;
+    let testo = `Il backup contiene <b>${chiavi.length}</b> ${plur(chiavi.length,'movimento','movimenti')} ${periodo}`;
+    testo += res.impostazioni ? ' e le impostazioni del libretto.' : '.';
+    if(conflitti > 0) testo += ` <b>${conflitti}</b> ${plur(conflitti,'giorno è già segnato','giorni sono già segnati')} nel libretto attuale: unendo, vince la versione del backup.`;
+    if(res.scartati > 0) testo += ` ${res.scartati} ${plur(res.scartati,'riga non leggibile verrà ignorata','righe non leggibili verranno ignorate')}.`;
+
+    $('importSummary').innerHTML = testo;
+    $('importConfirm').hidden = false;
+    setStatus('importStatus', '', '');
+  }
+
+  function itDate(k){
+    const [yy,mm,dd] = k.split('-');
+    return `${dd}/${mm}/${yy}`;
+  }
+
+  async function applyImport(sostituisci){
+    if(!importPayload) return;
+    const n = Object.keys(importPayload.movimenti).length;
+    entries = sostituisci ? {...importPayload.movimenti} : {...entries, ...importPayload.movimenti};
+    if(importPayload.impostazioni) settings = {...DEFAULT_SETTINGS, ...importPayload.impostazioni};
+
+    await saveEntries();
+    await saveSettings();
+
+    importPayload = null;
+    $('importConfirm').hidden = true;
+    $('importArea').value = '';
+    $('importFile').value = '';
+
+    fillSettingsForm();
+    hideToast();
+    refreshViews();
+    refreshExport();
+    if(sostituisci) await markBackupDone(); // i dati coincidono con il file appena importato
+    setStatus('importStatus',
+      sostituisci
+        ? `Libretto sostituito con il backup: ${n} ${plur(n,'movimento','movimenti')}.`
+        : `Backup unito: ora il libretto ha ${Object.keys(entries).length} movimenti.`,
+      'ok');
+  }
+
+  function cancelImport(){
+    importPayload = null;
+    $('importConfirm').hidden = true;
+    setStatus('importStatus', 'Importazione annullata. Nulla è cambiato.', '');
+  }
+
+  function readImportFile(file){
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      $('importArea').value = String(reader.result || '');
+      prepareImport();
+    };
+    reader.onerror = () => {
+      setStatus('importStatus', 'Non sono riuscito a leggere il file. Prova a incollarne il contenuto.', 'err');
+    };
+    reader.readAsText(file);
+  }
+
+  function init(){
+    applyTheme();
+    $('themeBtn').addEventListener('click', toggleTheme);
+
+    $('prevMonth').addEventListener('click', () => {
+      viewDate.setMonth(viewDate.getMonth()-1);
+      renderCalendar(); renderLedger();
+    });
+    $('nextMonth').addEventListener('click', () => {
+      viewDate.setMonth(viewDate.getMonth()+1);
+      renderCalendar(); renderLedger();
+    });
+    $('todayBtn').addEventListener('click', () => {
+      viewDate = new Date();
+      viewDate.setDate(1);
+      renderCalendar(); renderLedger();
+    });
+
+    document.querySelectorAll('.view-toggle button').forEach(b => {
+      b.addEventListener('click', () => setView(b.dataset.view));
+    });
+    $('prevYear').addEventListener('click', () => {
+      viewDate.setFullYear(viewDate.getFullYear()-1);
+      renderYear(); renderLedger();
+    });
+    $('nextYear').addEventListener('click', () => {
+      viewDate.setFullYear(viewDate.getFullYear()+1);
+      renderYear(); renderLedger();
+    });
+
+    $('toggleSettings').addEventListener('click', () => {
+      const open = $('settingsPanel').classList.toggle('open');
+      $('toggleSettings').setAttribute('aria-expanded', open ? 'true' : 'false');
+      if(open) refreshExport();
+    });
+
+    $('copyExport').addEventListener('click', copyExport);
+    $('refreshExport').addEventListener('click', refreshExport);
+    $('checkImport').addEventListener('click', prepareImport);
+    $('importMerge').addEventListener('click', () => applyImport(false));
+    $('importReplace').addEventListener('click', () => applyImport(true));
+    $('importCancel').addEventListener('click', cancelImport);
+    $('importFile').addEventListener('change', (e) => readImportFile(e.target.files[0]));
+    $('saveSettings').addEventListener('click', async () => {
+      settings.saldoFerie = parseFloat($('inpSaldoFerie').value) || 0;
+      settings.saldoRol = parseFloat($('inpSaldoRol').value) || 0;
+      settings.meseRif = $('inpMeseRif').value || settings.meseRif;
+      settings.maturazioneFerie = parseFloat($('inpMaturazioneFerie').value) || 0;
+      settings.maturazioneRol = parseFloat($('inpMaturazioneRol').value) || 0;
+      settings.oreGiornata = parseFloat($('inpOreGiornata').value) || 8;
+      await saveSettings();
+      fillSettingsForm();
+      renderLedger();
+      refreshExport();
+      $('settingsPanel').classList.remove('open');
+      $('toggleSettings').setAttribute('aria-expanded','false');
+    });
+
+    document.querySelectorAll('.type-opt').forEach(b => {
+      b.addEventListener('click', () => selezionaTipo(b.dataset.tipo, false));
+    });
+    document.querySelectorAll('#dayDurata button').forEach(b => {
+      b.addEventListener('click', () => setDurata(b.dataset.durata));
+    });
+    $('dayConfirm').addEventListener('click', confirmDay);
+    $('dayCancel').addEventListener('click', closeDay);
+    $('dayDelete').addEventListener('click', deleteDay);
+    $('dayOverlay').addEventListener('click', (e) => { if(e.target.id === 'dayOverlay') closeDay(); });
+    $('dayOre').addEventListener('keydown', (e) => { if(e.key === 'Enter') confirmDay(); });
+    $('dayOre').addEventListener('input', syncPresets);
+    document.querySelectorAll('#orePresets button').forEach(b => {
+      b.addEventListener('click', () => { $('dayOre').value = b.dataset.ore; syncPresets(); });
+    });
+    $('toastUndo').addEventListener('click', undoLast);
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && $('dayOverlay').classList.contains('open')) closeDay();
+    });
+
+    collegaAuguri();
+
+    // --- Mouse drag ---
+    const grid = $('calGrid');
+    grid.addEventListener('mousedown', (e) => {
+      const cell = e.target.closest('.day.selectable');
+      if(!cell) return;
+      e.preventDefault();
+      beginSelection(cell);
+    });
+    document.addEventListener('mousemove', (e) => {
+      if(!isPointerDown) return;
+      const cell = cellAtPoint(e.clientX, e.clientY);
+      if(cell) extendSelection(cell);
+    });
+    document.addEventListener('mouseup', () => { endSelection(); });
+
+    // --- Touch drag ---
+    grid.addEventListener('touchstart', (e) => {
+      const t = e.touches[0];
+      const cell = document.elementFromPoint(t.clientX, t.clientY);
+      const sel = cell && cell.closest('.day.selectable');
+      if(!sel) return;
+      beginSelection(sel);
+    }, {passive:true});
+    grid.addEventListener('touchmove', (e) => {
+      if(!isPointerDown) return;
+      e.preventDefault(); // blocca lo scroll mentre si trascina sui giorni
+      const t = e.touches[0];
+      const cell = cellAtPoint(t.clientX, t.clientY);
+      if(cell) extendSelection(cell);
+    }, {passive:false});
+    grid.addEventListener('touchend', () => { endSelection(); });
+    grid.addEventListener('touchcancel', () => { endSelection(); });
+
+    if(migraMezzeGiornate()) saveEntries();
+    renderCalendar();
+    renderLedger();
+    fillSettingsForm();
+
+    $('loadingMsg').style.display = 'none';
+    $('app').style.display = 'grid';
+  }
+
+  loadData().then(init);
+})();
+</script>
+</html>
