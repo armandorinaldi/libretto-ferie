@@ -448,6 +448,19 @@
     display:block;margin-top:5px;
     font-size:.6875rem;font-weight:600;color:var(--color-muted-foreground);
   }
+  .proj-total{
+    display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap;
+    padding:var(--space-3);margin-bottom:var(--space-3);
+    background:var(--color-muted);border-radius:var(--radius-md);
+  }
+  .proj-total-main{display:flex;align-items:baseline;gap:6px;}
+  .proj-total-num{
+    font-size:1.625rem;font-weight:800;line-height:1;letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;color:var(--color-foreground);
+  }
+  .proj-total-num.over{color:var(--color-destructive);}
+  .proj-total-unit{font-size:.75rem;font-weight:600;color:var(--color-muted-foreground);}
+  .proj-total .total-split span{background:var(--color-card);}
   .proj-sent{
     margin:0;font-size:.75rem;line-height:1.5;color:var(--color-muted-foreground);
   }
@@ -536,8 +549,10 @@
   }
   .move-row:last-child{border-bottom:none;}
   .move-date{
+    display:inline-block;min-width:3.4em;
     color:var(--color-faint);font-weight:700;font-variant-numeric:tabular-nums;margin-right:6px;
   }
+  .move-date small{font-size:.75rem;font-weight:600;text-transform:lowercase;margin-left:2px;}
   .no-move{font-size:.875rem;color:var(--color-faint);}
   .move-del{
     display:inline-flex;align-items:center;justify-content:center;
@@ -1062,6 +1077,16 @@
           <div class="proj-item">
             <span class="proj-num permesso-c" id="projRol">0</span>
             <small>ore di ROL al 31/12</small>
+          </div>
+        </div>
+        <div class="proj-total">
+          <div class="proj-total-main">
+            <span class="proj-total-num" id="projTotale">0</span>
+            <span class="proj-total-unit">giorni complessivi al 31/12</span>
+          </div>
+          <div class="total-split">
+            <span><span class="swatch" style="background:var(--ferie)"></span>Ferie <b id="projTotFerie">0</b> gg</span>
+            <span><span class="swatch" style="background:var(--permesso)"></span>ROL <b id="projTotRolGg">0</b> gg</span>
           </div>
         </div>
         <p class="proj-sent" id="projSentence"></p>
@@ -1855,8 +1880,8 @@
     delete entries[k];
     saveEntries();
     refreshViews();
-    const giorno = Number(k.split('-')[2]);
-    showUndo(`${etichettaTipo(rec)} del ${giorno} eliminata`, snap);
+    const [, meseK, giorno] = k.split('-').map(Number);
+    showUndo(`${etichettaTipo(rec)} del ${giorno} ${MESI[meseK-1]} eliminata`, snap);
     if(navigator.vibrate) { try{ navigator.vibrate(12); }catch(e){} }
   }
 
@@ -2031,6 +2056,13 @@
     $('projFerie').classList.toggle('over', projFerie < 0);
     $('projRol').classList.toggle('over', projRol < 0);
 
+    const projRolGg = projRol / oreGiornata;
+    const projTotale = projFerie + projRolGg;
+    $('projTotale').textContent = num(projTotale);
+    $('projTotale').classList.toggle('over', projTotale < 0);
+    $('projTotFerie').textContent = num(projFerie);
+    $('projTotRolGg').textContent = num(projRolGg);
+
     const meseCorrente = MESI[m];
     let frase;
     if(ferieFuture > 0 || rolFuture > 0){
@@ -2056,8 +2088,8 @@
     } else {
       list.innerHTML = monthMoves.map(mv => `
         <div class="move-row">
-          <span><span class="move-date">${pad(mv.kd)}</span>${mv.label}</span>
-          <button class="move-del" type="button" data-key="${mv.k}" aria-label="Elimina movimento del ${pad(mv.kd)}">
+          <span><span class="move-date">${pad(mv.kd)}<small>${MESI_BREVI[m]}</small></span>${mv.label}</span>
+          <button class="move-del" type="button" data-key="${mv.k}" aria-label="Elimina movimento del ${mv.kd} ${MESI[m]}">
             <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
           </button>
         </div>`).join('');
