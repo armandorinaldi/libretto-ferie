@@ -2478,6 +2478,26 @@
     return t;
   }
 
+  // Saldo residuo a una data: saldo busta paga + maturazione mensile − tutto ciò che è stato usato fino a quel giorno
+  function saldoAl(alIso){
+    const [ay, am] = alIso.split('-').map(Number);
+    const [ry, rm] = settings.meseRif.split('-').map(Number);
+    const alYM = ymIndex(ay, am - 1), refYM = ymIndex(ry, rm - 1);
+    const mesi = Math.max(0, alYM - refYM);
+    let ferieUsate = 0, rolUsate = 0;
+    Object.keys(entries).forEach(k => {
+      const [ky, km] = k.split('-').map(Number);
+      if(ymIndex(ky, km - 1) <= refYM || k > alIso) return;
+      const e = entries[k];
+      if(e.tipo === 'ferie' || e.tipo === 'chiusura') ferieUsate += 1;
+      else if(e.tipo === 'permesso') rolUsate += e.ore;
+    });
+    const oreG = settings.oreGiornata > 0 ? settings.oreGiornata : 8;
+    const ferie = settings.saldoFerie + mesi * settings.maturazioneFerie - ferieUsate;
+    const rol = settings.saldoRol + mesi * settings.maturazioneRol - rolUsate;
+    return { ferie, rol, rolGg: rol / oreG, totale: ferie + rol / oreG, oreG, primaDellaBusta: alYM < refYM };
+  }
+
   function applicaPreset(preset){
     const y = viewDate.getFullYear();
     const m = viewDate.getMonth();
@@ -2533,7 +2553,9 @@
     if(t.retrGiorni) retr.push(`${num(t.retrGiorni)} ${plur(t.retrGiorni,'giorno','giorni')}`);
     if(t.retrOre) retr.push(`${num(t.retrOre)} ${plur(t.retrOre,'ora','ore')}`);
     if(retr.length) pezzi.push(`<b>${retr.join(' e ')}</b> di permessi retribuiti`);
-    box.innerHTML = `Nel PDF: <b>${chiavi.length}</b> ${plur(chiavi.length,'movimento','movimenti')} · ${pezzi.join(', ')}.`;
+    const sal = saldoAl(al);
+    box.innerHTML = `Nel PDF: <b>${chiavi.length}</b> ${plur(chiavi.length,'movimento','movimenti')} · ${pezzi.join(', ')}.` +
+      `<br>Ti resteranno al ${itDate(al)}: <b>${num(sal.totale)}</b> giorni (${num(sal.ferie)} di ferie e ${num(sal.rol)} ore di ROL).`;
   }
 
   function apriPdf(){
@@ -2608,7 +2630,37 @@
       doc.setFont('helvetica','normal'); doc.setFontSize(7); col(MUTED);
       doc.text(doc.splitTextToSize(b.unit, bw - 8)[0], x + 4, y + 20.5);
     });
-    y += bh + 10;
+    y += bh + 5;
+
+    // saldo residuo alla fine del periodo
+    const sal = saldoAl(al);
+    const sh = 22;
+    doc.setDrawColor(INK[0], INK[1], INK[2]); doc.setLineWidth(.4);
+    doc.roundedRect(M, y, CW, sh, 2, 2, 'S');
+    doc.setFont('helvetica','bold'); doc.setFontSize(7); col(FAINT);
+    doc.text(`SALDO RESIDUO AL ${itDate(al)}`, M + 5, y + 6);
+    const [rfy, rfm] = settings.meseRif.split('-');
+    doc.setFont('helvetica','normal'); doc.setFontSize(6.5);
+    doc.text(doc.splitTextToSize(sal.primaDellaBusta
+      ? `Data precedente alla busta paga di ${rfm}/${rfy}: mostrato il saldo di quella busta paga.`
+      : `Busta paga di ${rfm}/${rfy}, più la maturazione mensile, meno i permessi segnati fino a questa data.`,
+      60), M + 5, y + 11);
+    const valori = [
+      { v:num(sal.ferie), u:plur(sal.ferie,'giorno di ferie','giorni di ferie'), rgb:PDF_TIPI.ferie.rgb },
+      { v:num(sal.rol), u:`ore di ROL (${num(sal.rolGg)} gg)`, rgb:PDF_TIPI.permesso.rgb },
+      { v:num(sal.totale), u:'giorni in totale', rgb:INK }
+    ];
+    const vx0 = M + 72, vw = (CW - 72 - 5) / 3;
+    valori.forEach((c, i) => {
+      const x = vx0 + i*vw;
+      doc.setFont('helvetica','bold'); doc.setFontSize(15);
+      const rgb = (parseFloat(c.v.replace(',','.')) < 0) ? [220,38,38] : c.rgb;
+      col(rgb);
+      doc.text(c.v, x, y + 11);
+      doc.setFont('helvetica','normal'); doc.setFontSize(7); col(MUTED);
+      doc.text(c.u, x, y + 16);
+    });
+    y += sh + 10;
 
     // tabella
     const cols = [
