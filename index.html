@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Libretto Ferie</title>
+<title>Pianificazione Ferie</title>
 <link rel="icon" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#F8FAFC" media="(prefers-color-scheme: light)">
@@ -13,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   /* ============================================================
-     LIBRETTO FERIE — Design System
+     PIANIFICAZIONE FERIE — Design System
      Stile: Flat Design · Tipografia: Plus Jakarta Sans
      Palette: Banking / Traditional Finance (navy + near-white)
      Niente ombre né gradienti: colore, tipografia e spazio.
@@ -40,7 +40,7 @@
     --color-warning:#9A5B16;
     --color-warning-soft:#FAEBD9;
 
-    /* categorie del libretto */
+    /* categorie della pianificazione */
     --ferie:#0F766E;
     --ferie-soft:#D9F0EC;
     --permesso:#9A5B16;
@@ -925,7 +925,7 @@
 
   <div class="masthead">
     <div>
-      <h1>Libretto Ferie</h1>
+      <h1>Pianificazione Ferie</h1>
       <div class="sub">Ferie · ROL · Chiusure aziendali</div>
     </div>
     <div class="masthead-actions">
@@ -942,7 +942,7 @@
 
   <div class="settings-panel card" id="settingsPanel">
     <p class="settings-hint">
-      Inserisci il saldo dell'ultima busta paga e il mese a cui si riferisce: da lì in poi il libretto aggiunge da solo la maturazione mensile, mese dopo mese.
+      Inserisci il saldo dell'ultima busta paga e il mese a cui si riferisce: da lì in poi la pianificazione aggiunge da sola la maturazione mensile, mese dopo mese.
     </p>
     <div class="settings-grid">
       <div class="field">
@@ -1009,7 +1009,7 @@
 
   <div class="restore-card card" id="restoreCard" hidden>
     <div class="restore-text">
-      <h3>Il libretto è vuoto</h3>
+      <h3>La pianificazione è vuota</h3>
       <p id="restoreMsg">Se hai una copia di sicurezza, ripristinala qui: ferie, ROL e impostazioni tornano come prima.</p>
     </div>
     <div class="backup-actions">
@@ -1023,7 +1023,7 @@
     </div>
     <div class="paste-box" id="restorePaste" hidden>
       <textarea class="backup-area" id="restoreText" spellcheck="false" placeholder='Incolla qui il contenuto della copia: inizia con {"app":"libretto-ferie"…' aria-label="Testo della copia di sicurezza"></textarea>
-      <button class="settings-save" type="button" id="restoreTextBtn">Riempi il libretto</button>
+      <button class="settings-save" type="button" id="restoreTextBtn">Riempi la pianificazione</button>
     </div>
   </div>
 
@@ -1177,9 +1177,9 @@
     </div>
   </div>
 
-  <div class="loading-msg" id="loadingMsg">Caricamento del libretto…</div>
+  <div class="loading-msg" id="loadingMsg">Caricamento della pianificazione…</div>
 
-  <div class="footnote">I dati restano salvati solo per te, tra una visita e l'altra.</div>
+  <div class="footnote">I dati restano salvati solo per te, tra una visita e l'altra. · <span id="appVersion">v2.02</span></div>
 </div>
 
 <div class="bday-tip" id="bdayTip" role="status" hidden></div>
@@ -1293,6 +1293,7 @@
 
 <script>
 (function(){
+  const APP_VERSION = '2.02';
   const MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
 
   function pad(n){ return n < 10 ? '0'+n : ''+n; }
@@ -2224,6 +2225,7 @@
     return {
       app: 'libretto-ferie',
       versione: 1,
+      versioneApp: APP_VERSION,
       esportatoIl: new Date().toISOString(),
       impostazioni: settings,
       movimenti: entries
@@ -2236,20 +2238,20 @@
     const btn = $('downloadBackup');
     btn.disabled = true;
     try{
-      await salvaFile(blob, `libretto-ferie-copia_${oggi}.json`);
+      await salvaFile(blob, `pianificazione-ferie-copia_${oggi}.json`);
       await markBackupDone();
       const n = Object.keys(entries).length;
       setStatus('importStatus', `Copia scaricata: ${n} ${plur(n,'movimento','movimenti')} e le impostazioni. Tienila in un posto sicuro (es. iCloud o Google Drive).`, 'ok');
     }catch(err){
       setStatus('importStatus', err && err.code === 'declined'
         ? 'Download annullato.'
-        : 'Il download non è disponibile in questa vista. Apri il libretto nel browser e riprova.', err && err.code === 'declined' ? '' : 'err');
+        : 'Il download non è disponibile in questa vista. Apri la pianificazione nel browser e riprova.', err && err.code === 'declined' ? '' : 'err');
     }finally{
       btn.disabled = false;
     }
   }
 
-  // Impronta dei dati: serve a capire se il libretto è cambiato dall'ultima copia.
+  // Impronta dei dati: serve a capire se la pianificazione è cambiata dall'ultima copia.
   function dataHash(){
     const src = JSON.stringify({s:settings, e:entries});
     let h = 5381;
@@ -2286,7 +2288,7 @@
     let stato, testo;
     if(!backupMeta || !backupMeta.at){
       stato = haDati ? 'none' : '';
-      testo = haDati ? 'Nessuna copia di sicurezza' : 'Nessuna copia — il libretto è vuoto';
+      testo = haDati ? 'Nessuna copia di sicurezza' : 'Nessuna copia — la pianificazione è vuota';
     } else if(backupMeta.hash === dataHash()){
       stato = 'fresh';
       testo = `Copia aggiornata · ${tempoFa(backupMeta.at)}`;
@@ -2316,7 +2318,7 @@
     let data;
     try{ data = JSON.parse(raw); }
     catch(e){ return { errore: 'Il testo non è un backup valido: controlla di averlo copiato per intero.' }; }
-    if(!data || typeof data !== 'object') return { errore: 'Il file non contiene dati del libretto.' };
+    if(!data || typeof data !== 'object') return { errore: 'Il file non contiene dati della pianificazione.' };
 
     const movimenti = data.movimenti || data.entries;
     const impostazioni = data.impostazioni || data.settings;
@@ -2388,8 +2390,8 @@
 
     importPayload = res;
     let testo = `Il backup contiene <b>${chiavi.length}</b> ${plur(chiavi.length,'movimento','movimenti')} ${periodo}`;
-    testo += res.impostazioni ? ' e le impostazioni del libretto.' : '.';
-    if(conflitti > 0) testo += ` <b>${conflitti}</b> ${plur(conflitti,'giorno è già segnato','giorni sono già segnati')} nel libretto attuale: unendo, vince la versione del backup.`;
+    testo += res.impostazioni ? ' e le impostazioni della pianificazione.' : '.';
+    if(conflitti > 0) testo += ` <b>${conflitti}</b> ${plur(conflitti,'giorno è già segnato','giorni sono già segnati')} nella pianificazione attuale: unendo, vince la versione del backup.`;
     if(res.scartati > 0) testo += ` ${res.scartati} ${plur(res.scartati,'riga non leggibile verrà ignorata','righe non leggibili verranno ignorate')}.`;
 
     $('importSummary').innerHTML = testo;
@@ -2423,8 +2425,8 @@
     if(sostituisci) await markBackupDone(); // i dati coincidono con il file appena importato
     setStatus('importStatus',
       sostituisci
-        ? `Libretto sostituito con il backup: ${n} ${plur(n,'movimento','movimenti')}.`
-        : `Backup unito: ora il libretto ha ${Object.keys(entries).length} movimenti.`,
+        ? `Pianificazione sostituita con il backup: ${n} ${plur(n,'movimento','movimenti')}.`
+        : `Backup unito: ora la pianificazione ha ${Object.keys(entries).length} movimenti.`,
       'ok');
   }
 
@@ -2600,7 +2602,7 @@
 
     // intestazione
     doc.setFont('helvetica','bold'); doc.setFontSize(20); col(INK);
-    doc.text('Libretto Ferie', M, y + 6);
+    doc.text('Pianificazione Ferie', M, y + 6);
     doc.setFont('helvetica','normal'); doc.setFontSize(8); col(FAINT);
     doc.text(`Generato il ${itDate(isoDay(new Date()))}`, W - M, y + 6, { align:'right' });
     y += 13;
@@ -2746,7 +2748,7 @@
     for(let i = 1; i <= n; i++){
       doc.setPage(i);
       doc.setFont('helvetica','normal'); doc.setFontSize(7.5); col(FAINT);
-      doc.text(`Libretto Ferie · ${itDate(dal)} – ${itDate(al)}`, M, H - 10);
+      doc.text(`Pianificazione Ferie · ${itDate(dal)} – ${itDate(al)}`, M, H - 10);
       doc.text(`Pagina ${i} di ${n}`, W - M, H - 10, { align:'right' });
     }
     return doc.output('blob');
@@ -2776,7 +2778,7 @@
     try{
       const JsPDF = await caricaJsPdf();
       const blob = costruisciPdf(JsPDF, dal, al, chiavi);
-      await salvaFile(blob, `libretto-ferie_${dal}_${al}.pdf`);
+      await salvaFile(blob, `pianificazione-ferie_${dal}_${al}.pdf`);
       chiudiPdf();
     }catch(err){
       const box = $('pdfCount');
@@ -2787,7 +2789,7 @@
         box.classList.add('err');
         box.textContent = err && err.message === 'rete'
           ? 'Non riesco a preparare il PDF: controlla la connessione e riprova.'
-          : 'Il download non è disponibile in questa vista. Apri il libretto nel browser e riprova.';
+          : 'Il download non è disponibile in questa vista. Apri la pianificazione nel browser e riprova.';
       }
     }finally{
       btn.disabled = false;
@@ -2795,7 +2797,7 @@
     }
   }
 
-  // ---- Libretto vuoto: proponi subito il ripristino ----
+  // ---- Pianificazione vuota: proponi subito il ripristino ----
   let restoreNascosto = false;
   function aggiornaRestoreCard(){
     $('restoreCard').hidden = restoreNascosto || Object.keys(entries).length > 0;
@@ -2822,13 +2824,13 @@
       $('restoreFile').value = '';
       return;
     }
-    // il libretto è vuoto: non c'è nulla da perdere, si ripristina tutto
+    // la pianificazione è vuota: non c'è nulla da perdere, si ripristina tutto
     importPayload = res;
     await applyImport(true);
     $('restoreText').value = '';
     restoreNascosto = true;
     aggiornaRestoreCard();
-    showUndoless(`Libretto ripristinato: ${n} ${plur(n,'movimento','movimenti')}.`);
+    showUndoless(`Pianificazione ripristinata: ${n} ${plur(n,'movimento','movimenti')}.`);
   }
 
   // messaggio breve senza pulsante Annulla
@@ -2851,6 +2853,7 @@
   }
 
   function init(){
+    $('appVersion').textContent = 'v' + APP_VERSION;
     applyTheme();
     $('themeBtn').addEventListener('click', toggleTheme);
 
