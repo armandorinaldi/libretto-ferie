@@ -677,6 +677,28 @@
   }
   .backup-status.ok{color:var(--ferie);}
   .backup-status.err{color:var(--color-destructive);}
+  .backup .settings-save.backup-main{margin-top:0;}
+  .backup .backup-file{min-height:44px;}
+  .restore-card{
+    display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);flex-wrap:wrap;
+    margin-bottom:var(--space-4);
+    border-color:var(--color-secondary);box-shadow:inset 0 0 0 1px var(--color-secondary);
+  }
+  .restore-text{flex:1 1 280px;}
+  .restore-card h3{margin:0 0 2px;font-size:1rem;font-weight:700;}
+  .restore-card p{margin:0;font-size:.8125rem;line-height:1.5;color:var(--color-muted-foreground);}
+  .restore-card p.ok{color:var(--ferie);font-weight:600;}
+  .restore-card p.err{color:var(--color-destructive);font-weight:600;}
+  .restore-btn{border-style:solid;border-color:var(--color-secondary);color:var(--color-secondary);min-height:44px;}
+  .paste-box{flex:1 1 100%;}
+  .paste-box .backup-area{margin-top:0;}
+  .paste-box .settings-save{margin-top:0;}
+  .paste-details{margin-top:var(--space-3);}
+  .paste-details summary{
+    display:inline-flex;align-items:center;min-height:36px;
+    font-size:.8125rem;font-weight:600;color:var(--color-secondary);cursor:pointer;
+  }
+  .paste-details[open] summary{margin-bottom:var(--space-2);}
   .backup-confirm{
     margin-top:var(--space-3);padding:var(--space-3);
     background:var(--color-warning-soft);color:var(--color-warning);
@@ -836,6 +858,58 @@
     transition:opacity 500ms linear, transform 500ms ease-out;
   }
 
+  /* ---------- ESPORTAZIONE PDF ---------- */
+  .ledger-head{
+    display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);
+    margin-bottom:var(--space-4);
+  }
+  .ledger .ledger-head h2{margin:0;}
+  .btn-sm{min-height:36px;padding:0 var(--space-3);font-size:.75rem;}
+  .modal-pdf{max-width:400px;}
+  .chip-row{display:flex;gap:var(--space-2);flex-wrap:wrap;margin-bottom:var(--space-4);}
+  .chip-row button{
+    min-height:36px;padding:0 var(--space-3);
+    background:var(--color-card);border:1px solid var(--color-border);
+    border-radius:999px;
+    font-size:.75rem;font-weight:700;color:var(--color-muted-foreground);
+    transition:background-color var(--dur) ease, color var(--dur) ease, border-color var(--dur) ease;
+  }
+  .chip-row button:hover{background:var(--color-muted);color:var(--color-foreground);}
+  .chip-row button.active{
+    background:var(--color-primary);color:var(--color-on-primary);border-color:var(--color-primary);
+  }
+  .pdf-range{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--space-2);margin-bottom:var(--space-4);}
+  .pdf-range label{
+    display:block;font-size:.6875rem;font-weight:700;letter-spacing:.03em;
+    text-transform:uppercase;color:var(--color-faint);
+  }
+  .modal-box .pdf-range input{
+    display:block;width:100%;min-width:0;margin:6px 0 0;min-height:44px;padding:0 var(--space-2);
+    font-size:.9375rem;font-weight:600;text-align:left;
+  }
+  .pdf-types{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-2);}
+  .pdf-types label{
+    display:flex;align-items:center;gap:var(--space-2);
+    min-height:44px;padding:0 var(--space-3);
+    border:1px solid var(--color-border);border-radius:var(--radius-md);
+    font-size:.8125rem;font-weight:600;color:var(--color-foreground);
+    cursor:pointer;
+    transition:background-color var(--dur) ease, border-color var(--dur) ease;
+  }
+  .pdf-types label:hover{background:var(--color-muted);}
+  .modal-box .pdf-types input{
+    width:16px;height:16px;min-height:0;margin:0;padding:0;flex:none;
+    accent-color:var(--c);
+  }
+  .pdf-types .dot{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none;margin-left:auto;}
+  .modal-box .pdf-count{
+    margin:0 0 var(--space-4);padding:var(--space-3);
+    background:var(--color-muted);border-radius:var(--radius-md);
+    font-size:.8125rem;line-height:1.45;color:var(--color-muted-foreground);
+  }
+  .modal-box .pdf-count b{color:var(--color-foreground);font-variant-numeric:tabular-nums;}
+  .modal-box .pdf-count.err{background:var(--color-destructive-soft);color:var(--color-destructive);}
+
   /* ---------- VARIE ---------- */
   .footnote{
     text-align:center;font-size:.75rem;color:var(--color-faint);
@@ -903,55 +977,53 @@
         <h3>Copia di sicurezza</h3>
         <span class="backup-badge" id="backupBadge"><span class="dot"></span><span id="backupBadgeText">—</span></span>
       </div>
-      <p>I dati vivono nel browser che stai usando. Salva una copia in un file JSON per ritrovarli su un altro dispositivo, o per recuperarli se svuoti la cache.</p>
+      <p>I dati restano solo in questo browser. Scarica una copia ogni tanto: se cambi dispositivo o i dati spariscono, la ripristini in un attimo.</p>
 
-      <div class="backup-grid">
-        <div class="backup-col">
-          <h4>
-            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-            Esporta
-          </h4>
-          <p>Copia il testo qui sotto e incollalo in un file di testo con estensione <b>.json</b>, conservato dove preferisci.</p>
-          <textarea class="backup-area" id="exportArea" readonly spellcheck="false" aria-label="Dati del libretto in formato JSON"></textarea>
-          <div class="backup-actions">
-            <button class="btn-ghost" type="button" id="copyExport">
-              <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              Copia negli appunti
-            </button>
-            <button class="btn-ghost" type="button" id="refreshExport">
-              <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
-              Aggiorna
-            </button>
-          </div>
-          <p class="backup-status" id="exportStatus"></p>
-        </div>
-
-        <div class="backup-col">
-          <h4>
-            <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-            Importa
-          </h4>
-          <p>Scegli un file di backup, oppure incolla qui il contenuto di una copia salvata.</p>
-          <textarea class="backup-area" id="importArea" spellcheck="false" placeholder='{"versione":1,"impostazioni":{…},"movimenti":{…}}' aria-label="Incolla qui il backup da importare"></textarea>
-          <div class="backup-actions">
-            <label class="backup-file">
-              <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>
-              Scegli file…
-              <input type="file" id="importFile" accept=".json,application/json,text/plain">
-            </label>
-            <button class="btn-ghost" type="button" id="checkImport">Controlla e importa</button>
-          </div>
-          <p class="backup-status" id="importStatus"></p>
-          <div class="backup-confirm" id="importConfirm" hidden>
-            <p id="importSummary"></p>
-            <div class="backup-actions">
-              <button class="btn-ghost" type="button" id="importMerge">Unisci ai dati attuali</button>
-              <button class="btn-ghost danger" type="button" id="importReplace">Sostituisci tutto</button>
-              <button class="btn-ghost" type="button" id="importCancel">Annulla</button>
-            </div>
-          </div>
+      <div class="backup-actions">
+        <button class="settings-save backup-main" type="button" id="downloadBackup">
+          <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          Scarica copia
+        </button>
+        <label class="backup-file">
+          <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          Ripristina da file
+          <input type="file" id="importFile" accept=".json,application/json,text/plain">
+        </label>
+      </div>
+      <details class="paste-details">
+        <summary>Oppure incolla il testo della copia</summary>
+        <textarea class="backup-area" id="importText" spellcheck="false" placeholder='{"app":"libretto-ferie","impostazioni":{…},"movimenti":{…}}' aria-label="Testo della copia di sicurezza"></textarea>
+        <button class="btn-ghost" type="button" id="importTextBtn">Controlla e importa</button>
+      </details>
+      <p class="backup-status" id="importStatus"></p>
+      <div class="backup-confirm" id="importConfirm" hidden>
+        <p id="importSummary"></p>
+        <div class="backup-actions">
+          <button class="btn-ghost" type="button" id="importMerge">Unisci ai dati attuali</button>
+          <button class="btn-ghost danger" type="button" id="importReplace">Sostituisci tutto</button>
+          <button class="btn-ghost" type="button" id="importCancel">Annulla</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="restore-card card" id="restoreCard" hidden>
+    <div class="restore-text">
+      <h3>Il libretto è vuoto</h3>
+      <p id="restoreMsg">Se hai una copia di sicurezza, ripristinala qui: ferie, ROL e impostazioni tornano come prima.</p>
+    </div>
+    <div class="backup-actions">
+      <label class="backup-file restore-btn">
+        <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Ripristina da file
+        <input type="file" id="restoreFile" accept=".json,application/json,text/plain">
+      </label>
+      <button class="btn-ghost" type="button" id="restorePasteToggle" aria-expanded="false" aria-controls="restorePaste">Incolla il testo</button>
+      <button class="btn-ghost" type="button" id="restoreDismiss">Inizio da zero</button>
+    </div>
+    <div class="paste-box" id="restorePaste" hidden>
+      <textarea class="backup-area" id="restoreText" spellcheck="false" placeholder='Incolla qui il contenuto della copia: inizia con {"app":"libretto-ferie"…' aria-label="Testo della copia di sicurezza"></textarea>
+      <button class="settings-save" type="button" id="restoreTextBtn">Riempi il libretto</button>
     </div>
   </div>
 
@@ -1010,7 +1082,13 @@
     </div>
 
     <div class="card ledger">
-      <h2>Riepilogo</h2>
+      <div class="ledger-head">
+        <h2>Riepilogo</h2>
+        <button class="btn-ghost btn-sm" type="button" id="openPdf">
+          <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 11v6M9.5 14.5 12 17l2.5-2.5"/></svg>
+          Scarica PDF
+        </button>
+      </div>
 
       <div class="ledger-block">
         <div class="ledger-label"><span>Ferie residue</span><span id="ferieAnnoLabel">a fine mese</span></div>
@@ -1112,6 +1190,42 @@
     <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
     Annulla
   </button>
+</div>
+
+<div class="modal-overlay" id="pdfOverlay">
+  <div class="modal-box modal-day modal-pdf" role="dialog" aria-modal="true" aria-labelledby="pdfTitle">
+    <h3 id="pdfTitle">Scarica i permessi in PDF</h3>
+    <p>Scegli il periodo da stampare e cosa includere.</p>
+
+    <div class="chip-row" id="pdfPresets" role="group" aria-label="Periodi rapidi">
+      <button type="button" data-preset="mese">Questo mese</button>
+      <button type="button" data-preset="anno">Quest'anno</button>
+      <button type="button" data-preset="annoPrec">Anno scorso</button>
+      <button type="button" data-preset="busta">Dalla busta paga</button>
+    </div>
+
+    <div class="pdf-range">
+      <label>Dal<input type="date" id="pdfDal"></label>
+      <label>Al<input type="date" id="pdfAl"></label>
+    </div>
+
+    <div class="modal-field">
+      <span>Cosa includere</span>
+      <div class="pdf-types">
+        <label style="--c:var(--ferie)"><input type="checkbox" value="ferie" checked>Ferie<span class="dot"></span></label>
+        <label style="--c:var(--permesso)"><input type="checkbox" value="permesso" checked>ROL<span class="dot"></span></label>
+        <label style="--c:var(--chiusura)"><input type="checkbox" value="chiusura" checked>Chiusure<span class="dot"></span></label>
+        <label style="--c:var(--retribuito)"><input type="checkbox" value="retribuito" checked>Retribuiti<span class="dot"></span></label>
+      </div>
+    </div>
+
+    <p class="pdf-count" id="pdfCount" aria-live="polite"></p>
+
+    <div class="modal-actions">
+      <button class="modal-confirm" type="button" id="pdfConfirm">Scarica PDF</button>
+    </div>
+    <button class="modal-minor" type="button" id="pdfCancel">Annulla</button>
+  </div>
 </div>
 
 <div class="modal-overlay" id="dayOverlay">
@@ -1372,6 +1486,7 @@
     catch(e){ console.error('Errore salvataggio impostazioni', e); }
   }
   async function saveEntries(){
+    if(Object.keys(entries).length) proteggiDati();
     try{ await store.set('leave-entries', JSON.stringify(entries)); }
     catch(e){ console.error('Errore salvataggio movimenti', e); }
   }
@@ -2115,11 +2230,23 @@
     };
   }
 
-  function refreshExport(){
-    $('exportArea').value = JSON.stringify(buildBackup(), null, 2);
-    const n = Object.keys(entries).length;
-    setStatus('exportStatus', `${n} ${plur(n,'movimento','movimenti')} nella copia, aggiornata adesso.`, '');
-    renderBackupStatus();
+  async function downloadBackup(){
+    const oggi = isoDay(new Date());
+    const blob = new Blob([JSON.stringify(buildBackup(), null, 2)], { type:'application/json' });
+    const btn = $('downloadBackup');
+    btn.disabled = true;
+    try{
+      await salvaFile(blob, `libretto-ferie-copia_${oggi}.json`);
+      await markBackupDone();
+      const n = Object.keys(entries).length;
+      setStatus('importStatus', `Copia scaricata: ${n} ${plur(n,'movimento','movimenti')} e le impostazioni. Tienila in un posto sicuro (es. iCloud o Google Drive).`, 'ok');
+    }catch(err){
+      setStatus('importStatus', err && err.code === 'declined'
+        ? 'Download annullato.'
+        : 'Il download non è disponibile in questa vista. Apri il libretto nel browser e riprova.', err && err.code === 'declined' ? '' : 'err');
+    }finally{
+      btn.disabled = false;
+    }
   }
 
   // Impronta dei dati: serve a capire se il libretto è cambiato dall'ultima copia.
@@ -2183,19 +2310,6 @@
     el.className = 'backup-status' + (kind ? ' ' + kind : '');
   }
 
-  async function copyExport(){
-    const area = $('exportArea');
-    try{
-      await navigator.clipboard.writeText(area.value);
-      setStatus('exportStatus', 'Copiato negli appunti. Incollalo in un file .json e conservalo.', 'ok');
-      markBackupDone();
-    }catch(e){
-      area.focus();
-      area.select();
-      setStatus('exportStatus', 'Il testo è selezionato: copialo con Cmd+C (o Ctrl+C).', '');
-    }
-  }
-
   function isValidKey(k){ return /^\d{4}-\d{2}-\d{2}$/.test(k); }
 
   function parseBackup(raw){
@@ -2244,10 +2358,10 @@
     return { movimenti: puliti, impostazioni: setPuliti, scartati: scartati };
   }
 
-  function prepareImport(){
-    const raw = $('importArea').value.trim();
+  function prepareImport(raw){
+    raw = String(raw || '').trim();
     if(!raw){
-      setStatus('importStatus', 'Incolla un backup o scegli un file prima di importare.', 'err');
+      setStatus('importStatus', 'Il file è vuoto.', 'err');
       return;
     }
     const res = parseBackup(raw);
@@ -2299,13 +2413,13 @@
 
     importPayload = null;
     $('importConfirm').hidden = true;
-    $('importArea').value = '';
     $('importFile').value = '';
+    $('importText').value = '';
 
     fillSettingsForm();
     hideToast();
     refreshViews();
-    refreshExport();
+    aggiornaRestoreCard();
     if(sostituisci) await markBackupDone(); // i dati coincidono con il file appena importato
     setStatus('importStatus',
       sostituisci
@@ -2323,14 +2437,365 @@
   function readImportFile(file){
     if(!file) return;
     const reader = new FileReader();
-    reader.onload = () => {
-      $('importArea').value = String(reader.result || '');
-      prepareImport();
-    };
+    reader.onload = () => { prepareImport(reader.result); };
     reader.onerror = () => {
-      setStatus('importStatus', 'Non sono riuscito a leggere il file. Prova a incollarne il contenuto.', 'err');
+      setStatus('importStatus', 'Non sono riuscito a leggere il file. Riprova o scegli un\'altra copia.', 'err');
     };
     reader.readAsText(file);
+  }
+
+  // ---- Esportazione PDF ----
+  const PDF_TIPI = {
+    ferie:      { nome:'Ferie',               rgb:[15,118,110] },
+    permesso:   { nome:'ROL',                 rgb:[154,91,22] },
+    chiusura:   { nome:'Chiusura aziendale',  rgb:[30,58,138] },
+    retribuito: { nome:'Permesso retribuito', rgb:[109,40,217] }
+  };
+  let pdfPreset = null;
+  let jsPdfPromise = null;
+
+  function isoDay(d){ return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`; }
+
+  function tipiScelti(){
+    return Array.from(document.querySelectorAll('.pdf-types input:checked')).map(i => i.value);
+  }
+
+  function movimentiNelPeriodo(dal, al, tipi){
+    return Object.keys(entries)
+      .filter(k => k >= dal && k <= al && entries[k] && tipi.indexOf(entries[k].tipo) !== -1)
+      .sort();
+  }
+
+  function totaliPeriodo(chiavi){
+    const t = { ferie:0, chiusure:0, rolOre:0, retrGiorni:0, retrOre:0 };
+    chiavi.forEach(k => {
+      const e = entries[k];
+      if(e.tipo === 'ferie') t.ferie += 1;
+      else if(e.tipo === 'chiusura') t.chiusure += 1;
+      else if(e.tipo === 'permesso') t.rolOre += e.ore;
+      else if(e.tipo === 'retribuito'){ if(e.ore) t.retrOre += e.ore; else t.retrGiorni += 1; }
+    });
+    return t;
+  }
+
+  function applicaPreset(preset){
+    const y = viewDate.getFullYear();
+    const m = viewDate.getMonth();
+    let dal, al;
+    if(preset === 'mese'){ dal = new Date(y, m, 1); al = new Date(y, m+1, 0); }
+    else if(preset === 'anno'){ dal = new Date(y, 0, 1); al = new Date(y, 11, 31); }
+    else if(preset === 'annoPrec'){ dal = new Date(y-1, 0, 1); al = new Date(y-1, 11, 31); }
+    else if(preset === 'busta'){
+      const [ry, rm] = settings.meseRif.split('-').map(Number);
+      dal = new Date(ry, rm, 1); // primo giorno del mese dopo la busta paga
+      al = new Date(Math.max(y, dal.getFullYear()), 11, 31);
+    }
+    $('pdfDal').value = isoDay(dal);
+    $('pdfAl').value = isoDay(al);
+    segnaPreset(preset);
+    aggiornaConteggioPdf();
+  }
+
+  function segnaPreset(preset){
+    pdfPreset = preset;
+    document.querySelectorAll('#pdfPresets button').forEach(b => {
+      const on = b.dataset.preset === preset;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+
+  function aggiornaConteggioPdf(){
+    const box = $('pdfCount');
+    const dal = $('pdfDal').value, al = $('pdfAl').value;
+    const tipi = tipiScelti();
+    let errore = null;
+    if(!dal || !al) errore = 'Scegli la data di inizio e di fine.';
+    else if(dal > al) errore = 'La data di inizio viene dopo quella di fine.';
+    else if(tipi.length === 0) errore = 'Scegli almeno un tipo di permesso.';
+
+    let chiavi = [];
+    if(!errore){
+      chiavi = movimentiNelPeriodo(dal, al, tipi);
+      if(chiavi.length === 0) errore = `Nessun movimento dal ${itDate(dal)} al ${itDate(al)}.`;
+    }
+
+    box.classList.toggle('err', !!errore);
+    $('pdfConfirm').disabled = !!errore;
+    if(errore){ box.textContent = errore; return; }
+
+    const t = totaliPeriodo(chiavi);
+    const pezzi = [];
+    const ferieTot = t.ferie + t.chiusure;
+    if(ferieTot) pezzi.push(`<b>${num(ferieTot)}</b> ${plur(ferieTot,'giorno','giorni')} di ferie${t.chiusure ? ` (di cui ${num(t.chiusure)} di chiusura)` : ''}`);
+    if(t.rolOre) pezzi.push(`<b>${num(t.rolOre)}</b> ${plur(t.rolOre,'ora','ore')} di ROL`);
+    const retr = [];
+    if(t.retrGiorni) retr.push(`${num(t.retrGiorni)} ${plur(t.retrGiorni,'giorno','giorni')}`);
+    if(t.retrOre) retr.push(`${num(t.retrOre)} ${plur(t.retrOre,'ora','ore')}`);
+    if(retr.length) pezzi.push(`<b>${retr.join(' e ')}</b> di permessi retribuiti`);
+    box.innerHTML = `Nel PDF: <b>${chiavi.length}</b> ${plur(chiavi.length,'movimento','movimenti')} · ${pezzi.join(', ')}.`;
+  }
+
+  function apriPdf(){
+    applicaPreset(pdfPreset || 'anno');
+    $('pdfConfirm').textContent = 'Scarica PDF';
+    $('pdfOverlay').classList.add('open');
+  }
+
+  function chiudiPdf(){ $('pdfOverlay').classList.remove('open'); }
+
+  function caricaJsPdf(){
+    if(window.jspdf && window.jspdf.jsPDF) return Promise.resolve(window.jspdf.jsPDF);
+    if(jsPdfPromise) return jsPdfPromise;
+    jsPdfPromise = new Promise((resolve, reject) => {
+      const sc = document.createElement('script');
+      sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      sc.onload = () => (window.jspdf && window.jspdf.jsPDF) ? resolve(window.jspdf.jsPDF) : reject(new Error('jsPDF'));
+      sc.onerror = () => { jsPdfPromise = null; reject(new Error('rete')); };
+      document.head.appendChild(sc);
+    });
+    return jsPdfPromise;
+  }
+
+  function descrizionePdf(e){
+    if(e.tipo === 'ferie') return { qta:'1 giorno', nota:'' };
+    if(e.tipo === 'chiusura') return { qta:'1 giorno', nota:'Scalata dalle ferie' };
+    if(e.tipo === 'permesso') return { qta:`${num(e.ore)} ${plur(e.ore,'ora','ore')}`, nota:'' };
+    return { qta: e.ore ? `${num(e.ore)} ${plur(e.ore,'ora','ore')}` : '1 giorno',
+             nota: `${e.motivo || 'Altro'} · non scalato` };
+  }
+
+  function costruisciPdf(JsPDF, dal, al, chiavi){
+    const doc = new JsPDF({ unit:'mm', format:'a4' });
+    const W = 210, H = 297, M = 18, CW = W - 2*M;
+    const INK = [15,23,42], MUTED = [71,85,105], FAINT = [100,116,139], LINE = [226,232,240], SOFT = [241,245,249];
+    const oreG = settings.oreGiornata > 0 ? settings.oreGiornata : 8;
+    const t = totaliPeriodo(chiavi);
+    const ferieTot = t.ferie + t.chiusure;
+    let y = M;
+
+    const col = (c) => doc.setTextColor(c[0], c[1], c[2]);
+
+    // intestazione
+    doc.setFont('helvetica','bold'); doc.setFontSize(20); col(INK);
+    doc.text('Libretto Ferie', M, y + 6);
+    doc.setFont('helvetica','normal'); doc.setFontSize(8); col(FAINT);
+    doc.text(`Generato il ${itDate(isoDay(new Date()))}`, W - M, y + 6, { align:'right' });
+    y += 13;
+    doc.setFontSize(11); col(MUTED);
+    doc.text(`Permessi dal ${itDate(dal)} al ${itDate(al)}`, M, y);
+    y += 8;
+
+    // riquadri di sintesi
+    const box = [
+      { label:'FERIE', val:num(ferieTot), unit: plur(ferieTot,'giorno','giorni') + (t.chiusure ? `, di cui ${num(t.chiusure)} chiusur${t.chiusure === 1 ? 'a' : 'e'}` : ''), rgb:PDF_TIPI.ferie.rgb },
+      { label:'ROL', val:num(t.rolOre), unit:`${plur(t.rolOre,'ora','ore')} (${num(t.rolOre/oreG)} gg)`, rgb:PDF_TIPI.permesso.rgb },
+      { label:'TOTALE', val:num(ferieTot + t.rolOre/oreG), unit:`giorni, ROL a ${num(oreG)} ore`, rgb:INK },
+      { label:'RETRIBUITI', val: t.retrOre && !t.retrGiorni ? num(t.retrOre) : num(t.retrGiorni),
+        unit: t.retrOre && !t.retrGiorni ? plur(t.retrOre,'ora','ore')
+            : plur(t.retrGiorni,'giorno','giorni') + (t.retrOre ? ` + ${num(t.retrOre)} ore` : '') + ', non scalati',
+        rgb:PDF_TIPI.retribuito.rgb }
+    ];
+    const gap = 4, bw = (CW - gap*3) / 4, bh = 24;
+    box.forEach((b, i) => {
+      const x = M + i*(bw + gap);
+      doc.setFillColor(SOFT[0], SOFT[1], SOFT[2]);
+      doc.roundedRect(x, y, bw, bh, 2, 2, 'F');
+      doc.setFont('helvetica','bold'); doc.setFontSize(7); col(FAINT);
+      doc.text(b.label, x + 4, y + 6);
+      doc.setFontSize(17); col(b.rgb);
+      doc.text(b.val, x + 4, y + 15);
+      doc.setFont('helvetica','normal'); doc.setFontSize(7); col(MUTED);
+      doc.text(doc.splitTextToSize(b.unit, bw - 8)[0], x + 4, y + 20.5);
+    });
+    y += bh + 10;
+
+    // tabella
+    const cols = [
+      { t:'Data',      x:M,       w:20 },
+      { t:'Giorno',    x:M + 20,  w:22 },
+      { t:'Tipo',      x:M + 42,  w:46 },
+      { t:'Quantità',  x:M + 88,  w:24 },
+      { t:'Dettaglio', x:M + 112, w:CW - 112 }
+    ];
+    const RH = 7;
+
+    function intestazioneTabella(){
+      doc.setFont('helvetica','bold'); doc.setFontSize(7.5); col(FAINT);
+      cols.forEach(c => doc.text(c.t.toUpperCase(), c.x, y));
+      y += 2.5;
+      doc.setDrawColor(INK[0], INK[1], INK[2]); doc.setLineWidth(.3);
+      doc.line(M, y, W - M, y);
+      y += 1;
+    }
+    function spazio(h){
+      if(y + h > H - 18){
+        doc.addPage(); y = M + 4;
+        intestazioneTabella();
+      }
+    }
+
+    intestazioneTabella();
+
+    // raggruppa per mese
+    const gruppi = [];
+    chiavi.forEach(k => {
+      const ym = k.slice(0,7);
+      if(!gruppi.length || gruppi[gruppi.length-1].ym !== ym) gruppi.push({ ym, chiavi:[] });
+      gruppi[gruppi.length-1].chiavi.push(k);
+    });
+
+    gruppi.forEach(g => {
+      spazio(RH * 2 + 2);
+      const [gy, gm] = g.ym.split('-').map(Number);
+      const tm = totaliPeriodo(g.chiavi);
+      const parti = [];
+      if(tm.ferie + tm.chiusure) parti.push(`${num(tm.ferie + tm.chiusure)} gg ferie`);
+      if(tm.rolOre) parti.push(`${num(tm.rolOre)} h ROL`);
+      const nRetr = g.chiavi.filter(k => entries[k].tipo === 'retribuito').length;
+      if(nRetr) parti.push(`${nRetr} ${plur(nRetr,'retribuito','retribuiti')}`);
+      y += 6;
+      doc.setFont('helvetica','bold'); doc.setFontSize(10); col(INK);
+      const nomeMese = MESI[gm-1].charAt(0).toUpperCase() + MESI[gm-1].slice(1);
+      doc.text(`${nomeMese} ${gy}`, M, y);
+      doc.setFont('helvetica','normal'); doc.setFontSize(8); col(MUTED);
+      doc.text(parti.join('  ·  '), W - M, y, { align:'right' });
+      y += 2.5;
+
+      g.chiavi.forEach(k => {
+        spazio(RH);
+        const e = entries[k];
+        const [ky, km, kd] = k.split('-').map(Number);
+        const giorno = GIORNI[new Date(ky, km-1, kd).getDay()];
+        const info = PDF_TIPI[e.tipo];
+        const d = descrizionePdf(e);
+        const ty = y + 4.8;
+
+        doc.setFont('helvetica','bold'); doc.setFontSize(9); col(INK);
+        doc.text(`${pad(kd)}/${pad(km)}`, cols[0].x, ty);
+        doc.setFont('helvetica','normal'); col(MUTED);
+        doc.text(giorno.charAt(0).toUpperCase() + giorno.slice(1), cols[1].x, ty);
+        doc.setFillColor(info.rgb[0], info.rgb[1], info.rgb[2]);
+        doc.circle(cols[2].x + 1.2, ty - 1.1, 1.2, 'F');
+        col(INK);
+        doc.text(info.nome, cols[2].x + 4.5, ty);
+        doc.text(d.qta, cols[3].x, ty);
+        col(MUTED);
+        doc.text(doc.splitTextToSize(d.nota, cols[4].w)[0] || '', cols[4].x, ty);
+
+        y += RH;
+        doc.setDrawColor(LINE[0], LINE[1], LINE[2]); doc.setLineWidth(.2);
+        doc.line(M, y, W - M, y);
+      });
+    });
+
+    // piè di pagina
+    const n = doc.getNumberOfPages();
+    for(let i = 1; i <= n; i++){
+      doc.setPage(i);
+      doc.setFont('helvetica','normal'); doc.setFontSize(7.5); col(FAINT);
+      doc.text(`Libretto Ferie · ${itDate(dal)} – ${itDate(al)}`, M, H - 10);
+      doc.text(`Pagina ${i} di ${n}`, W - M, H - 10, { align:'right' });
+    }
+    return doc.output('blob');
+  }
+
+  async function salvaFile(blob, filename){
+    // dentro Claude: il download passa dalla conferma del visualizzatore
+    if(window.claude && typeof window.claude.use === 'function'){
+      const dl = await window.claude.use('downloads');
+      if(dl){ await dl.save({ filename, data: blob }); return; }
+    }
+    // browser normale (es. GitHub Pages)
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  }
+
+  async function scaricaPdf(){
+    const dal = $('pdfDal').value, al = $('pdfAl').value;
+    const chiavi = movimentiNelPeriodo(dal, al, tipiScelti());
+    if(!chiavi.length) return;
+    const btn = $('pdfConfirm');
+    btn.disabled = true;
+    btn.textContent = 'Preparo il PDF…';
+    try{
+      const JsPDF = await caricaJsPdf();
+      const blob = costruisciPdf(JsPDF, dal, al, chiavi);
+      await salvaFile(blob, `libretto-ferie_${dal}_${al}.pdf`);
+      chiudiPdf();
+    }catch(err){
+      const box = $('pdfCount');
+      if(err && err.code === 'declined'){
+        box.classList.remove('err');
+        box.textContent = 'Download annullato. Puoi riprovare quando vuoi.';
+      } else {
+        box.classList.add('err');
+        box.textContent = err && err.message === 'rete'
+          ? 'Non riesco a preparare il PDF: controlla la connessione e riprova.'
+          : 'Il download non è disponibile in questa vista. Apri il libretto nel browser e riprova.';
+      }
+    }finally{
+      btn.disabled = false;
+      btn.textContent = 'Scarica PDF';
+    }
+  }
+
+  // ---- Libretto vuoto: proponi subito il ripristino ----
+  let restoreNascosto = false;
+  function aggiornaRestoreCard(){
+    $('restoreCard').hidden = restoreNascosto || Object.keys(entries).length > 0;
+  }
+
+  function ripristinaDaRiquadro(file){
+    if(!file) return;
+    const msg = $('restoreMsg');
+    const reader = new FileReader();
+    reader.onload = () => ripristinaDaTesto(reader.result);
+    reader.onerror = () => { msg.className = 'err'; msg.textContent = 'Non sono riuscito a leggere il file.'; };
+    reader.readAsText(file);
+  }
+
+  async function ripristinaDaTesto(raw){
+    const msg = $('restoreMsg');
+    raw = String(raw || '').trim();
+    if(!raw){ msg.className = 'err'; msg.textContent = 'Incolla prima il testo della copia.'; return; }
+    const res = parseBackup(raw);
+    const n = res.movimenti ? Object.keys(res.movimenti).length : 0;
+    if(res.errore || n === 0){
+      msg.className = 'err';
+      msg.textContent = res.errore || 'La copia non contiene movimenti leggibili.';
+      $('restoreFile').value = '';
+      return;
+    }
+    // il libretto è vuoto: non c'è nulla da perdere, si ripristina tutto
+    importPayload = res;
+    await applyImport(true);
+    $('restoreText').value = '';
+    restoreNascosto = true;
+    aggiornaRestoreCard();
+    showUndoless(`Libretto ripristinato: ${n} ${plur(n,'movimento','movimenti')}.`);
+  }
+
+  // messaggio breve senza pulsante Annulla
+  function showUndoless(testo){
+    showUndo(testo, null);
+    $('toastUndo').hidden = true;
+    setTimeout(() => { $('toastUndo').hidden = false; }, 7200);
+  }
+
+  // Chiede al browser di non cancellare i dati quando libera spazio
+  let persistenzaChiesta = false;
+  function proteggiDati(){
+    if(persistenzaChiesta) return;
+    persistenzaChiesta = true;
+    try{
+      if(navigator.storage && navigator.storage.persist){
+        navigator.storage.persisted().then(gia => { if(!gia) navigator.storage.persist(); }).catch(() => {});
+      }
+    }catch(e){ /* non supportato */ }
   }
 
   function init(){
@@ -2366,12 +2831,20 @@
     $('toggleSettings').addEventListener('click', () => {
       const open = $('settingsPanel').classList.toggle('open');
       $('toggleSettings').setAttribute('aria-expanded', open ? 'true' : 'false');
-      if(open) refreshExport();
+      if(open) renderBackupStatus();
     });
 
-    $('copyExport').addEventListener('click', copyExport);
-    $('refreshExport').addEventListener('click', refreshExport);
-    $('checkImport').addEventListener('click', prepareImport);
+    $('downloadBackup').addEventListener('click', downloadBackup);
+    $('restoreFile').addEventListener('change', (e) => ripristinaDaRiquadro(e.target.files[0]));
+    $('restorePasteToggle').addEventListener('click', () => {
+      const box = $('restorePaste');
+      box.hidden = !box.hidden;
+      $('restorePasteToggle').setAttribute('aria-expanded', box.hidden ? 'false' : 'true');
+      if(!box.hidden) $('restoreText').focus();
+    });
+    $('restoreTextBtn').addEventListener('click', () => ripristinaDaTesto($('restoreText').value));
+    $('importTextBtn').addEventListener('click', () => prepareImport($('importText').value));
+    $('restoreDismiss').addEventListener('click', () => { restoreNascosto = true; aggiornaRestoreCard(); });
     $('importMerge').addEventListener('click', () => applyImport(false));
     $('importReplace').addEventListener('click', () => applyImport(true));
     $('importCancel').addEventListener('click', cancelImport);
@@ -2386,7 +2859,6 @@
       await saveSettings();
       fillSettingsForm();
       renderLedger();
-      refreshExport();
       $('settingsPanel').classList.remove('open');
       $('toggleSettings').setAttribute('aria-expanded','false');
     });
@@ -2407,8 +2879,19 @@
       b.addEventListener('click', () => { $('dayOre').value = b.dataset.ore; syncPresets(); });
     });
     $('toastUndo').addEventListener('click', undoLast);
+
+    $('openPdf').addEventListener('click', apriPdf);
+    $('pdfCancel').addEventListener('click', chiudiPdf);
+    $('pdfConfirm').addEventListener('click', scaricaPdf);
+    $('pdfOverlay').addEventListener('click', (e) => { if(e.target.id === 'pdfOverlay') chiudiPdf(); });
+    document.querySelectorAll('#pdfPresets button').forEach(b => {
+      b.addEventListener('click', () => applicaPreset(b.dataset.preset));
+    });
+    ['pdfDal','pdfAl'].forEach(id => $(id).addEventListener('input', () => { segnaPreset(null); aggiornaConteggioPdf(); }));
+    document.querySelectorAll('.pdf-types input').forEach(i => i.addEventListener('change', aggiornaConteggioPdf));
     document.addEventListener('keydown', (e) => {
       if(e.key === 'Escape' && $('dayOverlay').classList.contains('open')) closeDay();
+      if(e.key === 'Escape' && $('pdfOverlay').classList.contains('open')) chiudiPdf();
     });
 
     collegaAuguri();
@@ -2450,6 +2933,8 @@
     renderCalendar();
     renderLedger();
     fillSettingsForm();
+    aggiornaRestoreCard();
+    if(Object.keys(entries).length) proteggiDati();
 
     $('loadingMsg').style.display = 'none';
     $('app').style.display = 'grid';
