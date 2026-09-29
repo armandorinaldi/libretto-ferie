@@ -586,9 +586,18 @@
 
   /* ---------- IMPOSTAZIONI ---------- */
   .modal-box .settings-hint{margin:0 0 var(--space-4);font-size:.8125rem;line-height:1.5;color:var(--color-muted-foreground);}
-  .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3) var(--space-4);}
-  .settings-grid .field.wide{grid-column:1 / -1;}
-  @media (max-width:380px){ .settings-grid{grid-template-columns:1fr;} }
+  /* tre valori per riga: sono numeri corti, stanno affiancati */
+  /* stessa griglia per Busta paga e Maturazione: colonne allineate, la terza più larga (serve al Mese) */
+  .settings-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.35fr);gap:var(--space-3);}
+  .settings-grid .field label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .modal-settings .settings-grid .field input{padding:0 var(--space-2) 0 var(--space-3);}
+  .settings-grid .input-unit input{padding-right:38px !important;}
+  .settings-grid .input-unit .unit{right:var(--space-2);}
+  /* telefono stretto: il mese va a capo, i numeri restano affiancati */
+  @media (max-width:479px){
+    .settings-grid.busta{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .settings-grid.busta .field.wide{grid-column:1 / -1;}
+  }
   .field label{
     display:block;font-size:.8125rem;font-weight:600;
     color:var(--color-foreground);margin-bottom:6px;
@@ -1315,7 +1324,7 @@
 
   <div class="loading-msg" id="loadingMsg">Caricamento della pianificazione…</div>
 
-  <div class="footnote">I dati restano salvati solo per te, tra una visita e l'altra. · <span id="appVersion">v2.13</span></div>
+  <div class="footnote">I dati restano salvati solo per te, tra una visita e l'altra. · <span id="appVersion">v2.15</span></div>
 </div>
 
 <div class="bday-tip" id="bdayTip" role="status" hidden></div>
@@ -1342,7 +1351,7 @@
       <section class="ms-section" aria-labelledby="bustaTitle">
         <h4 id="bustaTitle"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>Busta paga</h4>
         <p class="settings-hint">Il saldo dell'ultima busta paga e il mese a cui si riferisce. Può essere anche negativo.</p>
-        <div class="settings-grid">
+        <div class="settings-grid busta">
           <div class="field" data-for="inpSaldoFerie">
             <label for="inpSaldoFerie">Saldo ferie</label>
             <div class="input-unit"><input type="number" id="inpSaldoFerie" step="0.01" inputmode="decimal" aria-describedby="inpSaldoFerieErr"><span class="unit" aria-hidden="true">gg</span></div>
@@ -1354,7 +1363,7 @@
             <p class="field-err" id="inpSaldoRolErr" hidden></p>
           </div>
           <div class="field wide" data-for="inpMeseRif">
-            <label for="inpMeseRif">Mese della busta paga</label>
+            <label for="inpMeseRif">Mese</label>
             <input type="month" id="inpMeseRif" aria-describedby="inpMeseRifErr">
             <p class="field-err" id="inpMeseRifErr" hidden></p>
           </div>
@@ -1363,20 +1372,20 @@
 
       <section class="ms-section" aria-labelledby="matTitle">
         <h4 id="matTitle"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Maturazione</h4>
-        <p class="settings-hint">Quanto matura ogni mese, dal mese dopo la busta paga in poi.</p>
+        <p class="settings-hint">Quanto matura ogni mese, dal mese dopo la busta paga. Le ore al giorno servono a convertire i ROL in giorni.</p>
         <div class="settings-grid">
           <div class="field" data-for="inpMaturazioneFerie">
-            <label for="inpMaturazioneFerie">Ferie al mese</label>
+            <label for="inpMaturazioneFerie">Ferie</label>
             <div class="input-unit"><input type="number" id="inpMaturazioneFerie" step="0.01" inputmode="decimal" min="0" aria-describedby="inpMaturazioneFerieErr"><span class="unit" aria-hidden="true">gg</span></div>
             <p class="field-err" id="inpMaturazioneFerieErr" hidden></p>
           </div>
           <div class="field" data-for="inpMaturazioneRol">
-            <label for="inpMaturazioneRol">ROL al mese</label>
+            <label for="inpMaturazioneRol">ROL</label>
             <div class="input-unit"><input type="number" id="inpMaturazioneRol" step="0.01" inputmode="decimal" min="0" aria-describedby="inpMaturazioneRolErr"><span class="unit" aria-hidden="true">ore</span></div>
             <p class="field-err" id="inpMaturazioneRolErr" hidden></p>
           </div>
-          <div class="field wide" data-for="inpOreGiornata">
-            <label for="inpOreGiornata">Ore di una giornata lavorativa</label>
+          <div class="field" data-for="inpOreGiornata">
+            <label for="inpOreGiornata" title="Ore di una giornata lavorativa">Ore al giorno</label>
             <div class="input-unit"><input type="number" id="inpOreGiornata" step="0.5" inputmode="decimal" min="1" max="24" aria-describedby="inpOreGiornataErr"><span class="unit" aria-hidden="true">ore</span></div>
             <p class="field-err" id="inpOreGiornataErr" hidden></p>
           </div>
@@ -1529,7 +1538,7 @@
 
 <script>
 (function(){
-  const APP_VERSION = '2.13';
+  const APP_VERSION = '2.15';
   const MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
 
   function pad(n){ return n < 10 ? '0'+n : ''+n; }
