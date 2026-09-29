@@ -585,11 +585,10 @@
   .move-del:hover{background:var(--color-destructive-soft);color:var(--color-destructive);}
 
   /* ---------- IMPOSTAZIONI ---------- */
-  .settings-panel{display:none;margin-bottom:var(--space-4);}
-  .settings-panel.open{display:block;}
-  .settings-hint{margin:0 0 var(--space-4);font-size:.875rem;color:var(--color-muted-foreground);max-width:64ch;}
-  .settings-grid{display:grid;grid-template-columns:1fr;gap:var(--space-4);}
-  @media (min-width:640px){ .settings-grid{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));} }
+  .modal-box .settings-hint{margin:0 0 var(--space-4);font-size:.8125rem;line-height:1.5;color:var(--color-muted-foreground);}
+  .settings-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3) var(--space-4);}
+  .settings-grid .field.wide{grid-column:1 / -1;}
+  @media (max-width:380px){ .settings-grid{grid-template-columns:1fr;} }
   .field label{
     display:block;font-size:.8125rem;font-weight:600;
     color:var(--color-foreground);margin-bottom:6px;
@@ -763,6 +762,107 @@
   .modal-confirm[disabled]{opacity:.4;pointer-events:none;}
   .modal-cancel{background:var(--color-card);color:var(--color-muted-foreground);}
   .modal-cancel:hover{background:var(--color-muted);color:var(--color-foreground);}
+
+
+  /* ---------- MODALE IMPOSTAZIONI ---------- */
+  body.no-scroll{overflow:hidden;}
+  .modal-overlay.open .modal-settings{animation:sheetIn 220ms cubic-bezier(.2,.8,.2,1);}
+  @keyframes sheetIn{ from{opacity:0;transform:translateY(12px) scale(.98);} to{opacity:1;transform:none;} }
+  .modal-settings{
+    max-width:560px;padding:0;text-align:left;
+    display:flex;flex-direction:column;
+    max-height:calc(100vh - 2 * var(--space-4));
+    max-height:calc(100dvh - 2 * var(--space-4));
+    overflow:hidden;
+  }
+  .modal-settings:focus{outline:none;}
+  .ms-head{
+    display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-3);
+    padding:var(--space-6) var(--space-6) var(--space-4);
+    border-bottom:1px solid var(--color-border);
+  }
+  .modal-box .ms-head p{margin:2px 0 0;font-size:.8125rem;}
+  .ms-close{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:44px;height:44px;margin:-10px -10px 0 0;flex:none;
+    background:none;border:none;border-radius:var(--radius-md);
+    color:var(--color-muted-foreground);
+    transition:background-color var(--dur) ease, color var(--dur) ease;
+  }
+  .ms-close:hover{background:var(--color-muted);color:var(--color-foreground);}
+  .ms-body{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;padding:0 var(--space-6);}
+  .ms-section{padding:var(--space-6) 0;border-top:1px solid var(--color-border);}
+  .ms-section:first-child{border-top:none;}
+  .ms-section h4{
+    display:flex;align-items:center;gap:var(--space-2);
+    margin:0 0 var(--space-1);font-size:.9375rem;font-weight:700;letter-spacing:-.01em;
+  }
+  .ms-section h4 .icon{color:var(--color-muted-foreground);}
+  .modal-settings .field label{font-size:.75rem;color:var(--color-muted-foreground);}
+  .input-unit{position:relative;}
+  .modal-settings .field input{
+    min-height:44px;margin:0;padding:0 var(--space-3);
+    font-size:1rem;font-weight:600;text-align:left;
+  }
+  .input-unit input{padding-right:48px !important;}
+  .input-unit .unit{
+    position:absolute;right:var(--space-3);top:50%;transform:translateY(-50%);
+    font-size:.75rem;font-weight:600;color:var(--color-faint);pointer-events:none;
+  }
+  .modal-settings .field input[aria-invalid="true"]{border-color:var(--color-destructive);box-shadow:inset 0 0 0 1px var(--color-destructive);}
+  .modal-box .field-err{margin:4px 0 0;font-size:.6875rem;font-weight:600;color:var(--color-destructive);}
+  .field.changed label::after{
+    content:'';display:inline-block;width:6px;height:6px;margin-left:6px;vertical-align:middle;
+    border-radius:50%;background:var(--color-warning);
+  }
+  .modal-settings .backup{margin:0;padding:var(--space-6) 0;}
+  .modal-settings .backup > p{font-size:.8125rem;margin:var(--space-1) 0 var(--space-4);}
+  .modal-settings .backup-head{margin-bottom:0;}
+  .modal-settings .backup-file input{width:1px;height:1px;min-height:0;margin:0;padding:0;}
+  .modal-box .backup-status{margin:var(--space-3) 0 0;font-size:.75rem;}
+  .modal-box .backup-status:empty{display:none;}
+  .modal-box .backup-confirm p{font-size:.75rem;color:inherit;margin:0 0 var(--space-3);}
+  .ms-foot{
+    display:flex;align-items:center;justify-content:flex-end;gap:var(--space-2);flex-wrap:wrap;
+    padding:var(--space-4) var(--space-6);
+    padding-bottom:calc(var(--space-4) + env(safe-area-inset-bottom,0px));
+    border-top:1px solid var(--color-border);background:var(--color-card);
+  }
+  .ms-state{margin-right:auto;font-size:.75rem;font-weight:600;color:var(--color-faint);}
+  .ms-state.dirty{color:var(--color-warning);}
+  .ms-state.err{color:var(--color-destructive);}
+  .ms-foot button{
+    min-height:44px;padding:0 var(--space-6);border-radius:var(--radius-md);
+    font-size:.9375rem;font-weight:700;border:1px solid var(--color-border);
+    transition:background-color var(--dur) ease, opacity var(--dur) ease;
+  }
+  .ms-foot .modal-confirm[disabled]{opacity:.35;}
+  .ms-foot.confirming{background:var(--color-warning-soft);}
+  .ms-foot.confirming .ms-state{color:var(--color-warning);}
+  .btn-discard{background:var(--color-card);color:var(--color-destructive);border-color:var(--color-destructive) !important;}
+  .btn-discard:hover{background:var(--color-destructive-soft);}
+  .modal-settings.nudge-shake{animation:shake 320ms ease;}
+  @keyframes shake{ 0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);} }
+
+  /* telefono: foglio che sale dal basso */
+  @media (max-width:559px){
+    .settings-overlay{align-items:flex-end;padding:0;}
+    .modal-settings{
+      max-width:none;border-radius:var(--radius-lg) var(--radius-lg) 0 0;border-bottom:none;
+      max-height:92vh;max-height:92dvh;
+    }
+    .modal-overlay.open .modal-settings{animation:sheetUp 260ms cubic-bezier(.2,.8,.2,1);}
+    .ms-head{padding:var(--space-4) var(--space-4) var(--space-3);position:relative;}
+    .ms-head::before{
+      content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);
+      width:36px;height:4px;border-radius:999px;background:var(--color-border-strong);
+    }
+    .ms-body{padding:0 var(--space-4);}
+    .ms-foot{padding-left:var(--space-4);padding-right:var(--space-4);}
+    .ms-foot button{flex:1;padding:0 var(--space-3);}
+    .ms-state{flex:1 1 100%;}
+  }
+  @keyframes sheetUp{ from{transform:translateY(100%);} to{transform:none;} }
 
   /* ---------- MODALE DEL GIORNO ---------- */
   .modal-day{
@@ -1044,78 +1144,11 @@
       <button class="theme-btn" id="themeBtn" type="button" aria-label="Cambia tema">
         <span id="themeIcon" aria-hidden="true"></span><span id="themeLabel">Scuro</span>
       </button>
-      <button class="gear-btn" id="toggleSettings" type="button" aria-expanded="false" aria-controls="settingsPanel">
+      <button class="gear-btn" id="toggleSettings" type="button" aria-haspopup="dialog" aria-controls="settingsOverlay">
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         <span>Impostazioni</span>
         <span class="nudge" id="settingsNudge" hidden aria-hidden="true"></span>
       </button>
-    </div>
-  </div>
-
-  <div class="settings-panel card" id="settingsPanel">
-    <p class="settings-hint">
-      Inserisci il saldo dell'ultima busta paga e il mese a cui si riferisce: da lì in poi la pianificazione aggiunge da sola la maturazione mensile, mese dopo mese.
-    </p>
-    <div class="settings-grid">
-      <div class="field">
-        <label for="inpSaldoFerie">Saldo ferie da busta paga (gg)</label>
-        <input type="number" id="inpSaldoFerie" min="0" step="0.01">
-      </div>
-      <div class="field">
-        <label for="inpSaldoRol">Saldo ROL da busta paga (ore)</label>
-        <input type="number" id="inpSaldoRol" min="0" step="0.01">
-      </div>
-      <div class="field">
-        <label for="inpMeseRif">Mese di riferimento busta paga</label>
-        <input type="month" id="inpMeseRif">
-      </div>
-      <div class="field">
-        <label for="inpMaturazioneFerie">Maturazione mensile ferie (gg)</label>
-        <input type="number" id="inpMaturazioneFerie" min="0" step="0.01">
-      </div>
-      <div class="field">
-        <label for="inpMaturazioneRol">Maturazione mensile ROL (ore)</label>
-        <input type="number" id="inpMaturazioneRol" min="0" step="0.01">
-      </div>
-      <div class="field">
-        <label for="inpOreGiornata">Ore di una giornata lavorativa</label>
-        <input type="number" id="inpOreGiornata" min="1" step="0.5">
-      </div>
-    </div>
-    <button class="settings-save" type="button" id="saveSettings">Salva impostazioni</button>
-
-    <div class="backup">
-      <div class="backup-head">
-        <h3>Copia di sicurezza</h3>
-        <span class="backup-badge" id="backupBadge"><span class="dot"></span><span id="backupBadgeText">—</span></span>
-      </div>
-      <p>I dati restano solo in questo browser. Scarica una copia ogni tanto: se cambi dispositivo o i dati spariscono, la ripristini in un attimo.</p>
-
-      <div class="backup-actions">
-        <button class="settings-save backup-main" type="button" id="downloadBackup">
-          <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-          Scarica copia
-        </button>
-        <label class="backup-file">
-          <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-          Ripristina da file
-          <input type="file" id="importFile" accept=".json,application/json,text/plain">
-        </label>
-      </div>
-      <details class="paste-details">
-        <summary>Oppure incolla il testo della copia</summary>
-        <textarea class="backup-area" id="importText" spellcheck="false" placeholder='{"app":"libretto-ferie","impostazioni":{…},"movimenti":{…}}' aria-label="Testo della copia di sicurezza"></textarea>
-        <button class="btn-ghost" type="button" id="importTextBtn">Controlla e importa</button>
-      </details>
-      <p class="backup-status" id="importStatus"></p>
-      <div class="backup-confirm" id="importConfirm" hidden>
-        <p id="importSummary"></p>
-        <div class="backup-actions">
-          <button class="btn-ghost" type="button" id="importMerge">Unisci ai dati attuali</button>
-          <button class="btn-ghost danger" type="button" id="importReplace">Sostituisci tutto</button>
-          <button class="btn-ghost" type="button" id="importCancel">Annulla</button>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -1282,7 +1315,7 @@
 
   <div class="loading-msg" id="loadingMsg">Caricamento della pianificazione…</div>
 
-  <div class="footnote">I dati restano salvati solo per te, tra una visita e l'altra. · <span id="appVersion">v2.12</span></div>
+  <div class="footnote">I dati restano salvati solo per te, tra una visita e l'altra. · <span id="appVersion">v2.13</span></div>
 </div>
 
 <div class="bday-tip" id="bdayTip" role="status" hidden></div>
@@ -1293,6 +1326,106 @@
     <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
     Annulla
   </button>
+</div>
+
+<div class="modal-overlay settings-overlay" id="settingsOverlay">
+  <div class="modal-box modal-settings" id="settingsPanel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" tabindex="-1">
+    <div class="ms-head">
+      <div>
+        <h3 id="settingsTitle">Impostazioni</h3>
+        <p>Saldi, maturazione e copia di sicurezza</p>
+      </div>
+      <button class="ms-close" type="button" id="closeSettings" aria-label="Chiudi le impostazioni"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+
+    <div class="ms-body">
+      <section class="ms-section" aria-labelledby="bustaTitle">
+        <h4 id="bustaTitle"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>Busta paga</h4>
+        <p class="settings-hint">Il saldo dell'ultima busta paga e il mese a cui si riferisce. Può essere anche negativo.</p>
+        <div class="settings-grid">
+          <div class="field" data-for="inpSaldoFerie">
+            <label for="inpSaldoFerie">Saldo ferie</label>
+            <div class="input-unit"><input type="number" id="inpSaldoFerie" step="0.01" inputmode="decimal" aria-describedby="inpSaldoFerieErr"><span class="unit" aria-hidden="true">gg</span></div>
+            <p class="field-err" id="inpSaldoFerieErr" hidden></p>
+          </div>
+          <div class="field" data-for="inpSaldoRol">
+            <label for="inpSaldoRol">Saldo ROL</label>
+            <div class="input-unit"><input type="number" id="inpSaldoRol" step="0.01" inputmode="decimal" aria-describedby="inpSaldoRolErr"><span class="unit" aria-hidden="true">ore</span></div>
+            <p class="field-err" id="inpSaldoRolErr" hidden></p>
+          </div>
+          <div class="field wide" data-for="inpMeseRif">
+            <label for="inpMeseRif">Mese della busta paga</label>
+            <input type="month" id="inpMeseRif" aria-describedby="inpMeseRifErr">
+            <p class="field-err" id="inpMeseRifErr" hidden></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ms-section" aria-labelledby="matTitle">
+        <h4 id="matTitle"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>Maturazione</h4>
+        <p class="settings-hint">Quanto matura ogni mese, dal mese dopo la busta paga in poi.</p>
+        <div class="settings-grid">
+          <div class="field" data-for="inpMaturazioneFerie">
+            <label for="inpMaturazioneFerie">Ferie al mese</label>
+            <div class="input-unit"><input type="number" id="inpMaturazioneFerie" step="0.01" inputmode="decimal" min="0" aria-describedby="inpMaturazioneFerieErr"><span class="unit" aria-hidden="true">gg</span></div>
+            <p class="field-err" id="inpMaturazioneFerieErr" hidden></p>
+          </div>
+          <div class="field" data-for="inpMaturazioneRol">
+            <label for="inpMaturazioneRol">ROL al mese</label>
+            <div class="input-unit"><input type="number" id="inpMaturazioneRol" step="0.01" inputmode="decimal" min="0" aria-describedby="inpMaturazioneRolErr"><span class="unit" aria-hidden="true">ore</span></div>
+            <p class="field-err" id="inpMaturazioneRolErr" hidden></p>
+          </div>
+          <div class="field wide" data-for="inpOreGiornata">
+            <label for="inpOreGiornata">Ore di una giornata lavorativa</label>
+            <div class="input-unit"><input type="number" id="inpOreGiornata" step="0.5" inputmode="decimal" min="1" max="24" aria-describedby="inpOreGiornataErr"><span class="unit" aria-hidden="true">ore</span></div>
+            <p class="field-err" id="inpOreGiornataErr" hidden></p>
+          </div>
+        </div>
+      </section>
+
+    <section class="ms-section backup" aria-labelledby="backupTitle">
+      <div class="backup-head">
+        <h4 id="backupTitle"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>Copia di sicurezza</h4>
+        <span class="backup-badge" id="backupBadge"><span class="dot"></span><span id="backupBadgeText">—</span></span>
+      </div>
+      <p>I dati restano solo in questo browser. Scarica una copia ogni tanto: se cambi dispositivo o i dati spariscono, la ripristini in un attimo.</p>
+
+      <div class="backup-actions">
+        <button class="settings-save backup-main" type="button" id="downloadBackup">
+          <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          Scarica copia
+        </button>
+        <label class="backup-file">
+          <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3M8 7l4-4 4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          Ripristina da file
+          <input type="file" id="importFile" accept=".json,application/json,text/plain">
+        </label>
+      </div>
+      <details class="paste-details">
+        <summary>Oppure incolla il testo della copia</summary>
+        <textarea class="backup-area" id="importText" spellcheck="false" placeholder='{"app":"libretto-ferie","impostazioni":{…},"movimenti":{…}}' aria-label="Testo della copia di sicurezza"></textarea>
+        <button class="btn-ghost" type="button" id="importTextBtn">Controlla e importa</button>
+      </details>
+      <p class="backup-status" id="importStatus"></p>
+      <div class="backup-confirm" id="importConfirm" hidden>
+        <p id="importSummary"></p>
+        <div class="backup-actions">
+          <button class="btn-ghost" type="button" id="importMerge">Unisci ai dati attuali</button>
+          <button class="btn-ghost danger" type="button" id="importReplace">Sostituisci tutto</button>
+          <button class="btn-ghost" type="button" id="importCancel">Annulla</button>
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <div class="ms-foot" id="settingsFoot">
+      <span class="ms-state" id="settingsState" aria-live="polite">Nessuna modifica</span>
+      <button class="modal-cancel" type="button" id="cancelSettings">Annulla</button>
+      <button class="modal-confirm" type="button" id="saveSettings" disabled>Salva</button>
+      <button class="modal-cancel" type="button" id="keepEditing" hidden>Continua</button>
+      <button class="btn-discard" type="button" id="discardSettings" hidden>Scarta modifiche</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal-overlay" id="pdfOverlay">
@@ -1396,7 +1529,7 @@
 
 <script>
 (function(){
-  const APP_VERSION = '2.12';
+  const APP_VERSION = '2.13';
   const MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
 
   function pad(n){ return n < 10 ? '0'+n : ''+n; }
@@ -1480,6 +1613,14 @@
 
   function undoLast(){
     if(!undoSnapshot) return;
+    if(undoSnapshot.__impostazioni){
+      settings = {...undoSnapshot.__impostazioni};
+      saveSettings();
+      fillSettingsForm();
+      refreshViews();
+      hideToast();
+      return;
+    }
     Object.keys(undoSnapshot).forEach(k => {
       if(undoSnapshot[k]) entries[k] = undoSnapshot[k];
       else delete entries[k];
@@ -1621,6 +1762,132 @@
     $('inpMaturazioneFerie').value = settings.maturazioneFerie;
     $('inpMaturazioneRol').value = settings.maturazioneRol;
     $('inpOreGiornata').value = settings.oreGiornata;
+    aggiornaStatoImpostazioni();
+  }
+
+  // ---- Modale Impostazioni ----
+  const CAMPI_IMPOSTAZIONI = [
+    { id:'inpSaldoFerie',       key:'saldoFerie' },
+    { id:'inpSaldoRol',         key:'saldoRol' },
+    { id:'inpMeseRif',          key:'meseRif', mese:true },
+    { id:'inpMaturazioneFerie', key:'maturazioneFerie', min:0 },
+    { id:'inpMaturazioneRol',   key:'maturazioneRol', min:0 },
+    { id:'inpOreGiornata',      key:'oreGiornata', min:1, max:24 }
+  ];
+  let focusPrimaImpostazioni = null;
+
+  function leggiCampo(c){
+    const raw = $(c.id).value.trim();
+    if(c.mese){
+      if(!/^\d{4}-\d{2}$/.test(raw)) return { errore:'Scegli il mese della busta paga.' };
+      return { valore: raw };
+    }
+    if(raw === '') return { errore:'Inserisci un numero (anche 0).' };
+    const v = parseFloat(raw.replace(',', '.'));
+    if(isNaN(v)) return { errore:'Deve essere un numero.' };
+    if(c.min !== undefined && v < c.min) return { errore: c.min === 0 ? 'Non può essere negativo.' : `Almeno ${c.min}.` };
+    if(c.max !== undefined && v > c.max) return { errore:`Al massimo ${c.max}.` };
+    return { valore: v };
+  }
+
+  // Confronta il modulo con le impostazioni salvate: segna i campi cambiati e gli errori.
+  function aggiornaStatoImpostazioni(){
+    let cambiati = 0, errori = 0;
+    CAMPI_IMPOSTAZIONI.forEach(c => {
+      const r = leggiCampo(c);
+      const field = document.querySelector(`.field[data-for="${c.id}"]`);
+      const err = $(c.id + 'Err');
+      const input = $(c.id);
+      const cambiato = r.errore ? true : r.valore !== settings[c.key];
+      if(cambiato) cambiati++;
+      if(r.errore) errori++;
+      field.classList.toggle('changed', cambiato && !r.errore);
+      input.setAttribute('aria-invalid', r.errore ? 'true' : 'false');
+      err.hidden = !r.errore;
+      err.textContent = r.errore || '';
+    });
+    const stato = $('settingsState');
+    if(errori){
+      stato.className = 'ms-state err';
+      stato.textContent = errori === 1 ? 'Correggi il campo in rosso' : `Correggi i ${errori} campi in rosso`;
+    } else if(cambiati){
+      stato.className = 'ms-state dirty';
+      stato.textContent = cambiati === 1 ? '1 modifica da salvare' : `${cambiati} modifiche da salvare`;
+    } else {
+      stato.className = 'ms-state';
+      stato.textContent = 'Nessuna modifica';
+    }
+    $('saveSettings').disabled = errori > 0 || cambiati === 0;
+    return { cambiati, errori };
+  }
+
+  function impostazioniAperte(){ return $('settingsOverlay').classList.contains('open'); }
+
+  function apriImpostazioni(){
+    focusPrimaImpostazioni = document.activeElement;
+    fillSettingsForm();
+    esciDaConferma();
+    renderBackupStatus();
+    $('settingsOverlay').classList.add('open');
+    document.body.classList.add('no-scroll');
+    $('toggleSettings').setAttribute('aria-expanded', 'true');
+    $('settingsPanel').querySelector('.ms-body').scrollTop = 0;
+    $('settingsPanel').focus();
+  }
+
+  function chiudiImpostazioni(forza){
+    if(!forza && aggiornaStatoImpostazioni().cambiati > 0){
+      entraInConferma();
+      return;
+    }
+    $('settingsOverlay').classList.remove('open');
+    document.body.classList.remove('no-scroll');
+    $('toggleSettings').setAttribute('aria-expanded', 'false');
+    esciDaConferma();
+    fillSettingsForm(); // scarta ciò che non è stato salvato
+    if(focusPrimaImpostazioni && focusPrimaImpostazioni.focus) focusPrimaImpostazioni.focus();
+  }
+
+  // Chiusura con modifiche in sospeso: il piè del pannello chiede conferma.
+  function entraInConferma(){
+    const foot = $('settingsFoot');
+    const box = $('settingsPanel');
+    foot.classList.add('confirming');
+    $('settingsState').className = 'ms-state';
+    $('settingsState').textContent = 'Chiudere senza salvare?';
+    ['cancelSettings','saveSettings'].forEach(id => { $(id).hidden = true; });
+    ['keepEditing','discardSettings'].forEach(id => { $(id).hidden = false; });
+    box.classList.remove('nudge-shake'); void box.offsetWidth; box.classList.add('nudge-shake');
+    $('keepEditing').focus();
+  }
+
+  function esciDaConferma(){
+    $('settingsFoot').classList.remove('confirming');
+    ['cancelSettings','saveSettings'].forEach(id => { $(id).hidden = false; });
+    ['keepEditing','discardSettings'].forEach(id => { $(id).hidden = true; });
+  }
+
+  async function salvaImpostazioni(){
+    const { cambiati, errori } = aggiornaStatoImpostazioni();
+    if(errori || !cambiati) return;
+    const prima = {...settings};
+    CAMPI_IMPOSTAZIONI.forEach(c => { settings[c.key] = leggiCampo(c).valore; });
+    await saveSettings();
+    refreshViews();
+    chiudiImpostazioni(true);
+    showUndo(cambiati === 1 ? 'Impostazione salvata' : `${cambiati} impostazioni salvate`, { __impostazioni: prima });
+  }
+
+  // Tab resta dentro il pannello aperto
+  function trappolaFocus(e){
+    if(e.key !== 'Tab' || !impostazioniAperte()) return;
+    const box = $('settingsPanel');
+    const f = Array.from(box.querySelectorAll('button, input, textarea, select, summary, [tabindex]:not([tabindex="-1"])'))
+      .filter(el => !el.disabled && !el.closest('[hidden]') && el.offsetParent !== null && el.getAttribute('tabindex') !== '-1');
+    if(!f.length) return;
+    const primo = f[0], ultimo = f[f.length-1];
+    if(e.shiftKey && (document.activeElement === primo || document.activeElement === box)){ e.preventDefault(); ultimo.focus(); }
+    else if(!e.shiftKey && document.activeElement === ultimo){ e.preventDefault(); primo.focus(); }
   }
 
   // "Oggi" compare solo quando non stai già guardando il presente
@@ -3027,11 +3294,18 @@
       renderYear(); renderLedger();
     });
 
-    $('toggleSettings').addEventListener('click', () => {
-      const open = $('settingsPanel').classList.toggle('open');
-      $('toggleSettings').setAttribute('aria-expanded', open ? 'true' : 'false');
-      if(open) renderBackupStatus();
+    $('toggleSettings').addEventListener('click', apriImpostazioni);
+    $('closeSettings').addEventListener('click', () => chiudiImpostazioni(false));
+    $('cancelSettings').addEventListener('click', () => chiudiImpostazioni(true));
+    $('keepEditing').addEventListener('click', () => { esciDaConferma(); aggiornaStatoImpostazioni(); });
+    $('discardSettings').addEventListener('click', () => chiudiImpostazioni(true));
+    $('saveSettings').addEventListener('click', salvaImpostazioni);
+    $('settingsOverlay').addEventListener('click', (e) => { if(e.target.id === 'settingsOverlay') chiudiImpostazioni(false); });
+    CAMPI_IMPOSTAZIONI.forEach(c => {
+      $(c.id).addEventListener('input', () => { esciDaConferma(); aggiornaStatoImpostazioni(); });
+      $(c.id).addEventListener('keydown', (e) => { if(e.key === 'Enter'){ e.preventDefault(); salvaImpostazioni(); } });
     });
+    document.addEventListener('keydown', trappolaFocus);
 
     $('downloadBackup').addEventListener('click', downloadBackup);
     $('restoreFile').addEventListener('change', (e) => ripristinaDaRiquadro(e.target.files[0]));
@@ -3048,19 +3322,6 @@
     $('importReplace').addEventListener('click', () => applyImport(true));
     $('importCancel').addEventListener('click', cancelImport);
     $('importFile').addEventListener('change', (e) => readImportFile(e.target.files[0]));
-    $('saveSettings').addEventListener('click', async () => {
-      settings.saldoFerie = parseFloat($('inpSaldoFerie').value) || 0;
-      settings.saldoRol = parseFloat($('inpSaldoRol').value) || 0;
-      settings.meseRif = $('inpMeseRif').value || settings.meseRif;
-      settings.maturazioneFerie = parseFloat($('inpMaturazioneFerie').value) || 0;
-      settings.maturazioneRol = parseFloat($('inpMaturazioneRol').value) || 0;
-      settings.oreGiornata = parseFloat($('inpOreGiornata').value) || 8;
-      await saveSettings();
-      fillSettingsForm();
-      renderLedger();
-      $('settingsPanel').classList.remove('open');
-      $('toggleSettings').setAttribute('aria-expanded','false');
-    });
 
     document.querySelectorAll('.type-opt').forEach(b => {
       b.addEventListener('click', () => selezionaTipo(b.dataset.tipo, false));
@@ -3091,6 +3352,10 @@
     document.addEventListener('keydown', (e) => {
       if(e.key === 'Escape' && $('dayOverlay').classList.contains('open')) closeDay();
       if(e.key === 'Escape' && $('pdfOverlay').classList.contains('open')) chiudiPdf();
+      if(e.key === 'Escape' && impostazioniAperte()){
+        if($('settingsFoot').classList.contains('confirming')){ esciDaConferma(); aggiornaStatoImpostazioni(); }
+        else chiudiImpostazioni(false);
+      }
     });
 
     collegaAuguri();
