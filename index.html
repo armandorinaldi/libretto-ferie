@@ -30,29 +30,41 @@
 
     --color-primary:#0F172A;
     --color-on-primary:#FFFFFF;
-    --color-secondary:#1E3A8A;
+    /* comandi: neutro scuro (nessun colore di categoria) */
+    --color-secondary:#0F172A;
     --color-border:#E2E8F0;
     --color-border-strong:#CBD5E1;
-    --color-ring:#1E3A8A;
+    --color-ring:#0F172A;
 
+    /* stati: ogni colore un solo significato */
+    --color-success:#15803D;
+    --color-success-soft:#DCFCE7;
     --color-destructive:#DC2626;
-    --color-destructive-soft:#FBE4E7;
-    --color-warning:#9A5B16;
-    --color-warning-soft:#FAEBD9;
+    --color-destructive-soft:#FEE2E2;
+    --color-warning:#B45309;
+    --color-warning-soft:#FEF3C7;
 
-    /* categorie della pianificazione */
-    --ferie:#0F766E;
-    --ferie-soft:#D9F0EC;
-    --permesso:#9A5B16;
-    --permesso-soft:#FAEBD9;
-    --chiusura:#1E3A8A;
-    --chiusura-soft:#E2E8FC;
-    --festivo:#BE2A3E;
-    --festivo-soft:#FBE4E7;
-    --retribuito:#6D28D9;
-    --retribuito-soft:#EDE6FB;
-    --torta:#C2410C;
-    --torta-soft:#FCE7D8;
+    /* categorie: il colore dice da quale saldo scala il giorno.
+       Ferie chiare, ROL scuri: si distinguono anche per luminosità (daltonismo). */
+    --ferie:#0369A1;          /* testo, barre, pallini */
+    --ferie-fill:#7DD3FC;     /* timbri e campioni */
+    --ferie-on:#0C4A6E;       /* testo sul timbro */
+    --ferie-bd:#38BDF8;
+    --ferie-bar:#0EA5E9;      /* barra: più chiara del viola dei ROL */
+    --ferie-soft:#E0F2FE;
+    --chiusura:#0C4A6E;
+    --chiusura-fill:repeating-linear-gradient(135deg,#7DD3FC 0 5px,#BAE6FD 5px 10px);
+    --chiusura-soft:#E0F2FE;
+    --permesso:#6D28D9;
+    --permesso-fill:#6D28D9;
+    --permesso-on:#FFFFFF;
+    --permesso-soft:#EDE9FE;
+    --retribuito:#475569;     /* neutro: non scala nulla */
+    --retribuito-soft:#F1F5F9;
+    --festivo:#9D174D;
+    --festivo-soft:#FCE7F3;
+    --torta:#64748B;
+    --torta-soft:#F1F5F9;
 
     /* scala di spazio — densità standard */
     --space-1:4px; --space-2:8px; --space-3:12px;
@@ -74,28 +86,37 @@
 
     --color-primary:#DBE6F5;
     --color-on-primary:#0B1220;
-    --color-secondary:#7EA2F0;
+    --color-secondary:#F1F5F9;
     --color-border:#27334A;
     --color-border-strong:#3C4B67;
-    --color-ring:#7EA2F0;
+    --color-ring:#F1F5F9;
 
+    --color-success:#4ADE80;
+    --color-success-soft:#14301F;
     --color-destructive:#F87171;
     --color-destructive-soft:#3B1F26;
-    --color-warning:#E0A26A;
-    --color-warning-soft:#38281A;
+    --color-warning:#FBBF24;
+    --color-warning-soft:#3A2A0E;
 
-    --ferie:#5EC9BC;
-    --ferie-soft:#123833;
-    --permesso:#E0A26A;
-    --permesso-soft:#38281A;
-    --chiusura:#93AEF5;
-    --chiusura-soft:#1C2745;
-    --festivo:#F08A9A;
-    --festivo-soft:#3B1F26;
-    --retribuito:#B49BF5;
-    --retribuito-soft:#271F42;
-    --torta:#F0A97C;
-    --torta-soft:#3A2618;
+    --ferie:#38BDF8;
+    --ferie-fill:#38BDF8;
+    --ferie-on:#0B1220;
+    --ferie-bd:#38BDF8;
+    --ferie-bar:#38BDF8;
+    --ferie-soft:#0C2A3D;
+    --chiusura:#7DD3FC;
+    --chiusura-fill:repeating-linear-gradient(135deg,#38BDF8 0 5px,#0EA5E9 5px 10px);
+    --chiusura-soft:#0C2A3D;
+    --permesso:#A78BFA;
+    --permesso-fill:#7C3AED;
+    --permesso-on:#FFFFFF;
+    --permesso-soft:#2A1F4A;
+    --retribuito:#CBD5E1;
+    --retribuito-soft:#1E293B;
+    --festivo:#F9A8D4;
+    --festivo-soft:#3B1D2E;
+    --torta:#94A3B8;
+    --torta-soft:#1E293B;
   }
 
   html{color-scheme:light;scroll-padding-top:env(safe-area-inset-top,0px);}
@@ -311,13 +332,9 @@
     font-variant-numeric:tabular-nums;
     color:var(--color-card);
   }
-  :root[data-theme="dark"] .stamp-circle,
-  :root[data-theme="dark"] .stamp-half,
-  :root[data-theme="dark"] .stamp-permesso,
-  :root[data-theme="dark"] .stamp-chiusura{color:#0B1220;}
-  .stamp-circle{background:var(--ferie);}
-  .stamp-half,.stamp-permesso{background:var(--permesso);}
-  .stamp-chiusura{background:var(--chiusura);}
+  .stamp-circle{background:var(--ferie-fill);color:var(--ferie-on);box-shadow:inset 0 0 0 1px var(--ferie-bd);}
+  .stamp-half,.stamp-permesso{background:var(--permesso-fill);color:var(--permesso-on);}
+  .stamp-chiusura{background:var(--chiusura-fill);color:var(--ferie-on);box-shadow:inset 0 0 0 1px var(--ferie-bd);}
   .stamp-retribuito{
     background:var(--retribuito-soft);color:var(--retribuito);
     box-shadow:inset 0 0 0 1.5px var(--retribuito);
@@ -533,9 +550,9 @@
   .mini-day.empty{background:transparent;}
   .mini-day.weekend{background:var(--color-muted);}
   .mini-day.holiday{background:var(--festivo-soft);}
-  .mini-day.ferie{background:var(--ferie);}
-  .mini-day.mezza,.mini-day.permesso{background:var(--permesso);}
-  .mini-day.chiusura{background:var(--chiusura);}
+  .mini-day.ferie{background:var(--ferie-fill);}
+  .mini-day.mezza,.mini-day.permesso{background:var(--permesso-fill);}
+  .mini-day.chiusura{background:var(--chiusura-fill);}
   .mini-day.retribuito{background:var(--retribuito);}
 
   /* ---------- MOVIMENTI ---------- */
@@ -551,7 +568,7 @@
   }
   .move-row:last-child{border-bottom:none;}
   .move-row > span:first-child{
-    display:grid;grid-template-columns:3.6em 10px 1fr;column-gap:var(--space-2);align-items:baseline;
+    display:grid;grid-template-columns:3.6em 12px 1fr;column-gap:var(--space-2);align-items:baseline;
   }
   .move-date{
     color:var(--color-faint);font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;
@@ -615,7 +632,7 @@
     background:var(--color-muted);color:var(--color-muted-foreground);
   }
   .backup-badge .dot{width:7px;height:7px;border-radius:50%;flex:none;background:currentColor;}
-  .backup-badge.fresh{background:var(--ferie-soft);color:var(--ferie);}
+  .backup-badge.fresh{background:var(--color-success-soft);color:var(--color-success);}
   .backup-badge.stale{background:var(--color-warning-soft);color:var(--color-warning);}
   .backup-badge.none{background:var(--color-destructive-soft);color:var(--color-destructive);}
 
@@ -679,7 +696,7 @@
     margin:var(--space-3) 0 0;font-size:.75rem;line-height:1.5;font-weight:600;
     color:var(--color-muted-foreground);
   }
-  .backup-status.ok{color:var(--ferie);}
+  .backup-status.ok{color:var(--color-success);}
   .backup-status.err{color:var(--color-destructive);}
   .backup .settings-save.backup-main{margin-top:0;}
   .backup .backup-file{min-height:44px;}
@@ -691,7 +708,7 @@
   .restore-text{flex:1 1 280px;}
   .restore-card h3{margin:0 0 2px;font-size:1rem;font-weight:700;}
   .restore-card p{margin:0;font-size:.8125rem;line-height:1.5;color:var(--color-muted-foreground);}
-  .restore-card p.ok{color:var(--ferie);font-weight:600;}
+  .restore-card p.ok{color:var(--color-success);font-weight:600;}
   .restore-card p.err{color:var(--color-destructive);font-weight:600;}
   .restore-btn{border-style:solid;border-color:var(--color-secondary);color:var(--color-secondary);min-height:44px;}
   .paste-box{flex:1 1 100%;}
@@ -764,7 +781,7 @@
     transition:background-color var(--dur) ease, border-color var(--dur) ease;
   }
   .type-opt:hover{background:var(--color-muted);}
-  .type-opt .dot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--c);}
+  .type-opt .dot{width:12px;height:12px;border-radius:4px;flex:none;background:var(--f, var(--c));box-shadow:inset 0 0 0 1px var(--fb, transparent);}
   .type-opt .hint{
     margin-left:auto;font-size:.6875rem;font-weight:600;
     color:var(--color-faint);text-align:right;
@@ -905,7 +922,7 @@
     width:16px;height:16px;min-height:0;margin:0;padding:0;flex:none;
     accent-color:var(--c);
   }
-  .pdf-types .dot{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none;margin-left:auto;}
+  .pdf-types .dot{width:10px;height:10px;border-radius:3px;background:var(--f, var(--c));box-shadow:inset 0 0 0 1px var(--fb, transparent);flex:none;margin-left:auto;}
   .modal-box .pdf-count{
     margin:0 0 var(--space-4);padding:var(--space-3);
     background:var(--color-muted);border-radius:var(--radius-md);
@@ -930,7 +947,7 @@
   .period-chip{
     display:inline-flex;align-items:center;gap:6px;
     padding:6px var(--space-3);border-radius:999px;
-    background:var(--chiusura-soft);color:var(--color-secondary);
+    background:var(--color-muted);color:var(--color-secondary);
     font-size:.875rem;font-weight:700;line-height:1.2;
   }
   .period-chip.pulse{animation:periodPulse 520ms ease-out;}
@@ -1002,7 +1019,7 @@
   .sum-how ul{margin:0 0 var(--space-2);padding-left:18px;}
   .sum-how li:empty{display:none;}
   .movements h3{font-size:.9375rem;color:var(--color-foreground);letter-spacing:-.01em;margin-bottom:var(--space-1);}
-  .move-dot{width:10px;height:10px;border-radius:3px;background:var(--c);}
+  .move-dot{width:12px;height:12px;border-radius:4px;background:var(--c);box-shadow:inset 0 0 0 1px var(--b, transparent);}
   @media (max-width:1023px){ .ledger{order:-1;} }
 
   /* ---------- VARIE ---------- */
@@ -1167,12 +1184,12 @@
       <div class="grid" id="calGrid"></div>
 
       <div class="stamp-legend">
-        <span><span class="legend-swatch" style="background:var(--ferie)"></span>Ferie</span>
-        <span><span class="legend-swatch" style="background:var(--permesso)"></span>ROL (permessi a ore)</span>
-        <span><span class="legend-swatch" style="background:var(--chiusura)"></span>Chiusura aziendale (scala dalle ferie)</span>
+        <span><span class="legend-swatch" style="background:var(--ferie-fill);box-shadow:inset 0 0 0 1px var(--ferie-bd)"></span>Ferie</span>
+        <span><span class="legend-swatch" style="background:var(--permesso-fill)"></span>ROL (permessi a ore)</span>
+        <span><span class="legend-swatch" style="background:var(--chiusura-fill);box-shadow:inset 0 0 0 1px var(--ferie-bd)"></span>Chiusura aziendale (scala dalle ferie)</span>
         <span><span class="legend-swatch" style="background:var(--retribuito-soft);box-shadow:inset 0 0 0 1.5px var(--retribuito)"></span>Permesso retribuito (non scala nulla)</span>
-        <span><span class="legend-swatch" style="background:var(--festivo)"></span>Festività</span>
-        <span><span class="legend-swatch" style="background:var(--color-muted)"></span>Weekend</span>
+        <span><span class="legend-swatch" style="background:var(--festivo-soft);box-shadow:inset 0 0 0 1px var(--festivo)"></span>Festività</span>
+        <span><span class="legend-swatch" style="background:var(--color-muted);box-shadow:inset 0 0 0 1px var(--color-border-strong)"></span>Weekend</span>
       </div>
 
       <div class="movements">
@@ -1210,7 +1227,7 @@
             <span class="ferie-t">Ferie</span>
             <span><b id="ferieResidueNum">0</b> gg</span>
           </div>
-          <div class="ledger-bar"><div class="ledger-bar-fill" id="ferieBar" style="background:var(--ferie);width:0%"></div></div>
+          <div class="ledger-bar"><div class="ledger-bar-fill" id="ferieBar" style="background:var(--ferie-bar);width:0%"></div></div>
           <span class="sum-cap" id="ferieCap"></span>
           <div class="alert danger" id="ferieAlert" hidden>
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
@@ -1265,7 +1282,7 @@
 
   <div class="loading-msg" id="loadingMsg">Caricamento della pianificazione…</div>
 
-  <div class="footnote">I dati restano salvati solo per te, tra una visita e l'altra. · <span id="appVersion">v2.10</span></div>
+  <div class="footnote">I dati restano salvati solo per te, tra una visita e l'altra. · <span id="appVersion">v2.12</span></div>
 </div>
 
 <div class="bday-tip" id="bdayTip" role="status" hidden></div>
@@ -1298,10 +1315,10 @@
     <div class="modal-field">
       <span>Cosa includere</span>
       <div class="pdf-types">
-        <label style="--c:var(--ferie)"><input type="checkbox" value="ferie" checked>Ferie<span class="dot"></span></label>
-        <label style="--c:var(--permesso)"><input type="checkbox" value="permesso" checked>ROL<span class="dot"></span></label>
-        <label style="--c:var(--chiusura)"><input type="checkbox" value="chiusura" checked>Chiusure<span class="dot"></span></label>
-        <label style="--c:var(--retribuito)"><input type="checkbox" value="retribuito" checked>Retribuiti<span class="dot"></span></label>
+        <label style="--c:var(--ferie);--f:var(--ferie-fill);--fb:var(--ferie-bd)"><input type="checkbox" value="ferie" checked>Ferie<span class="dot"></span></label>
+        <label style="--c:var(--permesso);--f:var(--permesso-fill)"><input type="checkbox" value="permesso" checked>ROL<span class="dot"></span></label>
+        <label style="--c:var(--chiusura);--f:var(--chiusura-fill);--fb:var(--ferie-bd)"><input type="checkbox" value="chiusura" checked>Chiusure<span class="dot"></span></label>
+        <label style="--c:var(--retribuito);--f:var(--retribuito-soft);--fb:var(--retribuito)"><input type="checkbox" value="retribuito" checked>Retribuiti<span class="dot"></span></label>
       </div>
     </div>
 
@@ -1320,16 +1337,16 @@
     <p id="daySubtitle">Cosa segni su questo giorno?</p>
 
     <div class="type-list" id="typeList">
-      <button class="type-opt" type="button" data-tipo="ferie" style="--c:var(--ferie);--cs:var(--ferie-soft)" aria-pressed="false">
+      <button class="type-opt" type="button" data-tipo="ferie" style="--c:var(--ferie);--cs:var(--ferie-soft);--f:var(--ferie-fill);--fb:var(--ferie-bd)" aria-pressed="false">
         <span class="dot"></span>Ferie<span class="hint">giornata intera</span>
       </button>
-      <button class="type-opt" type="button" data-tipo="permesso" style="--c:var(--permesso);--cs:var(--permesso-soft)" aria-pressed="false">
+      <button class="type-opt" type="button" data-tipo="permesso" style="--c:var(--permesso);--cs:var(--permesso-soft);--f:var(--permesso-fill)" aria-pressed="false">
         <span class="dot"></span>ROL<span class="hint">a ore</span>
       </button>
-      <button class="type-opt" type="button" data-tipo="chiusura" style="--c:var(--chiusura);--cs:var(--chiusura-soft)" aria-pressed="false">
+      <button class="type-opt" type="button" data-tipo="chiusura" style="--c:var(--chiusura);--cs:var(--chiusura-soft);--f:var(--chiusura-fill);--fb:var(--ferie-bd)" aria-pressed="false">
         <span class="dot"></span>Chiusura aziendale<span class="hint">scala dalle ferie</span>
       </button>
-      <button class="type-opt" type="button" data-tipo="retribuito" style="--c:var(--retribuito);--cs:var(--retribuito-soft)" aria-pressed="false">
+      <button class="type-opt" type="button" data-tipo="retribuito" style="--c:var(--retribuito);--cs:var(--retribuito-soft);--f:var(--retribuito-soft);--fb:var(--retribuito)" aria-pressed="false">
         <span class="dot"></span>Permesso retribuito<span class="hint">non scala nulla</span>
       </button>
     </div>
@@ -1379,7 +1396,7 @@
 
 <script>
 (function(){
-  const APP_VERSION = '2.10';
+  const APP_VERSION = '2.12';
   const MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
 
   function pad(n){ return n < 10 ? '0'+n : ''+n; }
@@ -2319,14 +2336,19 @@
     // --- movimenti ---
     monthMoves.sort((a,b) => a.kd - b.kd);
     $('movTitle').textContent = `Movimenti di ${MESI[m]}`;
-    const COLORE_TIPO = { ferie:'var(--ferie)', permesso:'var(--permesso)', chiusura:'var(--chiusura)', retribuito:'var(--retribuito)' };
+    const COLORE_TIPO = {
+      ferie:'--c:var(--ferie-fill);--b:var(--ferie-bd)',
+      permesso:'--c:var(--permesso-fill)',
+      chiusura:'--c:var(--chiusura-fill);--b:var(--ferie-bd)',
+      retribuito:'--c:var(--retribuito-soft);--b:var(--retribuito)'
+    };
     const list = $('movementsList');
     if(monthMoves.length === 0){
       list.innerHTML = '<div class="no-move">Nessun movimento registrato questo mese.</div>';
     } else {
       list.innerHTML = monthMoves.map(mv => `
         <div class="move-row">
-          <span><span class="move-date">${pad(mv.kd)}<small>${MESI_BREVI[m]}</small></span><span class="move-dot" style="--c:${COLORE_TIPO[entries[mv.k].tipo] || 'var(--color-faint)'}"></span><span>${mv.label}</span></span>
+          <span><span class="move-date">${pad(mv.kd)}<small>${MESI_BREVI[m]}</small></span><span class="move-dot" style="${COLORE_TIPO[entries[mv.k].tipo] || '--c:var(--color-faint)'}"></span><span>${mv.label}</span></span>
           <button class="move-del" type="button" data-key="${mv.k}" aria-label="Elimina movimento del ${mv.kd} ${MESI[m]}">
             <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
           </button>
@@ -2570,10 +2592,10 @@
 
   // ---- Esportazione PDF ----
   const PDF_TIPI = {
-    ferie:      { nome:'Ferie',               rgb:[15,118,110] },
-    permesso:   { nome:'ROL',                 rgb:[154,91,22] },
-    chiusura:   { nome:'Chiusura aziendale',  rgb:[30,58,138] },
-    retribuito: { nome:'Permesso retribuito', rgb:[109,40,217] }
+    ferie:      { nome:'Ferie',               rgb:[3,105,161] },
+    permesso:   { nome:'ROL',                 rgb:[109,40,217] },
+    chiusura:   { nome:'Chiusura aziendale',  rgb:[12,74,110] },
+    retribuito: { nome:'Permesso retribuito', rgb:[100,116,139] }
   };
   let pdfPreset = null;
   let jsPdfPromise = null;
