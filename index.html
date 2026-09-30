@@ -1101,6 +1101,129 @@
   .move-dot{width:12px;height:12px;border-radius:4px;background:var(--c);box-shadow:inset 0 0 0 1px var(--b, transparent);}
   @media (max-width:1023px){ .ledger{order:-1;} }
 
+
+  /* ---------- MOVIMENTI RICHIUDIBILI ---------- */
+  .mov-toggle{
+    display:flex;align-items:center;gap:var(--space-2);width:100%;min-height:48px;
+    padding:0;margin:0 0 var(--space-1);background:none;border:none;text-align:left;color:var(--color-foreground);
+    border-radius:var(--radius-sm);
+  }
+  .mov-head{flex:1 1 auto;display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .mov-title{display:flex;align-items:center;gap:var(--space-2);font-size:.9375rem;font-weight:700;letter-spacing:-.01em;}
+  .mov-count{
+    padding:1px 8px;border-radius:999px;background:var(--color-muted);
+    font-size:.75rem;font-weight:700;color:var(--color-muted-foreground);font-variant-numeric:tabular-nums;
+  }
+  .mov-sum{font-size:.75rem;color:var(--color-muted-foreground);}
+  .mov-sum:empty{display:none;}
+  .movements.open .mov-sum{display:none;}
+  .mov-chev{
+    display:inline-flex;align-items:center;justify-content:center;flex:none;
+    width:44px;height:44px;border-radius:var(--radius-md);color:var(--color-muted-foreground);
+    transition:background-color var(--dur) ease;
+  }
+  .mov-toggle:hover .mov-chev{background:var(--color-muted);color:var(--color-foreground);}
+  .mov-chev .icon{transition:transform var(--dur) ease;}
+  .movements.open .mov-chev .icon{transform:rotate(180deg);}
+  .movements:not(.open) #movementsList{display:none;}
+  .move-row > span:first-child{align-items:start;}
+  .move-dot{margin-top:5px;}
+  .move-text{display:flex;flex-direction:column;min-width:0;}
+  .move-text small{font-size:.75rem;color:var(--color-muted-foreground);line-height:1.4;}
+  .move-date{line-height:1.5;}
+
+  /* il pulsante Dettagli del riepilogo esiste solo su telefono */
+  .ledger-toggle,.pdf-short,.hint-short,.m-short,.lt-short{display:none;}
+  .stamp-legend .lg-short{display:none;}
+
+  /* ---------- TELEFONO ---------- */
+  @media (max-width:767px){
+    body{padding-top:var(--space-3);}
+    .masthead{flex-wrap:nowrap;gap:var(--space-3);padding-bottom:var(--space-3);margin-bottom:var(--space-3);}
+    .masthead > div:first-child{min-width:0;}
+    .masthead h1{font-size:1.25rem;font-weight:800;}
+    .masthead .sub{font-size:.75rem;}
+    .masthead-actions{flex:none;}
+    .gear-btn,.theme-btn{width:44px;padding:0;justify-content:center;}
+    .btn-label,.lg-extra,.hint-long,.pdf-long{display:none;}
+    .hint-short{display:inline;}
+    .pdf-short{display:inline;}
+    .m-long{display:none;}
+    .stamp-legend .lg-full{display:none;}
+    .stamp-legend .lg-short{display:inline;}
+    .m-short{display:inline;}
+    .gear-btn .nudge{top:7px;right:7px;}
+
+    /* riepilogo compatto */
+    .ledger{position:relative;}
+    .ledger-head{margin:0;}
+    .ledger .ledger-head h2{display:none;}
+    .ledger .pdf-cta{position:absolute;top:var(--space-3);right:var(--space-3);}
+    .sum-hero{margin-bottom:var(--space-3);gap:2px;}
+    .sum-period{min-height:44px;margin-bottom:var(--space-1);padding-right:88px;}
+    .period-chip{font-size:.8125rem;}
+    .sum-num{font-size:2.75rem;}
+    .sum-unit{font-size:.9375rem;}
+    .sum-sub{display:none;}
+    .sum-rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px var(--space-4);margin-bottom:var(--space-3);}
+    .sum-row{display:contents;}
+    .sum-row:nth-child(1) > .sum-row-head{grid-area:1 / 1;}
+    .sum-row:nth-child(1) > .ledger-bar{grid-area:2 / 1;}
+    .sum-row:nth-child(2) > .sum-row-head{grid-area:1 / 2;}
+    .sum-row:nth-child(2) > .ledger-bar{grid-area:2 / 2;}
+    .sum-row:nth-child(1) > .alert{grid-area:3 / 1 / 4 / 3;}
+    .sum-row:nth-child(2) > .alert{grid-area:4 / 1 / 5 / 3;}
+    .sum-row-head{font-size:.8125rem;margin-bottom:0;}
+    .sum-row-head b{font-size:1rem;}
+    .sum-row-head .dim,.sum-cap{display:none;}
+    .ledger-bar{height:6px;margin-bottom:0;}
+    .sum-rows .alert{grid-column:1 / -1;margin-top:0;}
+    .ledger-extra{display:none !important;}
+    .ledger-toggle{
+      display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);
+      width:100%;min-height:44px;margin:0;padding:0;
+      background:none;border:none;border-top:1px solid var(--color-border);
+      font-size:.8125rem;color:var(--color-muted-foreground);text-align:left;
+    }
+    .ledger-toggle b{color:var(--color-foreground);font-variant-numeric:tabular-nums;}
+    .ledger-toggle.warn .lt-proj{color:var(--color-warning);}
+    .ledger-toggle.warn .lt-proj b{color:var(--color-warning);}
+    .ledger-toggle.danger .lt-proj,.ledger-toggle.danger .lt-proj b{color:var(--color-destructive);}
+    .lt-act{display:inline-flex;align-items:center;gap:4px;flex:none;font-weight:700;color:var(--color-secondary);}
+    .lt-act .icon{transition:transform var(--dur) ease;}
+
+    /* riepilogo aperto: torna la versione completa */
+    .ledger.open .sum-rows{display:flex;flex-direction:column;gap:var(--space-4);margin-bottom:var(--space-4);}
+    .ledger.open .sum-row{display:block;}
+    .ledger.open .sum-row-head{margin-bottom:6px;}
+    .ledger.open .sum-row-head .dim{display:inline;}
+    .ledger.open .sum-cap{display:block;}
+    .ledger.open .ledger-bar{margin-bottom:var(--space-2);}
+    .ledger.open .sum-rows .alert{margin-top:var(--space-3);}
+    .ledger.open .ledger-extra{display:block !important;}
+    .ledger.open .sum-retr.ledger-extra{display:flex !important;}
+    .ledger.open .sum-retr.ledger-extra[hidden]{display:none !important;}
+    .ledger.open .sum-how{margin-bottom:var(--space-1);}
+    .ledger.open .ledger-toggle{margin-top:var(--space-2);}
+    .ledger.open .lt-act .icon{transform:rotate(180deg);}
+    .sum-year-top{flex-wrap:wrap;}
+    .sum-year-split{white-space:nowrap;}
+
+    /* legenda su una riga, scorrevole */
+    .stamp-legend{flex-wrap:nowrap;overflow-x:auto;gap:var(--space-4);padding-bottom:2px;scrollbar-width:none;}
+    .stamp-legend::-webkit-scrollbar{display:none;}
+    .stamp-legend > span{flex:none;white-space:nowrap;}
+  }
+
+  @media (max-width:374px){
+    .masthead h1{font-size:1.0625rem;}
+    .ledger .pdf-cta{width:44px;padding:0;justify-content:center;}
+    .ledger .pdf-cta .pdf-short{display:none;}
+    .sum-period{padding-right:52px;}
+    .lt-long{display:none;}
+    .lt-short{display:inline;}
+  }
+
   /* ---------- VARIE ---------- */
   .footnote{
     display:flex;flex-direction:column;align-items:center;gap:var(--space-1);
@@ -1125,15 +1248,15 @@
   <div class="masthead">
     <div>
       <h1>Pianificazione Ferie</h1>
-      <div class="sub">Ferie · ROL · Chiusure aziendali</div>
+      <div class="sub">Ferie · ROL · Chiusure<span class="lg-extra"> aziendali</span></div>
     </div>
     <div class="masthead-actions">
       <button class="theme-btn" id="themeBtn" type="button" aria-label="Cambia tema">
-        <span id="themeIcon" aria-hidden="true"></span><span id="themeLabel">Scuro</span>
+        <span id="themeIcon" aria-hidden="true"></span><span id="themeLabel" class="btn-label">Scuro</span>
       </button>
-      <button class="gear-btn" id="toggleSettings" type="button" aria-haspopup="dialog" aria-controls="settingsOverlay">
+      <button class="gear-btn" id="toggleSettings" type="button" aria-label="Impostazioni" aria-haspopup="dialog" aria-controls="settingsOverlay">
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        <span>Impostazioni</span>
+        <span class="btn-label">Impostazioni</span>
         <span class="nudge" id="settingsNudge" hidden aria-hidden="true"></span>
       </button>
     </div>
@@ -1195,7 +1318,7 @@
 
       <div class="cal-hint" id="modeRow">
         <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V6a2 2 0 0 1 4 0v5"/><path d="M13 11V7a2 2 0 0 1 4 0v4"/><path d="M17 11v-.5a2 2 0 0 1 4 0V15a6 6 0 0 1-6 6h-2a7 7 0 0 1-7-7v-3a2 2 0 0 1 4 0"/></svg>
-        <span>Tocca un giorno per segnarlo o modificarlo, trascina per più giorni. Tieni premuto su un giorno segnato per eliminarlo.</span>
+        <span class="hint-long">Tocca un giorno per segnarlo o modificarlo, trascina per più giorni. Tieni premuto su un giorno segnato per eliminarlo.</span><span class="hint-short">Tocca un giorno, trascina per più giorni.</span>
       </div>
 
       <div class="weekdays" id="weekdays">
@@ -1205,25 +1328,31 @@
 
       <div class="stamp-legend">
         <span><span class="legend-swatch" style="background:var(--ferie-fill);box-shadow:inset 0 0 0 1px var(--ferie-bd)"></span>Ferie</span>
-        <span><span class="legend-swatch" style="background:var(--permesso-fill)"></span>ROL (permessi a ore)</span>
-        <span><span class="legend-swatch" style="background:var(--chiusura-fill);box-shadow:inset 0 0 0 1px var(--ferie-bd)"></span>Chiusura aziendale (scala dalle ferie)</span>
-        <span><span class="legend-swatch" style="background:var(--retribuito-soft);box-shadow:inset 0 0 0 1.5px var(--retribuito)"></span>Permesso retribuito (non scala nulla)</span>
+        <span><span class="legend-swatch" style="background:var(--permesso-fill)"></span><span class="lg-full">ROL (permessi a ore)</span><span class="lg-short">ROL</span></span>
+        <span><span class="legend-swatch" style="background:var(--chiusura-fill);box-shadow:inset 0 0 0 1px var(--ferie-bd)"></span><span class="lg-full">Chiusura aziendale (scala dalle ferie)</span><span class="lg-short">Chiusura</span></span>
+        <span><span class="legend-swatch" style="background:var(--retribuito-soft);box-shadow:inset 0 0 0 1.5px var(--retribuito)"></span><span class="lg-full">Permesso retribuito (non scala nulla)</span><span class="lg-short">Retribuito</span></span>
         <span><span class="legend-swatch" style="background:var(--festivo-soft);box-shadow:inset 0 0 0 1px var(--festivo)"></span>Festività</span>
         <span><span class="legend-swatch" style="background:var(--color-muted);box-shadow:inset 0 0 0 1px var(--color-border-strong)"></span>Weekend</span>
       </div>
 
-      <div class="movements">
-        <h3 id="movTitle">Movimenti del mese</h3>
+      <div class="movements" id="movements">
+        <button class="mov-toggle" type="button" id="movToggle" aria-expanded="true" aria-controls="movementsList">
+          <span class="mov-head">
+            <span class="mov-title"><span id="movTitle">Movimenti del mese</span><span class="mov-count" id="movCount" hidden></span></span>
+            <span class="mov-sum" id="movSum"></span>
+          </span>
+          <span class="mov-chev" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+        </button>
         <div id="movementsList"></div>
       </div>
     </div>
 
-    <div class="card ledger">
+    <div class="card ledger" id="ledger">
       <div class="ledger-head">
         <h2>Riepilogo</h2>
         <button class="pdf-cta" type="button" id="openPdf">
           <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-          Scarica PDF
+          <span class="pdf-long">Scarica PDF</span><span class="pdf-short">PDF</span>
         </button>
       </div>
 
@@ -1268,7 +1397,7 @@
         </div>
       </div>
 
-      <div class="sum-year" id="projBox">
+      <div class="sum-year ledger-extra" id="projBox">
         <div class="sum-year-top">
           <div>
             <span class="sum-year-label" id="projTitle">Al 31 dicembre</span>
@@ -1279,12 +1408,12 @@
         <p class="sum-year-note" id="projSentence"></p>
       </div>
 
-      <div class="sum-retr" id="retribuitiBlock" hidden>
+      <div class="sum-retr ledger-extra" id="retribuitiBlock" hidden>
         <span id="retribuitiAnno">Permessi retribuiti</span>
         <div class="motivi-list" id="motiviList"></div>
       </div>
 
-      <details class="sum-how">
+      <details class="sum-how ledger-extra">
         <summary>
           <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>
           <span>Come è calcolato</span>
@@ -1297,6 +1426,11 @@
           <li>I permessi retribuiti (donazione sangue, Legge 104, lutto…) non scalano né ferie né ROL.</li>
         </ul>
       </details>
+
+      <button class="ledger-toggle" type="button" id="ledgerToggle" aria-expanded="false" aria-controls="ledger">
+        <span class="lt-proj" id="ltProj">Al 31 dicembre</span>
+        <span class="lt-act"><span id="ltLabel">Dettagli</span><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+      </button>
     </div>
   </div>
 
@@ -1304,7 +1438,7 @@
 
   <footer class="footnote">
     <span>I dati restano salvati solo per te, tra una visita e l'altra.</span>
-    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.17</span> · realizzata da <b>Paolo V</b></span>
+    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.18</span> · realizzata da <b>Paolo V</b></span>
   </footer>
 </div>
 
@@ -1517,7 +1651,7 @@
 
 <script>
 (function(){
-  const APP_VERSION = '2.17';
+  const APP_VERSION = '2.18';
   const APP_AUTORE = 'Paolo V';
   const MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
 
@@ -1693,6 +1827,10 @@
       if(b && b.value) backupMeta = JSON.parse(b.value);
     }catch(e){ /* nessuna copia ancora */ }
     try{
+      const u = await store.get('leave-ui');
+      if(u && u.value) uiPref = {...uiPref, ...JSON.parse(u.value)};
+    }catch(e){ /* preferenze non salvate */ }
+    try{
       const t = await store.get('leave-theme');
       if(t && t.value && (t.value === 'dark' || t.value === 'light')) theme = t.value;
       else if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) theme = 'dark';
@@ -1738,6 +1876,27 @@
     $('inpMaturazioneRol').value = settings.maturazioneRol;
     $('inpOreGiornata').value = settings.oreGiornata;
     aggiornaStatoImpostazioni();
+  }
+
+  // ---- Riepilogo e movimenti richiudibili ----
+  let uiPref = { movimenti: true };
+  function applicaRichiudibili(){
+    $('movements').classList.toggle('open', uiPref.movimenti !== false);
+    $('movToggle').setAttribute('aria-expanded', uiPref.movimenti !== false ? 'true' : 'false');
+  }
+  async function toggleMovimenti(){
+    uiPref.movimenti = uiPref.movimenti === false;
+    applicaRichiudibili();
+    try{ await store.set('leave-ui', JSON.stringify(uiPref)); }catch(e){ /* non importante */ }
+  }
+  function toggleRiepilogo(){
+    const open = $('ledger').classList.toggle('open');
+    $('ledgerToggle').setAttribute('aria-expanded', open ? 'true' : 'false');
+    $('ltLabel').textContent = open ? 'Meno' : 'Dettagli';
+    if(!open){
+      const top = $('ledger').getBoundingClientRect().top;
+      if(top < 0) window.scrollBy({ top: top - 12, behavior: 'smooth' });
+    }
   }
 
   // ---- Modale Impostazioni ----
@@ -2326,15 +2485,15 @@
 
       if(e.tipo === 'ferie'){
         if(countsTowardBalance) ferieUsateDaRif += 1;
-        if(isThisMonth){ ferieMese += 1; monthMoves.push({k, kd, label:'Ferie · giornata intera'}); }
+        if(isThisMonth){ ferieMese += 1; monthMoves.push({k, kd, titolo:'Ferie', dett:'giornata intera'}); }
         contaProiezione('ferie', 1, 0, entryYM);
       } else if(e.tipo === 'chiusura'){
         if(countsTowardBalance){ ferieUsateDaRif += 1; chiusureDaRif += 1; }
-        if(isThisMonth){ ferieMese += 1; chiusureMese += 1; monthMoves.push({k, kd, label:'Chiusura aziendale · 1 giorno di ferie'}); }
+        if(isThisMonth){ ferieMese += 1; chiusureMese += 1; monthMoves.push({k, kd, titolo:'Chiusura aziendale', dett:'1 giorno di ferie'}); }
         contaProiezione('chiusura', 1, 0, entryYM);
       } else if(e.tipo === 'permesso'){
         if(countsTowardBalance) permessoUsateDaRif += e.ore;
-        if(isThisMonth){ permessoMese += e.ore; monthMoves.push({k, kd, label:`ROL · ${e.ore} ore`}); }
+        if(isThisMonth){ permessoMese += e.ore; monthMoves.push({k, kd, titolo:'ROL', dett:`${e.ore} ${plur(e.ore,'ora','ore')}`}); }
         contaProiezione('permesso', 0, e.ore, entryYM);
       } else if(e.tipo === 'retribuito'){
         // non scala nulla: lo contiamo solo per memoria, sull'anno solare visualizzato
@@ -2344,7 +2503,7 @@
           motiviConteggio[motivo] = (motiviConteggio[motivo] || 0) + 1;
         }
         if(isThisMonth){
-          monthMoves.push({k, kd, label:`${motivo} · ${e.ore ? e.ore + ' ore' : 'giornata intera'}, non scalato`});
+          monthMoves.push({k, kd, titolo:motivo, dett:`${e.ore ? e.ore + ' ' + plur(e.ore,'ora','ore') : 'giornata intera'} · non scalato`, retr:true});
         }
       }
     });
@@ -2359,7 +2518,7 @@
 
     // --- cifra principale ---
     const ultimoGiorno = new Date(y, m+1, 0).getDate();
-    $('sumLabel').textContent = `Saldo al ${ultimoGiorno} ${MESI[m]} ${y}`;
+    $('sumLabel').innerHTML = `Saldo al ${ultimoGiorno} <span class="m-long">${MESI[m]}</span><span class="m-short">${MESI_BREVI[m]}</span> ${y}`;
     // quando cambi mese, il periodo "pulsa" per far notare che è cambiato
     if(ultimoPeriodo !== null && ultimoPeriodo !== viewedYM){
       const chip = $('periodChip');
@@ -2470,6 +2629,11 @@
     const nota = $('projSentence');
     const sforaAnno = projFerie < 0 || projRol < 0;
     const projSotto = projTotale < 0;
+    const lt = $('ledgerToggle');
+    $('ltProj').innerHTML = `<span class="lt-long">Al 31 dicembre</span><span class="lt-short">31 dic</span>: <b>${num(projTotale)} giorni</b>`;
+    lt.classList.toggle('danger', projSotto);
+    lt.classList.toggle('warn', !projSotto && (projFerie < 0 || projRol < 0));
+
     $('projBox').classList.toggle('danger', projSotto);
     $('projTotale').classList.toggle('over', projSotto);
     nota.classList.toggle('warn', sforaAnno && !projSotto);
@@ -2503,6 +2667,14 @@
     // --- movimenti ---
     monthMoves.sort((a,b) => a.kd - b.kd);
     $('movTitle').textContent = `Movimenti di ${MESI[m]}`;
+    $('movCount').hidden = monthMoves.length === 0;
+    $('movCount').textContent = monthMoves.length;
+    const retrMese = monthMoves.filter(mv => mv.retr).length;
+    const sommario = [];
+    if(ferieMese > 0) sommario.push(`${num(ferieMese)} gg di ferie`);
+    if(permessoMese > 0) sommario.push(`${num(permessoMese)} h di ROL`);
+    if(retrMese > 0) sommario.push(`${retrMese} ${plur(retrMese,'retribuito','retribuiti')}`);
+    $('movSum').textContent = monthMoves.length ? sommario.join(' · ') : 'Nessun movimento';
     const COLORE_TIPO = {
       ferie:'--c:var(--ferie-fill);--b:var(--ferie-bd)',
       permesso:'--c:var(--permesso-fill)',
@@ -2515,8 +2687,8 @@
     } else {
       list.innerHTML = monthMoves.map(mv => `
         <div class="move-row">
-          <span><span class="move-date">${pad(mv.kd)}<small>${MESI_BREVI[m]}</small></span><span class="move-dot" style="${COLORE_TIPO[entries[mv.k].tipo] || '--c:var(--color-faint)'}"></span><span>${mv.label}</span></span>
-          <button class="move-del" type="button" data-key="${mv.k}" aria-label="Elimina movimento del ${mv.kd} ${MESI[m]}">
+          <span><span class="move-date">${pad(mv.kd)}<small>${MESI_BREVI[m]}</small></span><span class="move-dot" style="${COLORE_TIPO[entries[mv.k].tipo] || '--c:var(--color-faint)'}"></span><span class="move-text"><span>${mv.titolo}</span><small>${mv.dett}</small></span></span>
+          <button class="move-del" type="button" data-key="${mv.k}" aria-label="Elimina ${mv.titolo} del ${mv.kd} ${MESI[m]}">
             <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>
           </button>
         </div>`).join('');
@@ -3196,6 +3368,9 @@
     });
 
     $('toggleSettings').addEventListener('click', apriImpostazioni);
+    $('movToggle').addEventListener('click', toggleMovimenti);
+    $('ledgerToggle').addEventListener('click', toggleRiepilogo);
+    applicaRichiudibili();
     $('closeSettings').addEventListener('click', () => chiudiImpostazioni(false));
     $('cancelSettings').addEventListener('click', () => chiudiImpostazioni(true));
     $('keepEditing').addEventListener('click', () => { esciDaConferma(); aggiornaStatoImpostazioni(); });

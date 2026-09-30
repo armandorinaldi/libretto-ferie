@@ -2,6 +2,15 @@
 
 Dalla 2.01 l'app si chiama **Pianificazione Ferie** e il numero di versione compare in fondo alla pagina e in ogni copia di sicurezza. Sale di 0.01 a ogni modifica pubblicata. Le versioni precedenti (V1–VRawit, *Libretto Ferie*) sono in fondo.
 
+## 2.18 — versione telefono più compatta · 30/09/2026
+
+Su telefono il calendario compare già nella prima schermata.
+
+- Testata compatta: titolo più piccolo, tema e Impostazioni come icone da 44px.
+- Riepilogo richiudibile: totale, ferie e ROL affiancati con le barre, e la riga "Al 31 dicembre" (arancione o rossa se sfori). "Dettagli" apre il riepilogo completo, "Meno" lo richiude. Gli avvisi di sforamento restano sempre visibili.
+- Legenda su una riga scorrevole e suggerimento d'uso più breve.
+- Su tutti gli schermi: i Movimenti del mese si aprono e chiudono con la freccia, con il numero dei movimenti accanto al titolo e un riassunto quando sono chiusi. La scelta viene ricordata. Ogni movimento ha il nome sopra e il dettaglio in grigio sotto.
+
 ## 2.17 — via i compleanni · 30/09/2026
 
 Tolti torta, messaggio di auguri ed elenco dei nomi: non avevano effetto sui saldi, affollavano le celle e, con la repository pubblica, rendevano visibili i nomi a chiunque. Il calendario mostra solo ciò che conta per ferie e permessi.
