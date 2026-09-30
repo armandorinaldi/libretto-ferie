@@ -2,6 +2,10 @@
 
 Dalla 2.01 l'app si chiama **Pianificazione Ferie** e il numero di versione compare in fondo alla pagina e in ogni copia di sicurezza. Sale di 0.01 a ogni modifica pubblicata. Le versioni precedenti (V1–VRawit, *Libretto Ferie*) sono in fondo.
 
+## 2.20 — riepilogo da chiudere col dito · 30/09/2026
+
+Su telefono il riepilogo che sale dal basso si chiude anche trascinandolo verso il basso: dalla maniglia e dal titolo sempre, dal contenuto quando è già in cima (così non si confonde con lo scorrimento). Se lo trascini poco torna su da solo. Anche il tasto Indietro del telefono ora chiude il riepilogo invece di lasciare la pagina. Scende con un'animazione anche quando si chiude con la X o toccando fuori. Il pulsante "Scarica PDF" non è più ripetuto dentro il riepilogo: resta quello nella schermata principale.
+
 ## 2.19 — saldo in tre tessere su telefono · 30/09/2026
 
 Il riepilogo richiudibile della 2.18 spingeva giù il calendario quando si apriva. Ora su telefono, in cima, ci sono tre tessere (Totale · Ferie · ROL) e la riga "Al 31 dicembre". Toccandone una, il riepilogo completo sale dal basso, sopra la pagina, e si chiude con la X, con Esc o toccando fuori. Il calendario non si sposta mai. Se ferie o ROL vanno sotto zero compare una riga di avviso arancione o rossa sotto le tessere. Su computer e tablet non cambia nulla.

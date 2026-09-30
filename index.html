@@ -1203,9 +1203,23 @@
     @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
     .ledger .ledger-head{position:relative;}
     .sheet-grip{
-      display:block;position:absolute;top:-16px;left:50%;transform:translateX(-50%);
-      width:36px;height:4px;border-radius:999px;background:var(--color-border-strong);
+      display:block;position:absolute;top:-24px;left:0;right:0;height:28px;
+      touch-action:none;cursor:grab;
     }
+    .sheet-grip::before{
+      content:'';position:absolute;top:10px;left:50%;transform:translateX(-50%);
+      width:40px;height:5px;border-radius:999px;background:var(--color-border-strong);
+    }
+    .ledger.sheet-open .ledger-head{touch-action:none;}
+    .ledger.dragging{animation:none;transition:none;}
+    .ledger.settling{transition:transform 220ms cubic-bezier(.2,.8,.2,1);}
+    .ledger.sheet-closing{display:block;position:fixed;left:0;right:0;bottom:0;z-index:51;
+      border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+      padding:var(--space-6) var(--space-4) calc(var(--space-6) + env(safe-area-inset-bottom,0px));
+      max-height:92vh;max-height:92dvh;overflow:hidden;
+      transform:translateY(100%);transition:transform 220ms ease-in;}
+    .sheet-scrim.closing{opacity:0;transition:opacity 220ms ease-in;}
+    .ledger .ledger-head .pdf-cta{display:none;}
     .ledger .ledger-head h2{flex:1 1 auto;}
     .sheet-close{
       display:inline-flex;align-items:center;justify-content:center;flex:none;
@@ -1474,7 +1488,7 @@
 
   <footer class="footnote">
     <span>I dati restano salvati solo per te, tra una visita e l'altra.</span>
-    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.19</span> · realizzata da <b>Paolo V</b></span>
+    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.20</span> · realizzata da <b>Paolo V</b></span>
   </footer>
 </div>
 
@@ -1687,7 +1701,7 @@
 
 <script>
 (function(){
-  const APP_VERSION = '2.19';
+  const APP_VERSION = '2.20';
   const APP_AUTORE = 'Paolo V';
   const MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
 
@@ -1929,7 +1943,13 @@
   let focusPrimaRiepilogo = null;
   function riepilogoAperto(){ return $('ledger').classList.contains('sheet-open'); }
   function apriRiepilogo(){
+    if(riepilogoAperto()) return;
     focusPrimaRiepilogo = document.activeElement;
+    $('ledger').classList.remove('sheet-closing');
+    $('ledger').style.transform = '';
+    $('ledgerScrim').classList.remove('closing');
+    $('ledgerScrim').style.opacity = '';
+    try{ history.pushState({ riepilogo: true }, ''); }catch(e){ /* cronologia non disponibile */ }
     $('ledger').classList.add('sheet-open');
     $('ledger').setAttribute('role','dialog');
     $('ledger').setAttribute('aria-modal','true');
@@ -1938,14 +1958,83 @@
     $('ledger').scrollTop = 0;
     $('ledger').focus();
   }
-  function chiudiRiepilogo(){
+  // dalCronologia: chiusura arrivata dal tasto Indietro, la voce è già stata tolta
+  function chiudiRiepilogo(dalCronologia){
     if(!riepilogoAperto()) return;
-    $('ledger').classList.remove('sheet-open');
-    $('ledger').setAttribute('role','region');
-    $('ledger').removeAttribute('aria-modal');
-    $('ledgerScrim').hidden = true;
+    const box = $('ledger'), scrim = $('ledgerScrim');
+    const animato = window.matchMedia('(max-width:767px)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    box.classList.remove('sheet-open','dragging','settling');
+    box.setAttribute('role','region');
+    box.removeAttribute('aria-modal');
     document.body.classList.remove('no-scroll');
-    if(focusPrimaRiepilogo && focusPrimaRiepilogo.focus) focusPrimaRiepilogo.focus();
+    if(animato){
+      // scende fino in fondo, poi sparisce
+      const partenza = box.style.transform || 'translateY(0)';
+      box.style.transform = partenza;
+      box.classList.add('sheet-closing');
+      void box.offsetWidth;
+      box.style.transform = 'translateY(100%)';
+      scrim.classList.add('closing');
+      setTimeout(() => {
+        box.classList.remove('sheet-closing'); box.style.transform = '';
+        scrim.hidden = true; scrim.classList.remove('closing'); scrim.style.opacity = '';
+      }, 230);
+    } else {
+      box.style.transform = ''; scrim.hidden = true; scrim.style.opacity = '';
+    }
+    if(dalCronologia !== true){
+      try{ if(history.state && history.state.riepilogo) history.back(); }catch(e){}
+    }
+    if(focusPrimaRiepilogo && focusPrimaRiepilogo.focus) focusPrimaRiepilogo.focus({ preventScroll:true });
+  }
+
+  // Trascinare verso il basso chiude: dalla maniglia e dal titolo sempre,
+  // dal contenuto solo se è già in cima (così non si confonde con lo scorrimento).
+  function collegaTrascinamentoRiepilogo(){
+    const box = $('ledger'), scrim = $('ledgerScrim');
+    let y0 = null, t0 = 0, dy = 0, attivo = false;
+    box.addEventListener('touchstart', (e) => {
+      if(!riepilogoAperto() || e.touches.length !== 1) return;
+      const dallaTesta = !!e.target.closest('.ledger-head');
+      if(!dallaTesta && box.scrollTop > 0) return;
+      if(e.target.closest('.sheet-close')) return;
+      y0 = e.touches[0].clientY; t0 = Date.now(); dy = 0; attivo = dallaTesta;
+    }, { passive:true });
+    box.addEventListener('touchmove', (e) => {
+      if(y0 === null) return;
+      const d = e.touches[0].clientY - y0;
+      if(!attivo){
+        if(d > 6 && box.scrollTop <= 0) attivo = true;           // tirato giù dal contenuto in cima
+        else if(d < -4 || box.scrollTop > 0){ y0 = null; return; } // sta scorrendo: lascia fare
+        else return;
+      }
+      e.preventDefault();
+      dy = Math.max(0, d);
+      box.classList.add('dragging');
+      box.style.transform = `translateY(${dy}px)`;
+      scrim.style.opacity = String(Math.max(0.15, 1 - dy / (box.offsetHeight || 600)));
+    }, { passive:false });
+    const fine = () => {
+      if(y0 === null) return;
+      const veloce = dy / Math.max(1, Date.now() - t0) > 0.6;
+      const lontano = dy > Math.min(140, (box.offsetHeight || 600) * 0.25);
+      box.classList.remove('dragging');
+      if(attivo && dy > 0 && (lontano || (veloce && dy > 30))){
+        if(navigator.vibrate){ try{ navigator.vibrate(8); }catch(e){} }
+        chiudiRiepilogo();
+      } else if(dy > 0){
+        box.classList.add('settling');
+        box.style.transform = 'translateY(0)';
+        scrim.style.opacity = '';
+        setTimeout(() => { box.classList.remove('settling'); box.style.transform = ''; }, 230);
+      }
+      y0 = null; dy = 0; attivo = false;
+    };
+    box.addEventListener('touchend', fine);
+    box.addEventListener('touchcancel', fine);
+    // tasto Indietro del telefono: chiude il foglio invece di lasciare la pagina
+    window.addEventListener('popstate', () => { if(riepilogoAperto()) chiudiRiepilogo(true); });
   }
   function trappolaRiepilogo(e){
     if(e.key !== 'Tab' || !riepilogoAperto()) return;
@@ -3445,8 +3534,9 @@
     $('toggleSettings').addEventListener('click', apriImpostazioni);
     $('movToggle').addEventListener('click', toggleMovimenti);
     document.querySelectorAll('[data-open-ledger]').forEach(b => b.addEventListener('click', apriRiepilogo));
-    $('closeLedger').addEventListener('click', chiudiRiepilogo);
-    $('ledgerScrim').addEventListener('click', chiudiRiepilogo);
+    $('closeLedger').addEventListener('click', () => chiudiRiepilogo());
+    $('ledgerScrim').addEventListener('click', () => chiudiRiepilogo());
+    collegaTrascinamentoRiepilogo();
     $('miniPdf').addEventListener('click', apriPdf);
     document.addEventListener('keydown', trappolaRiepilogo);
     window.matchMedia('(min-width:768px)').addEventListener('change', (e) => { if(e.matches) chiudiRiepilogo(); });
