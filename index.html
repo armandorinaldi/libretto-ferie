@@ -744,7 +744,7 @@
 
 
   /* ---------- MODALE IMPOSTAZIONI ---------- */
-  body.no-scroll{overflow:hidden;}
+  body.no-scroll,body.no-scroll-soft{overflow:hidden;}
   .modal-overlay.open .modal-settings{animation:sheetIn 220ms cubic-bezier(.2,.8,.2,1);}
   @keyframes sheetIn{ from{opacity:0;transform:translateY(12px) scale(.98);} to{opacity:1;transform:none;} }
   .modal-settings{
@@ -834,8 +834,13 @@
     .ms-head{padding:var(--space-4) var(--space-4) var(--space-3);position:relative;}
     .ms-head::before{
       content:'';position:absolute;top:6px;left:50%;transform:translateX(-50%);
-      width:36px;height:4px;border-radius:999px;background:var(--color-border-strong);
+      width:40px;height:5px;border-radius:999px;background:var(--color-border-strong);
     }
+    .ms-head{touch-action:none;cursor:grab;}
+    .modal-settings.dragging{animation:none;transition:none;}
+    .modal-settings.settling{transition:transform 220ms cubic-bezier(.2,.8,.2,1);}
+    .modal-settings.leaving{transition:transform 200ms ease-in;}
+    .settings-overlay{transition:background-color 200ms ease;}
     .ms-body{padding:0 var(--space-4);}
     .ms-foot{padding-left:var(--space-4);padding-right:var(--space-4);}
     .ms-foot button{flex:1;padding:0 var(--space-3);}
@@ -929,24 +934,27 @@
   }
 
   /* ---------- ANNULLAMENTO ---------- */
+  /* larga quanto il testo, centrata, mai più stretta dello schermo meno i margini */
   .toast{
-    position:fixed;left:50%;transform:translateX(-50%);
+    position:fixed;left:var(--space-4);right:var(--space-4);
     bottom:calc(var(--space-4) + env(safe-area-inset-bottom,0px));
     z-index:60;
     display:flex;align-items:center;gap:var(--space-3);
-    max-width:calc(100vw - 2 * var(--space-4));
-    padding:var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+    width:fit-content;max-width:480px;margin-inline:auto;
+    min-height:52px;box-sizing:border-box;
+    padding:var(--space-2) var(--space-2) var(--space-2) var(--space-4);
     background:var(--color-primary);color:var(--color-on-primary);
-    border-radius:999px;
-    font-size:.8125rem;font-weight:600;line-height:1.3;
+    border-radius:var(--radius-lg);
+    font-size:.875rem;font-weight:600;line-height:1.35;
     animation:toastIn 200ms ease-out;
   }
-  @keyframes toastIn{ from{opacity:0;transform:translate(-50%,8px);} to{opacity:1;transform:translate(-50%,0);} }
+  #toastText{flex:1 1 auto;min-width:0;}
+  @keyframes toastIn{ from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
   .toast button{
     display:inline-flex;align-items:center;gap:5px;flex:none;
-    min-height:34px;padding:0 var(--space-3);
+    min-height:40px;padding:0 var(--space-3);
     background:var(--color-on-primary);color:var(--color-primary);
-    border:none;border-radius:999px;
+    border:none;border-radius:var(--radius-md);
     font-size:.75rem;font-weight:700;
     transition:opacity var(--dur) ease;
   }
@@ -1247,6 +1255,52 @@
     .lt-short{display:inline;}
   }
 
+
+  /* ---------- PANNELLO DEL GIORNO ---------- */
+  .day-box-focus:focus{outline:none;}
+  .day-sheet:focus{outline:none;}
+  .day-head{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--space-2);}
+  .day-close{display:none;}
+  .day.pending{
+    background:var(--color-muted);
+    border-color:var(--color-ring);box-shadow:inset 0 0 0 2px var(--color-ring);
+  }
+
+  @media (max-width:767px){
+    .day-overlay{align-items:flex-end;padding:0;background:rgba(2,6,23,.45);}
+    .day-sheet{
+      position:relative;display:flex;flex-direction:column;
+      max-width:none;width:100%;
+      max-height:72vh;max-height:72dvh;overflow-y:auto;overscroll-behavior:contain;
+      border-radius:var(--radius-lg) var(--radius-lg) 0 0;border-bottom:none;
+      padding:var(--space-6) var(--space-4) 0;
+    }
+    .modal-overlay.open .day-sheet{animation:sheetUp 260ms cubic-bezier(.2,.8,.2,1);}
+    .day-sheet::before{
+      content:'';position:absolute;top:8px;left:50%;transform:translateX(-50%);
+      width:40px;height:5px;border-radius:999px;background:var(--color-border-strong);
+    }
+    .day-head{touch-action:none;cursor:grab;margin:-8px 0 0;padding-top:8px;}
+    .day-close{
+      display:inline-flex;align-items:center;justify-content:center;flex:none;
+      width:44px;height:44px;margin:-10px -8px 0 0;padding:0;
+      background:none;border:none;border-radius:var(--radius-md);color:var(--color-muted-foreground);
+    }
+    .day-close:hover{background:var(--color-muted);color:var(--color-foreground);}
+    .day-sheet .modal-minor{display:none;}
+    .day-sheet .modal-delete{order:1;margin:0 0 var(--space-3);padding-top:0;border-top:none;justify-content:flex-start;min-height:44px;}
+    /* Salva sempre visibile in fondo */
+    .day-sheet .modal-actions{
+      order:2;position:sticky;bottom:0;z-index:1;
+      margin:0 calc(-1 * var(--space-4));
+      padding:var(--space-3) var(--space-4) calc(var(--space-3) + env(safe-area-inset-bottom,0px));
+      background:var(--color-card);border-top:1px solid var(--color-border);
+    }
+    .day-sheet.dragging{animation:none;transition:none;}
+    .day-sheet.settling{transition:transform 220ms cubic-bezier(.2,.8,.2,1);}
+    .day-sheet.leaving{transition:transform 200ms ease-in;}
+  }
+
   /* ---------- VARIE ---------- */
   .footnote{
     display:flex;flex-direction:column;align-items:center;gap:var(--space-1);
@@ -1488,7 +1542,7 @@
 
   <footer class="footnote">
     <span>I dati restano salvati solo per te, tra una visita e l'altra.</span>
-    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.20</span> · realizzata da <b>Paolo V</b></span>
+    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.22</span> · realizzata da <b>Paolo V</b></span>
   </footer>
 </div>
 
@@ -1636,9 +1690,12 @@
   </div>
 </div>
 
-<div class="modal-overlay" id="dayOverlay">
-  <div class="modal-box modal-day" role="dialog" aria-modal="true" aria-labelledby="dayTitle">
-    <h3 id="dayTitle">Giorno</h3>
+<div class="modal-overlay day-overlay" id="dayOverlay">
+  <div class="modal-box modal-day day-sheet" id="dayBox" role="dialog" aria-modal="true" aria-labelledby="dayTitle" aria-describedby="daySubtitle" tabindex="-1">
+    <div class="day-head">
+      <h3 id="dayTitle">Giorno</h3>
+      <button class="day-close" type="button" id="dayClose" aria-label="Chiudi senza salvare"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
     <p id="daySubtitle">Cosa segni su questo giorno?</p>
 
     <div class="type-list" id="typeList">
@@ -1701,7 +1758,7 @@
 
 <script>
 (function(){
-  const APP_VERSION = '2.20';
+  const APP_VERSION = '2.22';
   const APP_AUTORE = 'Paolo V';
   const MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
 
@@ -2105,7 +2162,9 @@
   function impostazioniAperte(){ return $('settingsOverlay').classList.contains('open'); }
 
   function apriImpostazioni(){
+    if(impostazioniAperte()) return;
     focusPrimaImpostazioni = document.activeElement;
+    try{ history.pushState({ impostazioni: true }, ''); }catch(e){ /* cronologia non disponibile */ }
     fillSettingsForm();
     esciDaConferma();
     renderBackupStatus();
@@ -2116,17 +2175,81 @@
     $('settingsPanel').focus();
   }
 
-  function chiudiImpostazioni(forza){
+  function chiudiImpostazioni(forza, dalCronologia){
+    if(!impostazioniAperte()) return true;
     if(!forza && aggiornaStatoImpostazioni().cambiati > 0){
       entraInConferma();
-      return;
+      if(dalCronologia){ try{ history.pushState({ impostazioni: true }, ''); }catch(e){} }
+      return false;
     }
+    if(!dalCronologia){ try{ if(history.state && history.state.impostazioni) history.back(); }catch(e){} }
+    const box = $('settingsPanel'), ov = $('settingsOverlay');
+    box.classList.remove('dragging','settling','leaving');
+    box.style.transform = ''; ov.style.backgroundColor = '';
     $('settingsOverlay').classList.remove('open');
     document.body.classList.remove('no-scroll');
     $('toggleSettings').setAttribute('aria-expanded', 'false');
     esciDaConferma();
     fillSettingsForm(); // scarta ciò che non è stato salvato
-    if(focusPrimaImpostazioni && focusPrimaImpostazioni.focus) focusPrimaImpostazioni.focus();
+    if(focusPrimaImpostazioni && focusPrimaImpostazioni.focus) focusPrimaImpostazioni.focus({ preventScroll:true });
+    return true;
+  }
+
+  // Foglio delle Impostazioni su telefono: si chiude trascinandolo giù.
+  // Dalla maniglia/titolo sempre, dal contenuto solo se è in cima.
+  // Con modifiche non salvate torna su e chiede conferma, come la X.
+  function collegaTrascinamentoImpostazioni(){
+    const box = $('settingsPanel'), ov = $('settingsOverlay'), body = box.querySelector('.ms-body');
+    const telefono = window.matchMedia('(max-width:559px)');
+    let y0 = null, t0 = 0, dy = 0, attivo = false;
+    const tornaSu = () => {
+      box.classList.add('settling'); box.style.transform = 'translateY(0)'; ov.style.backgroundColor = '';
+      setTimeout(() => { box.classList.remove('settling'); box.style.transform = ''; }, 230);
+    };
+    box.addEventListener('touchstart', (e) => {
+      if(!impostazioniAperte() || !telefono.matches || e.touches.length !== 1) return;
+      if(e.target.closest('.ms-close, .ms-foot, input, textarea, select, label, button:not(.ms-head *)')) return;
+      const dallaTesta = !!e.target.closest('.ms-head');
+      if(!dallaTesta && !(e.target.closest('.ms-body') && body.scrollTop <= 0)) return;
+      y0 = e.touches[0].clientY; t0 = Date.now(); dy = 0; attivo = dallaTesta;
+    }, { passive:true });
+    box.addEventListener('touchmove', (e) => {
+      if(y0 === null) return;
+      const d = e.touches[0].clientY - y0;
+      if(!attivo){
+        if(d > 6 && body.scrollTop <= 0) attivo = true;
+        else if(d < -4 || body.scrollTop > 0){ y0 = null; return; }
+        else return;
+      }
+      e.preventDefault();
+      dy = Math.max(0, d);
+      box.classList.add('dragging');
+      box.style.transform = `translateY(${dy}px)`;
+      const a = Math.max(0.1, 0.55 * (1 - dy / (box.offsetHeight || 600)));
+      ov.style.backgroundColor = `rgba(2,6,23,${a.toFixed(3)})`;
+    }, { passive:false });
+    const fine = () => {
+      if(y0 === null) return;
+      const veloce = dy / Math.max(1, Date.now() - t0) > 0.6;
+      const lontano = dy > Math.min(140, (box.offsetHeight || 600) * 0.25);
+      box.classList.remove('dragging');
+      if(attivo && dy > 0 && (lontano || (veloce && dy > 30))){
+        if(aggiornaStatoImpostazioni().cambiati > 0){
+          tornaSu(); entraInConferma();
+        } else {
+          if(navigator.vibrate){ try{ navigator.vibrate(8); }catch(e){} }
+          box.classList.add('leaving'); box.style.transform = 'translateY(100%)';
+          ov.style.backgroundColor = 'rgba(2,6,23,0)';
+          setTimeout(() => chiudiImpostazioni(true), 200);
+        }
+      } else if(dy > 0){
+        tornaSu();
+      }
+      y0 = null; dy = 0; attivo = false;
+    };
+    box.addEventListener('touchend', fine);
+    box.addEventListener('touchcancel', fine);
+    window.addEventListener('popstate', () => { if(impostazioniAperte()) chiudiImpostazioni(false, true); });
   }
 
   // Chiusura con modifiche in sospeso: il piè del pannello chiede conferma.
@@ -2490,7 +2613,7 @@
       ? `Elimina i ${esistenti.length} movimenti`
       : 'Elimina il movimento';
 
-    $('dayOverlay').classList.add('open');
+    apriPannelloGiorno(keys);
   }
 
   function selezionaTipo(tipo, iniziale){
@@ -2552,7 +2675,7 @@
     pendingKeys.forEach(k => { entries[k] = {...record}; });
     saveEntries();
     refreshViews();
-    showUndo(`${n} ${plur(n,'giorno segnato','giorni segnati')} come ${etichettaTipo(record)}`, snap);
+    showUndo(`${n === 1 ? 'Segnato' : n + ' giorni segnati'}: ${etichettaTipo(record)}`, snap);
     closeDay();
   }
 
@@ -2579,11 +2702,118 @@
     if(navigator.vibrate) { try{ navigator.vibrate(12); }catch(e){} }
   }
 
-  function closeDay(){
-    $('dayOverlay').classList.remove('open');
+  // ---- Pannello del giorno: foglio dal basso su telefono ----
+  let focusPrimaGiorno = null;
+  function giornoAperto(){ return $('dayOverlay').classList.contains('open'); }
+  function telefono(){ return window.matchMedia('(max-width:767px)').matches; }
+
+  function segnaInAttesa(keys){
+    $('calGrid').querySelectorAll('.day.pending').forEach(c => c.classList.remove('pending'));
+    keys.forEach(k => {
+      const cell = $('calGrid').querySelector(`.day[data-key="${k}"]`);
+      if(cell) cell.classList.add('pending');
+    });
+  }
+
+  function apriPannelloGiorno(keys){
+    focusPrimaGiorno = document.activeElement;
+    segnaInAttesa(keys);
+    const ov = $('dayOverlay'), box = $('dayBox');
+    box.classList.remove('dragging','settling','leaving'); box.style.transform = ''; ov.style.backgroundColor = '';
+    ov.classList.add('open');
+    box.scrollTop = 0;
+    if(telefono()){
+      try{ history.pushState({ giorno: true }, ''); }catch(e){}
+      // i giorni scelti restano visibili sopra il foglio
+      const primo = $('calGrid').querySelector('.day.pending');
+      if(primo){
+        const libero = window.innerHeight - box.offsetHeight;
+        const r = primo.getBoundingClientRect();
+        if(libero > r.height + 24 && (r.bottom > libero - 12 || r.top < 12)){
+          // spazio in fondo alla pagina, così si può far salire anche l'ultima riga
+          document.body.style.paddingBottom = box.offsetHeight + 'px';
+          window.scrollBy({ top: r.top - Math.max(12, (libero - r.height) / 2), behavior: 'auto' });
+        }
+      }
+      // blocca la pagina sotto solo dopo lo scorrimento verso i giorni scelti
+      setTimeout(() => { if(giornoAperto()) document.body.classList.add('no-scroll-soft'); }, 400);
+    }
+    box.focus({ preventScroll:true });
+  }
+
+  function closeDay(dalCronologia){
+    const ov = $('dayOverlay'), box = $('dayBox');
+    const eraAperto = giornoAperto();
+    ov.classList.remove('open');
+    box.classList.remove('dragging','settling','leaving'); box.style.transform = ''; ov.style.backgroundColor = '';
+    $('calGrid').querySelectorAll('.day.pending').forEach(c => c.classList.remove('pending'));
+    document.body.classList.remove('no-scroll-soft');
+    document.body.style.paddingBottom = '';
     pendingKeys = [];
     dayTipo = null;
     dayDurata = 'giorno';
+    if(eraAperto && dalCronologia !== true){
+      try{ if(history.state && history.state.giorno) history.back(); }catch(e){}
+    }
+    if(eraAperto && focusPrimaGiorno && focusPrimaGiorno.focus && focusPrimaGiorno !== document.body){
+      focusPrimaGiorno.focus({ preventScroll:true });
+    }
+  }
+
+  // Trascinare giù chiude (senza salvare): dal titolo sempre, dal contenuto se in cima.
+  function collegaTrascinamentoGiorno(){
+    const box = $('dayBox'), ov = $('dayOverlay');
+    let y0 = null, t0 = 0, dy = 0, attivo = false;
+    box.addEventListener('touchstart', (e) => {
+      if(!giornoAperto() || !telefono() || e.touches.length !== 1) return;
+      if(e.target.closest('.day-close, .modal-actions, input, select, .segmented, .ore-presets')) return;
+      const dallaTesta = !!e.target.closest('.day-head');
+      if(!dallaTesta && box.scrollTop > 0) return;
+      y0 = e.touches[0].clientY; t0 = Date.now(); dy = 0; attivo = dallaTesta;
+    }, { passive:true });
+    box.addEventListener('touchmove', (e) => {
+      if(y0 === null) return;
+      const d = e.touches[0].clientY - y0;
+      if(!attivo){
+        if(d > 6 && box.scrollTop <= 0) attivo = true;
+        else if(d < -4 || box.scrollTop > 0){ y0 = null; return; }
+        else return;
+      }
+      e.preventDefault();
+      dy = Math.max(0, d);
+      box.classList.add('dragging');
+      box.style.transform = `translateY(${dy}px)`;
+      const a = Math.max(0.08, 0.45 * (1 - dy / (box.offsetHeight || 500)));
+      ov.style.backgroundColor = `rgba(2,6,23,${a.toFixed(3)})`;
+    }, { passive:false });
+    const fine = () => {
+      if(y0 === null) return;
+      const veloce = dy / Math.max(1, Date.now() - t0) > 0.6;
+      const lontano = dy > Math.min(120, (box.offsetHeight || 500) * 0.25);
+      box.classList.remove('dragging');
+      if(attivo && dy > 0 && (lontano || (veloce && dy > 30))){
+        if(navigator.vibrate){ try{ navigator.vibrate(8); }catch(e){} }
+        box.classList.add('leaving'); box.style.transform = 'translateY(100%)';
+        ov.style.backgroundColor = 'rgba(2,6,23,0)';
+        setTimeout(() => closeDay(), 200);
+      } else if(dy > 0){
+        box.classList.add('settling'); box.style.transform = 'translateY(0)'; ov.style.backgroundColor = '';
+        setTimeout(() => { box.classList.remove('settling'); box.style.transform = ''; }, 230);
+      }
+      y0 = null; dy = 0; attivo = false;
+    };
+    box.addEventListener('touchend', fine);
+    box.addEventListener('touchcancel', fine);
+    window.addEventListener('popstate', () => { if(giornoAperto()) closeDay(true); });
+    // Tab resta dentro il pannello
+    document.addEventListener('keydown', (e) => {
+      if(e.key !== 'Tab' || !giornoAperto()) return;
+      const f = Array.from(box.querySelectorAll('button, input, select')).filter(el => !el.disabled && el.offsetParent !== null);
+      if(!f.length) return;
+      const primo = f[0], ultimo = f[f.length-1];
+      if(e.shiftKey && (document.activeElement === primo || document.activeElement === box)){ e.preventDefault(); ultimo.focus(); }
+      else if(!e.shiftKey && document.activeElement === ultimo){ e.preventDefault(); primo.focus(); }
+    });
   }
 
   function ymIndex(y, m){ return y*12 + m; } // m is 0-based
@@ -3532,6 +3762,7 @@
     });
 
     $('toggleSettings').addEventListener('click', apriImpostazioni);
+    collegaTrascinamentoImpostazioni();
     $('movToggle').addEventListener('click', toggleMovimenti);
     document.querySelectorAll('[data-open-ledger]').forEach(b => b.addEventListener('click', apriRiepilogo));
     $('closeLedger').addEventListener('click', () => chiudiRiepilogo());
@@ -3579,6 +3810,8 @@
     $('dayCancel').addEventListener('click', closeDay);
     $('dayDelete').addEventListener('click', deleteDay);
     $('dayOverlay').addEventListener('click', (e) => { if(e.target.id === 'dayOverlay') closeDay(); });
+    $('dayClose').addEventListener('click', () => closeDay());
+    collegaTrascinamentoGiorno();
     $('dayOre').addEventListener('keydown', (e) => { if(e.key === 'Enter') confirmDay(); });
     $('dayOre').addEventListener('input', syncPresets);
     document.querySelectorAll('#orePresets button').forEach(b => {

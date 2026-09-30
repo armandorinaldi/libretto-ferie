@@ -2,6 +2,20 @@
 
 Dalla 2.01 l'app si chiama **Pianificazione Ferie** e il numero di versione compare in fondo alla pagina e in ogni copia di sicurezza. Sale di 0.01 a ogni modifica pubblicata. Le versioni precedenti (V1–VRawit, *Libretto Ferie*) sono in fondo.
 
+## 2.22 — pannello del giorno dal basso · 30/09/2026
+
+Su telefono la finestra che si apre toccando un giorno ora sale dal basso, come Riepilogo e Impostazioni.
+
+- I giorni scelti restano evidenziati e visibili sopra il foglio: se servisse, la pagina scorre da sola per mostrarli.
+- Salva è sempre visibile in fondo, anche quando si sceglie un permesso a ore e il contenuto diventa lungo.
+- Si chiude senza salvare con la X, trascinandolo giù, con il tasto Indietro o toccando fuori.
+- Da tastiera il cursore resta dentro il pannello e alla chiusura torna dove eri.
+
+## 2.21 — Impostazioni col dito e messaggio di annullamento sistemato · 30/09/2026
+
+- Su telefono anche le Impostazioni si chiudono trascinandole verso il basso o con il tasto Indietro. Se ci sono modifiche non salvate, il foglio torna su e chiede "Chiudere senza salvare?", come la X.
+- Il messaggio in basso con "Annulla" non si stringe più in una colonna stretta: ora è largo quanto il testo, con angoli arrotondati anche su due righe, e il testo è più breve ("Segnato: ROL di 8 ore").
+
 ## 2.20 — riepilogo da chiudere col dito · 30/09/2026
 
 Su telefono il riepilogo che sale dal basso si chiude anche trascinandolo verso il basso: dalla maniglia e dal titolo sempre, dal contenuto quando è già in cima (così non si confonde con lo scorrimento). Se lo trascini poco torna su da solo. Anche il tasto Indietro del telefono ora chiude il riepilogo invece di lasciare la pagina. Scende con un'animazione anche quando si chiude con la X o toccando fuori. Il pulsante "Scarica PDF" non è più ripetuto dentro il riepilogo: resta quello nella schermata principale.
