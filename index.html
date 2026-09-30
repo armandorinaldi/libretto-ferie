@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Pianificazione Ferie</title>
+<meta name="author" content="Paolo V">
 <link rel="icon" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#F8FAFC" media="(prefers-color-scheme: light)">
@@ -1133,8 +1134,16 @@
 
   /* ---------- VARIE ---------- */
   .footnote{
-    text-align:center;font-size:.75rem;color:var(--color-faint);
-    margin-top:var(--space-8);
+    display:flex;flex-direction:column;align-items:center;gap:var(--space-1);
+    text-align:center;font-size:.75rem;line-height:1.5;color:var(--color-faint);
+    margin-top:var(--space-8);padding-top:var(--space-4);
+    border-top:1px solid var(--color-border);
+  }
+  .credits{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:center;}
+  .credits b{font-weight:700;color:var(--color-muted-foreground);}
+  .credits .ver{
+    padding:1px 8px;border-radius:999px;background:var(--color-muted);
+    font-weight:700;font-variant-numeric:tabular-nums;color:var(--color-muted-foreground);
   }
   .loading-msg{
     text-align:center;font-size:.875rem;color:var(--color-muted-foreground);
@@ -1324,7 +1333,10 @@
 
   <div class="loading-msg" id="loadingMsg">Caricamento della pianificazione…</div>
 
-  <div class="footnote">I dati restano salvati solo per te, tra una visita e l'altra. · <span id="appVersion">v2.15</span></div>
+  <footer class="footnote">
+    <span>I dati restano salvati solo per te, tra una visita e l'altra.</span>
+    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.16</span> · realizzata da <b>Paolo V</b></span>
+  </footer>
 </div>
 
 <div class="bday-tip" id="bdayTip" role="status" hidden></div>
@@ -1538,7 +1550,8 @@
 
 <script>
 (function(){
-  const APP_VERSION = '2.15';
+  const APP_VERSION = '2.16';
+  const APP_AUTORE = 'Paolo V';
   const MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
 
   function pad(n){ return n < 10 ? '0'+n : ''+n; }
@@ -2646,6 +2659,7 @@
       app: 'libretto-ferie',
       versione: 1,
       versioneApp: APP_VERSION,
+      autore: APP_AUTORE,
       esportatoIl: new Date().toISOString(),
       impostazioni: settings,
       movimenti: entries
