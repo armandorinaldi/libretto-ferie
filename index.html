@@ -1299,6 +1299,9 @@
     .day-sheet.dragging{animation:none;transition:none;}
     .day-sheet.settling{transition:transform 220ms cubic-bezier(.2,.8,.2,1);}
     .day-sheet.leaving{transition:transform 200ms ease-in;}
+    /* PDF: stesso foglio del giorno, più alto perché ha più contenuto */
+    .modal-pdf.day-sheet{max-height:92vh;max-height:92dvh;}
+    .modal-pdf .pdf-count{margin-bottom:var(--space-3);}
   }
 
   /* ---------- VARIE ---------- */
@@ -1542,7 +1545,7 @@
 
   <footer class="footnote">
     <span>I dati restano salvati solo per te, tra una visita e l'altra.</span>
-    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.23</span> · realizzata da <b>Paolo V</b></span>
+    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.24</span> · realizzata da <b>Paolo V</b></span>
   </footer>
 </div>
 
@@ -1654,10 +1657,13 @@
   </div>
 </div>
 
-<div class="modal-overlay" id="pdfOverlay">
-  <div class="modal-box modal-day modal-pdf" role="dialog" aria-modal="true" aria-labelledby="pdfTitle">
-    <h3 id="pdfTitle">Scarica i permessi in PDF</h3>
-    <p>Scegli il periodo da stampare e cosa includere.</p>
+<div class="modal-overlay day-overlay" id="pdfOverlay">
+  <div class="modal-box modal-day day-sheet modal-pdf" id="pdfBox" role="dialog" aria-modal="true" aria-labelledby="pdfTitle" aria-describedby="pdfSubtitle" tabindex="-1">
+    <div class="day-head">
+      <h3 id="pdfTitle">Scarica i permessi in PDF</h3>
+      <button class="day-close" type="button" id="pdfClose" aria-label="Chiudi senza scaricare"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    </div>
+    <p id="pdfSubtitle">Scegli il periodo da stampare e cosa includere.</p>
 
     <div class="chip-row" id="pdfPresets" role="group" aria-label="Periodi rapidi">
       <button type="button" data-preset="mese">Questo mese</button>
@@ -1758,7 +1764,7 @@
 
 <script>
 (function(){
-  const APP_VERSION = '2.23';
+  const APP_VERSION = '2.24';
   const APP_AUTORE = 'Paolo V';
   const MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
 
@@ -3440,13 +3446,100 @@
       `<br>Ti resteranno al ${itDate(al)}: <b>${num(sal.totale)}</b> giorni (${num(sal.ferie)} di ferie e ${num(sal.rol)} ore di ROL).`;
   }
 
+  // Finestra PDF: su telefono è un foglio dal basso, come quello del giorno
+  let focusPrimaPdf = null;
+  let pdfApertoIl = 0;
+  let pdfBloccaPagina = false;
+  function pdfAperto(){ return $('pdfOverlay').classList.contains('open'); }
+
   function apriPdf(){
+    if(pdfAperto()) return;
+    focusPrimaPdf = document.activeElement;
     applicaPreset(pdfPreset || 'anno');
     $('pdfConfirm').textContent = 'Scarica PDF';
-    $('pdfOverlay').classList.add('open');
+    const ov = $('pdfOverlay'), box = $('pdfBox');
+    box.classList.remove('dragging','settling','leaving'); box.style.transform = ''; ov.style.backgroundColor = '';
+    ov.classList.add('open');
+    pdfApertoIl = Date.now();
+    box.scrollTop = 0;
+    if(telefono()){
+      try{ history.pushState({ pdf: true }, ''); }catch(e){ /* cronologia non disponibile */ }
+      pdfBloccaPagina = !document.body.classList.contains('no-scroll');
+      if(pdfBloccaPagina) document.body.classList.add('no-scroll');
+    }
+    box.focus({ preventScroll:true });
   }
 
-  function chiudiPdf(){ $('pdfOverlay').classList.remove('open'); }
+  // dalCronologia: chiusura arrivata dal tasto Indietro, la voce è già stata tolta
+  function chiudiPdf(dalCronologia){
+    const ov = $('pdfOverlay'), box = $('pdfBox');
+    const eraAperto = pdfAperto();
+    ov.classList.remove('open');
+    box.classList.remove('dragging','settling','leaving'); box.style.transform = ''; ov.style.backgroundColor = '';
+    if(pdfBloccaPagina){ document.body.classList.remove('no-scroll'); pdfBloccaPagina = false; }
+    if(eraAperto && dalCronologia !== true){
+      try{ if(history.state && history.state.pdf) history.back(); }catch(e){}
+    }
+    if(eraAperto && focusPrimaPdf && focusPrimaPdf.focus && focusPrimaPdf !== document.body){
+      focusPrimaPdf.focus({ preventScroll:true });
+    }
+  }
+
+  // Trascinare giù chiude: dal titolo sempre, dal contenuto solo se è già in cima.
+  function collegaTrascinamentoPdf(){
+    const box = $('pdfBox'), ov = $('pdfOverlay');
+    let y0 = null, t0 = 0, dy = 0, attivo = false;
+    box.addEventListener('touchstart', (e) => {
+      if(!pdfAperto() || !telefono() || e.touches.length !== 1) return;
+      if(e.target.closest('.day-close, .modal-actions, input, label, .chip-row')) return;
+      const dallaTesta = !!e.target.closest('.day-head');
+      if(!dallaTesta && box.scrollTop > 0) return;
+      y0 = e.touches[0].clientY; t0 = Date.now(); dy = 0; attivo = dallaTesta;
+    }, { passive:true });
+    box.addEventListener('touchmove', (e) => {
+      if(y0 === null) return;
+      const d = e.touches[0].clientY - y0;
+      if(!attivo){
+        if(d > 6 && box.scrollTop <= 0) attivo = true;
+        else if(d < -4 || box.scrollTop > 0){ y0 = null; return; }
+        else return;
+      }
+      e.preventDefault();
+      dy = Math.max(0, d);
+      box.classList.add('dragging');
+      box.style.transform = `translateY(${dy}px)`;
+      const a = Math.max(0.08, 0.45 * (1 - dy / (box.offsetHeight || 500)));
+      ov.style.backgroundColor = `rgba(2,6,23,${a.toFixed(3)})`;
+    }, { passive:false });
+    const fine = () => {
+      if(y0 === null) return;
+      const veloce = dy / Math.max(1, Date.now() - t0) > 0.6;
+      const lontano = dy > Math.min(120, (box.offsetHeight || 500) * 0.25);
+      box.classList.remove('dragging');
+      if(attivo && dy > 0 && (lontano || (veloce && dy > 30))){
+        if(navigator.vibrate){ try{ navigator.vibrate(8); }catch(e){} }
+        box.classList.add('leaving'); box.style.transform = 'translateY(100%)';
+        ov.style.backgroundColor = 'rgba(2,6,23,0)';
+        setTimeout(() => chiudiPdf(), 200);
+      } else if(dy > 0){
+        box.classList.add('settling'); box.style.transform = 'translateY(0)'; ov.style.backgroundColor = '';
+        setTimeout(() => { box.classList.remove('settling'); box.style.transform = ''; }, 230);
+      }
+      y0 = null; dy = 0; attivo = false;
+    };
+    box.addEventListener('touchend', fine);
+    box.addEventListener('touchcancel', fine);
+    window.addEventListener('popstate', () => { if(pdfAperto()) chiudiPdf(true); });
+    // Tab resta dentro la finestra
+    document.addEventListener('keydown', (e) => {
+      if(e.key !== 'Tab' || !pdfAperto()) return;
+      const f = Array.from(box.querySelectorAll('button, input')).filter(el => !el.disabled && el.offsetParent !== null);
+      if(!f.length) return;
+      const primo = f[0], ultimo = f[f.length-1];
+      if(e.shiftKey && (document.activeElement === primo || document.activeElement === box)){ e.preventDefault(); ultimo.focus(); }
+      else if(!e.shiftKey && document.activeElement === ultimo){ e.preventDefault(); primo.focus(); }
+    });
+  }
 
   function caricaJsPdf(){
     if(window.jspdf && window.jspdf.jsPDF) return Promise.resolve(window.jspdf.jsPDF);
@@ -3825,9 +3918,14 @@
     $('toastUndo').addEventListener('click', undoLast);
 
     $('openPdf').addEventListener('click', apriPdf);
-    $('pdfCancel').addEventListener('click', chiudiPdf);
+    $('pdfCancel').addEventListener('click', () => chiudiPdf());
+    $('pdfClose').addEventListener('click', () => chiudiPdf());
     $('pdfConfirm').addEventListener('click', scaricaPdf);
-    $('pdfOverlay').addEventListener('click', (e) => { if(e.target.id === 'pdfOverlay') chiudiPdf(); });
+    $('pdfOverlay').addEventListener('click', (e) => {
+      // un tocco fuori chiude, ma non nei primi istanti dopo l'apertura
+      if(e.target.id === 'pdfOverlay' && Date.now() - pdfApertoIl > 600) chiudiPdf();
+    });
+    collegaTrascinamentoPdf();
     document.querySelectorAll('#pdfPresets button').forEach(b => {
       b.addEventListener('click', () => applicaPreset(b.dataset.preset));
     });
@@ -3902,4 +4000,5 @@
   loadData().then(init);
 })();
 </script>
+
 </html>
