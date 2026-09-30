@@ -2,6 +2,10 @@
 
 Dalla 2.01 l'app si chiama **Pianificazione Ferie** e il numero di versione compare in fondo alla pagina e in ogni copia di sicurezza. Sale di 0.01 a ogni modifica pubblicata. Le versioni precedenti (V1–VRawit, *Libretto Ferie*) sono in fondo.
 
+## 2.23 — correzione: il tocco sul giorno apre di nuovo il pannello · 30/09/2026
+
+Su telefono, toccando un giorno il pannello a volte non si apriva. Subito dopo il tocco il telefono invia anche un "clic" automatico: nella 2.22 quel clic cadeva sullo sfondo del foglio appena aperto e lo richiudeva all'istante. Ora quel clic viene ignorato e lo sfondo non chiude il pannello nei primi istanti dopo l'apertura. Tocco, trascinamento su più giorni e pressione prolungata per eliminare funzionano come prima.
+
 ## 2.22 — pannello del giorno dal basso · 30/09/2026
 
 Su telefono la finestra che si apre toccando un giorno ora sale dal basso, come Riepilogo e Impostazioni.

@@ -1542,7 +1542,7 @@
 
   <footer class="footnote">
     <span>I dati restano salvati solo per te, tra una visita e l'altra.</span>
-    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.22</span> · realizzata da <b>Paolo V</b></span>
+    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.23</span> · realizzata da <b>Paolo V</b></span>
   </footer>
 </div>
 
@@ -1758,7 +1758,7 @@
 
 <script>
 (function(){
-  const APP_VERSION = '2.22';
+  const APP_VERSION = '2.23';
   const APP_AUTORE = 'Paolo V';
   const MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
 
@@ -2704,6 +2704,7 @@
 
   // ---- Pannello del giorno: foglio dal basso su telefono ----
   let focusPrimaGiorno = null;
+  let apertoIl = 0;
   function giornoAperto(){ return $('dayOverlay').classList.contains('open'); }
   function telefono(){ return window.matchMedia('(max-width:767px)').matches; }
 
@@ -2721,6 +2722,7 @@
     const ov = $('dayOverlay'), box = $('dayBox');
     box.classList.remove('dragging','settling','leaving'); box.style.transform = ''; ov.style.backgroundColor = '';
     ov.classList.add('open');
+    apertoIl = Date.now();
     box.scrollTop = 0;
     if(telefono()){
       try{ history.pushState({ giorno: true }, ''); }catch(e){}
@@ -3809,7 +3811,10 @@
     $('dayConfirm').addEventListener('click', confirmDay);
     $('dayCancel').addEventListener('click', closeDay);
     $('dayDelete').addEventListener('click', deleteDay);
-    $('dayOverlay').addEventListener('click', (e) => { if(e.target.id === 'dayOverlay') closeDay(); });
+    $('dayOverlay').addEventListener('click', (e) => {
+      // un tocco fuori chiude, ma non nei primi istanti dopo l'apertura
+      if(e.target.id === 'dayOverlay' && Date.now() - apertoIl > 600) closeDay();
+    });
     $('dayClose').addEventListener('click', () => closeDay());
     collegaTrascinamentoGiorno();
     $('dayOre').addEventListener('keydown', (e) => { if(e.key === 'Enter') confirmDay(); });
@@ -3840,7 +3845,12 @@
 
     // --- Mouse drag ---
     const grid = $('calGrid');
+    // Dopo un tocco il telefono simula anche mouse e clic: vanno ignorati,
+    // altrimenti riaprono o richiudono il pannello (tocchi che "non funzionano").
+    let ultimoTocco = 0;
+    const daTocco = () => Date.now() - ultimoTocco < 900;
     grid.addEventListener('mousedown', (e) => {
+      if(daTocco()) return;
       const cell = e.target.closest('.day.selectable');
       if(!cell) return;
       e.preventDefault();
@@ -3851,10 +3861,11 @@
       const cell = cellAtPoint(e.clientX, e.clientY);
       if(cell) extendSelection(cell);
     });
-    document.addEventListener('mouseup', () => { endSelection(); });
+    document.addEventListener('mouseup', () => { if(!daTocco()) endSelection(); });
 
     // --- Touch drag ---
     grid.addEventListener('touchstart', (e) => {
+      ultimoTocco = Date.now();
       const t = e.touches[0];
       const cell = document.elementFromPoint(t.clientX, t.clientY);
       const sel = cell && cell.closest('.day.selectable');
@@ -3868,7 +3879,13 @@
       const cell = cellAtPoint(t.clientX, t.clientY);
       if(cell) extendSelection(cell);
     }, {passive:false});
-    grid.addEventListener('touchend', () => { endSelection(); });
+    grid.addEventListener('touchend', (e) => {
+      // il tocco sul giorno è già gestito: blocca il "clic fantasma" che il telefono
+      // invia subito dopo, altrimenti cade sul foglio appena aperto e lo richiude
+      ultimoTocco = Date.now();
+      if(isPointerDown || longPressFired) e.preventDefault();
+      endSelection();
+    }, { passive:false });
     grid.addEventListener('touchcancel', () => { endSelection(); });
 
     if(migraMezzeGiornate()) saveEntries();
