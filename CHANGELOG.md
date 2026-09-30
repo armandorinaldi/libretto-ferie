@@ -2,6 +2,10 @@
 
 Dalla 2.01 l'app si chiama **Pianificazione Ferie** e il numero di versione compare in fondo alla pagina e in ogni copia di sicurezza. Sale di 0.01 a ogni modifica pubblicata. Le versioni precedenti (V1–VRawit, *Libretto Ferie*) sono in fondo.
 
+## 2.17 — via i compleanni · 30/09/2026
+
+Tolti torta, messaggio di auguri ed elenco dei nomi: non avevano effetto sui saldi, affollavano le celle e, con la repository pubblica, rendevano visibili i nomi a chiunque. Il calendario mostra solo ciò che conta per ferie e permessi.
+
 ## 2.16 — credits · 29/09/2026
 
 In fondo alla pagina compaiono il nome dell'app, la versione e l'autore: "Pianificazione Ferie v2.16 · realizzata da Paolo V". L'autore è indicato anche nei dati della pagina e nella copia di sicurezza.

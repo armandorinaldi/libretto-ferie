@@ -4,7 +4,7 @@ Calendario personale per tenere il conto di **ferie, ROL, chiusure aziendali e p
 
 Una pagina sola, nessun account, nessun server: i dati restano nel browser di chi la usa.
 
-![Versione](https://img.shields.io/badge/versione-2.15-0F172A) ![Licenza](https://img.shields.io/badge/licenza-MIT-blue)
+![Versione](https://img.shields.io/badge/versione-2.17-0F172A) ![Licenza](https://img.shields.io/badge/licenza-MIT-blue)
 
 ## Cosa fa
 
@@ -22,7 +22,6 @@ Una pagina sola, nessun account, nessun server: i dati restano nel browser di ch
 - **Vista annuale** a dodici mini-mesi per decidere dove piazzare le vacanze
 - **Copia di sicurezza** scaricabile come file, con ripristino da file o da testo incollato
 - **Tema chiaro e scuro**
-- **Compleanni** con messaggio di auguri sulle date che ti interessano
 
 ## Come si usa
 
@@ -86,19 +85,6 @@ Per spostare i dati o metterli al sicuro usa **Impostazioni → Copia di sicurez
 Un pallino sul pulsante **Impostazioni** ti avvisa quando ci sono modifiche non ancora salvate in una copia. Se apri la pagina e la pianificazione è vuota, ti viene proposto subito il ripristino.
 
 Le chiavi di salvataggio sono rimaste le stesse del vecchio *Libretto Ferie*: aggiornando la pagina non si perde nulla, e i vecchi backup restano importabili.
-
-## Personalizzare i compleanni
-
-Le date sono nel codice, dentro `index.html`. Cerca `const COMPLEANNI` e modifica l'elenco:
-
-```js
-const COMPLEANNI = {
-  '03-14': 'Marco',
-  '09-02': 'Giulia'
-};
-```
-
-Il formato è `'MM-GG': 'Nome'`. Le date valgono per tutti gli anni. Attenzione: se il repository è pubblico, questi nomi li vede chiunque apra il codice.
 
 ## Personalizzare le festività
 
