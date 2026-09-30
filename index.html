@@ -1132,8 +1132,8 @@
   .move-text small{font-size:.75rem;color:var(--color-muted-foreground);line-height:1.4;}
   .move-date{line-height:1.5;}
 
-  /* il pulsante Dettagli del riepilogo esiste solo su telefono */
-  .ledger-toggle,.pdf-short,.hint-short,.m-short,.lt-short{display:none;}
+  /* elementi solo per telefono */
+  .mini-ledger,.sheet-grip,.sheet-close,.sheet-scrim,.hint-short,.m-short,.lt-short{display:none;}
   .stamp-legend .lg-short{display:none;}
 
   /* ---------- TELEFONO ---------- */
@@ -1145,7 +1145,7 @@
     .masthead .sub{font-size:.75rem;}
     .masthead-actions{flex:none;}
     .gear-btn,.theme-btn{width:44px;padding:0;justify-content:center;}
-    .btn-label,.lg-extra,.hint-long,.pdf-long{display:none;}
+    .btn-label,.lg-extra,.hint-long{display:none;}
     .hint-short{display:inline;}
     .pdf-short{display:inline;}
     .m-long{display:none;}
@@ -1154,58 +1154,65 @@
     .m-short{display:inline;}
     .gear-btn .nudge{top:7px;right:7px;}
 
-    /* riepilogo compatto */
-    .ledger{position:relative;}
-    .ledger-head{margin:0;}
-    .ledger .ledger-head h2{display:none;}
-    .ledger .pdf-cta{position:absolute;top:var(--space-3);right:var(--space-3);}
-    .sum-hero{margin-bottom:var(--space-3);gap:2px;}
-    .sum-period{min-height:44px;margin-bottom:var(--space-1);padding-right:88px;}
-    .period-chip{font-size:.8125rem;}
-    .sum-num{font-size:2.75rem;}
-    .sum-unit{font-size:.9375rem;}
-    .sum-sub{display:none;}
-    .sum-rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px var(--space-4);margin-bottom:var(--space-3);}
-    .sum-row{display:contents;}
-    .sum-row:nth-child(1) > .sum-row-head{grid-area:1 / 1;}
-    .sum-row:nth-child(1) > .ledger-bar{grid-area:2 / 1;}
-    .sum-row:nth-child(2) > .sum-row-head{grid-area:1 / 2;}
-    .sum-row:nth-child(2) > .ledger-bar{grid-area:2 / 2;}
-    .sum-row:nth-child(1) > .alert{grid-area:3 / 1 / 4 / 3;}
-    .sum-row:nth-child(2) > .alert{grid-area:4 / 1 / 5 / 3;}
-    .sum-row-head{font-size:.8125rem;margin-bottom:0;}
-    .sum-row-head b{font-size:1rem;}
-    .sum-row-head .dim,.sum-cap{display:none;}
-    .ledger-bar{height:6px;margin-bottom:0;}
-    .sum-rows .alert{grid-column:1 / -1;margin-top:0;}
-    .ledger-extra{display:none !important;}
-    .ledger-toggle{
-      display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);
-      width:100%;min-height:44px;margin:0;padding:0;
-      background:none;border:none;border-top:1px solid var(--color-border);
-      font-size:.8125rem;color:var(--color-muted-foreground);text-align:left;
+    /* saldo in breve: tre tessere */
+    .mini-ledger{display:flex;flex-direction:column;gap:var(--space-2);order:-2;}
+    .mini-top{display:flex;align-items:center;justify-content:space-between;gap:var(--space-2);}
+    .mini-top .period-chip{font-size:.8125rem;}
+    .mini-top .pdf-cta{flex:none;}
+    .pdf-short{display:inline;}
+    .mini-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-2);}
+    .mini-tile{
+      display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:0;min-height:80px;
+      padding:10px;background:var(--color-card);border:1px solid var(--color-border);border-radius:var(--radius-md);
+      text-align:left;color:var(--color-foreground);
+      transition:background-color var(--dur) ease, border-color var(--dur) ease, transform var(--dur) ease;
     }
-    .ledger-toggle b{color:var(--color-foreground);font-variant-numeric:tabular-nums;}
-    .ledger-toggle.warn .lt-proj{color:var(--color-warning);}
-    .ledger-toggle.warn .lt-proj b{color:var(--color-warning);}
-    .ledger-toggle.danger .lt-proj,.ledger-toggle.danger .lt-proj b{color:var(--color-destructive);}
-    .lt-act{display:inline-flex;align-items:center;gap:4px;flex:none;font-weight:700;color:var(--color-secondary);}
-    .lt-act .icon{transition:transform var(--dur) ease;}
+    .mini-tile:hover{background:var(--color-muted);border-color:var(--color-border-strong);}
+    .mini-tile:active{transform:scale(.97);}
+    .mt-label{font-size:.75rem;font-weight:700;color:var(--color-foreground);}
+    .mt-num{display:flex;align-items:baseline;gap:3px;white-space:nowrap;}
+    .mt-num b{font-size:1.375rem;font-weight:800;letter-spacing:-.02em;line-height:1.15;font-variant-numeric:tabular-nums;}
+    .mt-num small{font-size:.75rem;font-weight:600;color:var(--color-muted-foreground);}
+    .mt-num b.over{color:var(--color-destructive);}
+    .mt-num b.warn{color:var(--color-warning);}
+    .mt-sub{font-size:.6875rem;color:var(--color-muted-foreground);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+    .mini-alert,.mini-proj{
+      display:flex;align-items:center;gap:var(--space-2);width:100%;min-height:44px;padding:0 var(--space-3);
+      border:none;border-radius:var(--radius-md);font-size:.8125rem;text-align:left;
+    }
+    .mini-alert{background:var(--color-warning-soft);color:var(--color-warning);font-weight:600;}
+    .mini-alert.danger{background:var(--color-destructive-soft);color:var(--color-destructive);}
+    .mini-alert > span{flex:1 1 auto;}
+    .mini-proj{justify-content:space-between;background:var(--color-muted);color:var(--color-muted-foreground);}
+    .mini-proj b{color:var(--color-foreground);font-variant-numeric:tabular-nums;}
+    .mini-proj.warn .mp-text,.mini-proj.warn b{color:var(--color-warning);}
+    .mini-proj.danger .mp-text,.mini-proj.danger b{color:var(--color-destructive);}
+    .mp-act{display:inline-flex;align-items:center;gap:2px;flex:none;font-weight:700;color:var(--color-secondary);}
 
-    /* riepilogo aperto: torna la versione completa */
-    .ledger.open .sum-rows{display:flex;flex-direction:column;gap:var(--space-4);margin-bottom:var(--space-4);}
-    .ledger.open .sum-row{display:block;}
-    .ledger.open .sum-row-head{margin-bottom:6px;}
-    .ledger.open .sum-row-head .dim{display:inline;}
-    .ledger.open .sum-cap{display:block;}
-    .ledger.open .ledger-bar{margin-bottom:var(--space-2);}
-    .ledger.open .sum-rows .alert{margin-top:var(--space-3);}
-    .ledger.open .ledger-extra{display:block !important;}
-    .ledger.open .sum-retr.ledger-extra{display:flex !important;}
-    .ledger.open .sum-retr.ledger-extra[hidden]{display:none !important;}
-    .ledger.open .sum-how{margin-bottom:var(--space-1);}
-    .ledger.open .ledger-toggle{margin-top:var(--space-2);}
-    .ledger.open .lt-act .icon{transform:rotate(180deg);}
+    /* riepilogo completo: foglio che sale dal basso */
+    .ledger{display:none;}
+    .ledger.sheet-open{
+      display:block;position:fixed;left:0;right:0;bottom:0;z-index:51;
+      max-height:92vh;max-height:92dvh;overflow-y:auto;overscroll-behavior:contain;
+      border-radius:var(--radius-lg) var(--radius-lg) 0 0;border-bottom:none;
+      padding:var(--space-6) var(--space-4) calc(var(--space-6) + env(safe-area-inset-bottom,0px));
+      animation:sheetUp 260ms cubic-bezier(.2,.8,.2,1);
+    }
+    .ledger.sheet-open:focus{outline:none;}
+    .sheet-scrim:not([hidden]){display:block;position:fixed;inset:0;z-index:50;background:rgba(2,6,23,.55);animation:fadeIn 200ms ease;}
+    @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+    .ledger .ledger-head{position:relative;}
+    .sheet-grip{
+      display:block;position:absolute;top:-16px;left:50%;transform:translateX(-50%);
+      width:36px;height:4px;border-radius:999px;background:var(--color-border-strong);
+    }
+    .ledger .ledger-head h2{flex:1 1 auto;}
+    .sheet-close{
+      display:inline-flex;align-items:center;justify-content:center;flex:none;
+      width:44px;height:44px;margin-right:-8px;padding:0;
+      background:none;border:none;border-radius:var(--radius-md);color:var(--color-muted-foreground);
+    }
+    .sheet-close:hover{background:var(--color-muted);color:var(--color-foreground);}
     .sum-year-top{flex-wrap:wrap;}
     .sum-year-split{white-space:nowrap;}
 
@@ -1217,9 +1224,11 @@
 
   @media (max-width:374px){
     .masthead h1{font-size:1.0625rem;}
-    .ledger .pdf-cta{width:44px;padding:0;justify-content:center;}
-    .ledger .pdf-cta .pdf-short{display:none;}
-    .sum-period{padding-right:52px;}
+    .mini-top .pdf-cta{width:44px;padding:0;justify-content:center;}
+    .mini-top .pdf-cta .pdf-short{display:none;}
+    .mt-num b{font-size:1.1875rem;}
+    .mini-tile{padding:8px;}
+    .ledger .pdf-cta{padding:0 var(--space-3);}
     .lt-long{display:none;}
     .lt-short{display:inline;}
   }
@@ -1283,6 +1292,35 @@
   </div>
 
   <div id="app" class="layout" style="display:none;">
+    <section class="mini-ledger" id="miniLedger" aria-label="Saldo in breve">
+      <div class="mini-top">
+        <span class="period-chip"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M3 9.5h18M8 3v3M16 3v3"/></svg><span id="miniPeriod">Saldo</span></span>
+        <button class="pdf-cta" type="button" id="miniPdf" aria-label="Scarica PDF"><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg><span class="pdf-short">PDF</span></button>
+      </div>
+      <div class="mini-tiles">
+        <button class="mini-tile" type="button" data-open-ledger aria-label="Totale disponibile: apri il riepilogo">
+          <span class="mt-label">Totale</span>
+          <span class="mt-num"><b id="miniTot">0</b><small>gg</small></span>
+          <span class="mt-sub">ferie + ROL</span>
+        </button>
+        <button class="mini-tile" type="button" data-open-ledger aria-label="Ferie: apri il riepilogo">
+          <span class="mt-label ferie-t">Ferie</span>
+          <span class="mt-num"><b id="miniFerie">0</b><small>gg</small></span>
+          <span class="mt-sub" id="miniFerieSub"></span>
+        </button>
+        <button class="mini-tile" type="button" data-open-ledger aria-label="ROL: apri il riepilogo">
+          <span class="mt-label rol-t">ROL</span>
+          <span class="mt-num"><b id="miniRol">0</b><small>h</small></span>
+          <span class="mt-sub" id="miniRolSub"></span>
+        </button>
+      </div>
+      <button class="mini-alert" type="button" id="miniAlert" data-open-ledger hidden><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span id="miniAlertText"></span><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button>
+      <button class="mini-proj" type="button" id="miniProj" data-open-ledger aria-haspopup="dialog">
+        <span class="mp-text"><span class="lt-long">Al 31 dicembre</span><span class="lt-short">31 dic</span>: <b id="miniProjNum">0 giorni</b></span>
+        <span class="mp-act">Dettagli<svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></span>
+      </button>
+    </section>
+    <div class="sheet-scrim" id="ledgerScrim" hidden></div>
     <div class="card">
       <div class="cal-top">
         <div class="view-toggle" role="group" aria-label="Vista del calendario">
@@ -1347,13 +1385,15 @@
       </div>
     </div>
 
-    <div class="card ledger" id="ledger">
+    <div class="card ledger" id="ledger" role="region" aria-labelledby="ledgerTitle" tabindex="-1">
       <div class="ledger-head">
-        <h2>Riepilogo</h2>
+        <span class="sheet-grip" aria-hidden="true"></span>
+        <h2 id="ledgerTitle">Riepilogo</h2>
         <button class="pdf-cta" type="button" id="openPdf">
           <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-          <span class="pdf-long">Scarica PDF</span><span class="pdf-short">PDF</span>
+          Scarica PDF
         </button>
+        <button class="sheet-close" type="button" id="closeLedger" aria-label="Chiudi il riepilogo"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
       </div>
 
       <div class="sum-hero">
@@ -1427,10 +1467,6 @@
         </ul>
       </details>
 
-      <button class="ledger-toggle" type="button" id="ledgerToggle" aria-expanded="false" aria-controls="ledger">
-        <span class="lt-proj" id="ltProj">Al 31 dicembre</span>
-        <span class="lt-act"><span id="ltLabel">Dettagli</span><svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
-      </button>
     </div>
   </div>
 
@@ -1438,7 +1474,7 @@
 
   <footer class="footnote">
     <span>I dati restano salvati solo per te, tra una visita e l'altra.</span>
-    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.18</span> · realizzata da <b>Paolo V</b></span>
+    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.19</span> · realizzata da <b>Paolo V</b></span>
   </footer>
 </div>
 
@@ -1651,7 +1687,7 @@
 
 <script>
 (function(){
-  const APP_VERSION = '2.18';
+  const APP_VERSION = '2.19';
   const APP_AUTORE = 'Paolo V';
   const MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
 
@@ -1889,14 +1925,36 @@
     applicaRichiudibili();
     try{ await store.set('leave-ui', JSON.stringify(uiPref)); }catch(e){ /* non importante */ }
   }
-  function toggleRiepilogo(){
-    const open = $('ledger').classList.toggle('open');
-    $('ledgerToggle').setAttribute('aria-expanded', open ? 'true' : 'false');
-    $('ltLabel').textContent = open ? 'Meno' : 'Dettagli';
-    if(!open){
-      const top = $('ledger').getBoundingClientRect().top;
-      if(top < 0) window.scrollBy({ top: top - 12, behavior: 'smooth' });
-    }
+  // Su telefono il riepilogo completo sale dal basso
+  let focusPrimaRiepilogo = null;
+  function riepilogoAperto(){ return $('ledger').classList.contains('sheet-open'); }
+  function apriRiepilogo(){
+    focusPrimaRiepilogo = document.activeElement;
+    $('ledger').classList.add('sheet-open');
+    $('ledger').setAttribute('role','dialog');
+    $('ledger').setAttribute('aria-modal','true');
+    $('ledgerScrim').hidden = false;
+    document.body.classList.add('no-scroll');
+    $('ledger').scrollTop = 0;
+    $('ledger').focus();
+  }
+  function chiudiRiepilogo(){
+    if(!riepilogoAperto()) return;
+    $('ledger').classList.remove('sheet-open');
+    $('ledger').setAttribute('role','region');
+    $('ledger').removeAttribute('aria-modal');
+    $('ledgerScrim').hidden = true;
+    document.body.classList.remove('no-scroll');
+    if(focusPrimaRiepilogo && focusPrimaRiepilogo.focus) focusPrimaRiepilogo.focus();
+  }
+  function trappolaRiepilogo(e){
+    if(e.key !== 'Tab' || !riepilogoAperto()) return;
+    const box = $('ledger');
+    const f = Array.from(box.querySelectorAll('button, summary, [href]')).filter(el => !el.disabled && el.offsetParent !== null);
+    if(!f.length) return;
+    const primo = f[0], ultimo = f[f.length-1];
+    if(e.shiftKey && (document.activeElement === primo || document.activeElement === box)){ e.preventDefault(); ultimo.focus(); }
+    else if(!e.shiftKey && document.activeElement === ultimo){ e.preventDefault(); primo.focus(); }
   }
 
   // ---- Modale Impostazioni ----
@@ -2629,10 +2687,27 @@
     const nota = $('projSentence');
     const sforaAnno = projFerie < 0 || projRol < 0;
     const projSotto = projTotale < 0;
-    const lt = $('ledgerToggle');
-    $('ltProj').innerHTML = `<span class="lt-long">Al 31 dicembre</span><span class="lt-short">31 dic</span>: <b>${num(projTotale)} giorni</b>`;
-    lt.classList.toggle('danger', projSotto);
-    lt.classList.toggle('warn', !projSotto && (projFerie < 0 || projRol < 0));
+    // --- saldo in breve (telefono) ---
+    $('miniPeriod').innerHTML = $('sumLabel').innerHTML;
+    $('miniTot').textContent = num(totaleGiorni);
+    $('miniTot').className = totaleSotto ? 'over' : '';
+    $('miniFerie').textContent = num(ferieResidue);
+    $('miniFerie').className = ferieOver ? (totaleSotto ? 'over' : 'warn') : '';
+    $('miniRol').textContent = num(permessoResiduo);
+    $('miniRol').className = rolOver ? (totaleSotto ? 'over' : 'warn') : '';
+    $('miniFerieSub').textContent = ferieTotale < 0 ? 'in negativo' : `su ${num(ferieTotale)}`;
+    $('miniRolSub').textContent = `= ${num(rolInGiorni)} gg`;
+    const mAlert = $('miniAlert');
+    mAlert.hidden = !(ferieOver || rolOver);
+    mAlert.classList.toggle('danger', totaleSotto);
+    if(ferieOver || rolOver){
+      const cosa = ferieOver && rolOver ? 'Ferie e ROL sotto zero' : ferieOver ? `Ferie −${num(sforoFerie)} gg` : `ROL −${num(sforoRol)} h`;
+      $('miniAlertText').textContent = totaleSotto ? `${cosa} · totale sotto zero` : `${cosa} · ${ferieOver ? 'coperte dai ROL' : 'coperti dalle ferie'}`;
+    }
+    const mp = $('miniProj');
+    $('miniProjNum').textContent = `${num(projTotale)} giorni`;
+    mp.classList.toggle('danger', projSotto);
+    mp.classList.toggle('warn', !projSotto && (projFerie < 0 || projRol < 0));
 
     $('projBox').classList.toggle('danger', projSotto);
     $('projTotale').classList.toggle('over', projSotto);
@@ -3369,7 +3444,12 @@
 
     $('toggleSettings').addEventListener('click', apriImpostazioni);
     $('movToggle').addEventListener('click', toggleMovimenti);
-    $('ledgerToggle').addEventListener('click', toggleRiepilogo);
+    document.querySelectorAll('[data-open-ledger]').forEach(b => b.addEventListener('click', apriRiepilogo));
+    $('closeLedger').addEventListener('click', chiudiRiepilogo);
+    $('ledgerScrim').addEventListener('click', chiudiRiepilogo);
+    $('miniPdf').addEventListener('click', apriPdf);
+    document.addEventListener('keydown', trappolaRiepilogo);
+    window.matchMedia('(min-width:768px)').addEventListener('change', (e) => { if(e.matches) chiudiRiepilogo(); });
     applicaRichiudibili();
     $('closeSettings').addEventListener('click', () => chiudiImpostazioni(false));
     $('cancelSettings').addEventListener('click', () => chiudiImpostazioni(true));
@@ -3428,6 +3508,7 @@
     document.addEventListener('keydown', (e) => {
       if(e.key === 'Escape' && $('dayOverlay').classList.contains('open')) closeDay();
       if(e.key === 'Escape' && $('pdfOverlay').classList.contains('open')) chiudiPdf();
+      else if(e.key === 'Escape' && riepilogoAperto()) chiudiRiepilogo();
       if(e.key === 'Escape' && impostazioniAperte()){
         if($('settingsFoot').classList.contains('confirming')){ esciDaConferma(); aggiornaStatoImpostazioni(); }
         else chiudiImpostazioni(false);
