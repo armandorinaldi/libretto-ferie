@@ -1427,7 +1427,7 @@
 
       <div class="cal-hint" id="modeRow">
         <svg class="icon icon-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11V6a2 2 0 0 1 4 0v5"/><path d="M13 11V7a2 2 0 0 1 4 0v4"/><path d="M17 11v-.5a2 2 0 0 1 4 0V15a6 6 0 0 1-6 6h-2a7 7 0 0 1-7-7v-3a2 2 0 0 1 4 0"/></svg>
-        <span class="hint-long">Tocca un giorno per segnarlo o modificarlo, trascina per più giorni. Tieni premuto su un giorno segnato per eliminarlo.</span><span class="hint-short">Tocca un giorno, trascina per più giorni.</span>
+        <span class="hint-long">Tocca un giorno per segnarlo o modificarlo, trascina per più giorni. Clic destro (o tieni premuto) su un giorno segnato per eliminarlo.</span><span class="hint-short">Tocca un giorno, trascina per più giorni.</span>
       </div>
 
       <div class="weekdays" id="weekdays">
@@ -1545,7 +1545,7 @@
 
   <footer class="footnote">
     <span>I dati restano salvati solo per te, tra una visita e l'altra.</span>
-    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.24</span> · realizzata da <b>Paolo V</b></span>
+    <span class="credits">Pianificazione Ferie <span class="ver" id="appVersion">v2.25</span> · realizzata da <b>Paolo V</b></span>
   </footer>
 </div>
 
@@ -1764,7 +1764,7 @@
 
 <script>
 (function(){
-  const APP_VERSION = '2.24';
+  const APP_VERSION = '2.25';
   const APP_AUTORE = 'Paolo V';
   const MESI = ["gennaio","febbraio","marzo","aprile","maggio","giugno","luglio","agosto","settembre","ottobre","novembre","dicembre"];
 
@@ -3949,10 +3949,22 @@
     const daTocco = () => Date.now() - ultimoTocco < 900;
     grid.addEventListener('mousedown', (e) => {
       if(daTocco()) return;
+      // solo il tasto sinistro seleziona; destro e Ctrl+clic (Mac) li gestisce il menu contestuale
+      if(e.button !== 0 || e.ctrlKey) return;
       const cell = e.target.closest('.day.selectable');
       if(!cell) return;
       e.preventDefault();
       beginSelection(cell);
+    });
+    // Tasto destro su un giorno: niente menu del sistema.
+    // Su un giorno segnato elimina subito il movimento (con Annulla), come la pressione prolungata su telefono.
+    grid.addEventListener('contextmenu', (e) => {
+      const cell = e.target.closest('.day');
+      if(!cell || !grid.contains(cell)) return;
+      e.preventDefault();
+      if(daTocco()) return; // su telefono ci pensa già la pressione prolungata
+      const k = cell.dataset.key;
+      if(k && entries[k]) eliminaGiorno(k);
     });
     document.addEventListener('mousemove', (e) => {
       if(!isPointerDown) return;
